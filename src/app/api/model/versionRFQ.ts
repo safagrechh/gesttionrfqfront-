@@ -34,6 +34,8 @@ export interface VersionRFQ {
     approvalDate?: string | null;
     dateCreation?: string;
     statut?: Statut;
+    valide?: boolean;
+    rejete?: boolean;
     materialLeader?: Worker;
     materialLeaderId?: number | null;
     testLeader?: Worker;

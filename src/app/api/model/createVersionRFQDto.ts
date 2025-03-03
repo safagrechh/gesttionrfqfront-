@@ -33,6 +33,8 @@ export interface CreateVersionRFQDto {
     marketSegmentId?: number | null;
     ingenieurRFQId?: number | null;
     validateurId?: number | null;
+    valide?: boolean | null;
+    rejete?: boolean | null;
 }
 export namespace CreateVersionRFQDto {
 }

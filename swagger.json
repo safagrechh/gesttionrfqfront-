@@ -1011,6 +1011,54 @@
         }
       }
     },
+    "/api/RFQ/create-valide": {
+      "post": {
+        "tags": [
+          "RFQ"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/RFQ/{id}/valider": {
       "post": {
         "tags": [
@@ -2233,6 +2281,14 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "valide": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rejete": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2640,12 +2696,10 @@
             "nullable": true
           },
           "valide": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           },
           "rejete": {
-            "type": "boolean",
-            "nullable": true
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3006,6 +3060,14 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "valide": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rejete": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3202,6 +3264,12 @@
           "statut": {
             "$ref": "#/components/schemas/Statut"
           },
+          "valide": {
+            "type": "boolean"
+          },
+          "rejete": {
+            "type": "boolean"
+          },
           "materialLeader": {
             "$ref": "#/components/schemas/Worker"
           },
@@ -3371,6 +3439,12 @@
           "validateur": {
             "type": "string",
             "nullable": true
+          },
+          "valide": {
+            "type": "boolean"
+          },
+          "rejete": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3393,6 +3467,12 @@
           "rfqId": {
             "type": "integer",
             "format": "int32"
+          },
+          "valide": {
+            "type": "boolean"
+          },
+          "rejete": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

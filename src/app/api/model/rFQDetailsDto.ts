@@ -35,8 +35,8 @@ export interface RFQDetailsDto {
     ingenieurRFQ?: string | null;
     validateur?: string | null;
     client?: string | null;
-    valide?: boolean | null;
-    rejete?: boolean | null;
+    valide?: boolean;
+    rejete?: boolean;
 }
 export namespace RFQDetailsDto {
 }

@@ -1,0 +1,31 @@
+<div class="col-xl-8 col-md-6">
+  <app-card cardTitle="Recent RFQs" cardClass="Recent-Users table-card" blockClass="p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <tbody>
+          <tr *ngFor="let rfq of rfqs; trackBy: trackTable">
+            <td>
+             {{rfq.codeRFQ}}
+            </td>
+            <td>
+              <p class="m-0">{{ rfq.quoteName || 'No quote name provided' }}</p>
+            </td>
+            <td>
+              <h6 class="mb-1">{{ rfq.client || 'Unknown Client' }}</h6>
+            </td>
+            <td>
+              <h6 class="text-muted">
+                <i class="fas fa-circle text-c-grey f-10 m-r-15"></i>
+                {{ rfq.dateCreation || 'Unknown date' }}
+              </h6>
+            </td>
+            <td>
+              <a href="javascript:" *ngIf="rfq.valide" class="badge me-2 theme-bg2 text-white f-12">valide</a>
+              <a href="javascript:" *ngIf="rfq.rejete" class="badge me-2 theme-bg2 text-white f-12">Reject</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </app-card>
+</div>

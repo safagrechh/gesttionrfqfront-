@@ -14,5 +14,7 @@ export interface VersionRFQSummaryDto {
     quoteName?: string | null;
     numRefQuoted?: number;
     rfqId?: number;
+    valide?: boolean;
+    rejete?: boolean;
 }
 

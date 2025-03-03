@@ -36,6 +36,8 @@ export interface VersionRFQDetailsDto {
     marketSegment?: string | null;
     ingenieurRFQ?: string | null;
     validateur?: string | null;
+    valide?: boolean;
+    rejete?: boolean;
 }
 export namespace VersionRFQDetailsDto {
 }

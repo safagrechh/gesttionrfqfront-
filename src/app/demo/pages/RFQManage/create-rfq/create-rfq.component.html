@@ -233,8 +233,19 @@
             <!-- Submit button -->
         <div class="d-flex justify-content-center mt-4">
           <button type="submit" class="btn btn-outline-primary" >
-            Create RFQ
+            <i class="feather icon-save"></i> Ajouter
           </button>
+          <button type="submit" class="btn btn-outline-success" >
+            <i class="feather icon-file-plus"></i> Sauvegarder en tant que Brouillon
+          </button>
+           <!-- Show only if user is Validateur -->
+           <button *ngIf="isValidateur" type="button" class="btn btn-outline-danger" (click)="onSubmitValider()">
+            <i class="feather icon-check-circle"></i> Valider
+          </button>
+
+  <!-- <button *ngIf="isValidateur" type="submit" class="btn btn-outline-dark">
+    <i class="feather icon-x-circle"></i> Rejeter
+  </button> -->
         </div>
 
         </div>

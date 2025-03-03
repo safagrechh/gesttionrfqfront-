@@ -21,6 +21,7 @@ export class CreateRFQComponent implements OnInit {
   materialLeaders: WorkerDto[] = [];
   testers: WorkerDto[] = [];
   marketSegments: MarketSegment[] = [];
+  isValidateur: boolean = false;
 
   statutOptions = [
     { value: 0, label: 'Complete' },
@@ -70,6 +71,14 @@ export class CreateRFQComponent implements OnInit {
     this.getIngenieurs();
     this.getWorkers();
     this.getMarketSegments();
+    this.checkUserRole();
+  }
+
+  checkUserRole() {
+    this.userService.apiUserMeGet().subscribe(user => {
+      console.log('Authenticated User:', user);
+      this.isValidateur = user.role === 0;
+    });
   }
   getClients() {
     this.clientService.apiClientGet().subscribe(response => {
@@ -128,6 +137,27 @@ export class CreateRFQComponent implements OnInit {
       console.error('Error creating RFQ', error);
       alert('There was an error adding the RFQ.');
 
+    });
+  }
+
+  onSubmitValider(): void {
+    console.log('Form content for validation:', this.rfqForm.value);
+    console.log(this.rfqForm.valid); // Check form validity
+    if (this.rfqForm.invalid) return;
+
+    // Assurer que le statut soit un nombre
+    const formValue = this.rfqForm.value;
+    formValue.statut = Number(formValue.statut); // Convertir en nombre si c'est une chaîne
+
+    const createRFQDto: CreateRFQDto = formValue;
+
+    // Appeler la méthode apiRFQCreateValidePost du service
+    this.rfqService.apiRFQCreateValidePost(createRFQDto).subscribe(response => {
+      console.log('RFQ  saved and validated successfully', response);
+      alert('RFQ  Saved and validated successfully!');
+    }, error => {
+      console.error('Error Saving and validating RFQ', error);
+      alert('There was an error validating the RFQ.');
     });
   }
 
