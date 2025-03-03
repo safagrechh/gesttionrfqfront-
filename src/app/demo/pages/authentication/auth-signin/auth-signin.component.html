@@ -1,0 +1,45 @@
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="auth-bg">
+      <span class="r"></span>
+      <span class="r s"></span>
+      <span class="r s"></span>
+      <span class="r"></span>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="mb-4">
+          <img src="assets/images/logo.png" alt="User Logo" class="img-fluid" style="max-width: 200px;">
+        </div>
+        <h3 class="mb-4"> <i class="feather icon-unlock auth-icon"></i> Login</h3>
+
+        <!-- Email input -->
+        <div class="input-group mb-3">
+          <input type="email" [(ngModel)]="email" class="form-control" placeholder="Adresse email" />
+        </div>
+
+        <!-- Password input -->
+        <div class="input-group mb-4">
+          <input type="password" [(ngModel)]="password" class="form-control" placeholder="Mots de passe" />
+        </div>
+
+        <!-- Remember me checkbox -->
+        <div class="form-group text-start mb-4">
+          <div class="checkbox checkbox-fill d-inline">
+            <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="" />
+            <label for="checkbox-fill-a1" class="cr">Se Souvenir</label>
+          </div>
+        </div>
+
+        <!-- Submit button -->
+        <button class="btn btn-theme2 mb-4" (click)="onSubmit()">Se Connecter</button>
+
+        <!-- Forgot password link -->
+        <p class="mb-2 text-muted">
+          Mots de passe oublié?
+          <a [routerLink]="['/auth/reset-password']">Réinitialiser</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

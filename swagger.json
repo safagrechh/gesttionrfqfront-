@@ -1,0 +1,3477 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "GestionRFQ API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Client": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Client/{id}": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Client"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClientDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClientDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Client"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Commentaire": {
+      "post": {
+        "tags": [
+          "Commentaire"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentaireDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentaireDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentaireDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Commentaire/{id}": {
+      "get": {
+        "tags": [
+          "Commentaire"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Commentaire"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentaireDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentaireDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentaireDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Commentaire"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Commentaire"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Commentaire/byrfq/{rfqId}": {
+      "get": {
+        "tags": [
+          "Commentaire"
+        ],
+        "parameters": [
+          {
+            "name": "rfqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentaireDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentaireDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentaireDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Commentaire/byversionrfq/{versionRfqId}": {
+      "get": {
+        "tags": [
+          "Commentaire"
+        ],
+        "parameters": [
+          {
+            "name": "versionRfqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commentaire"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commentaire"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Commentaire"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/HistoriqueAction": {
+      "get": {
+        "tags": [
+          "HistoriqueAction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "HistoriqueAction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHistoriqueActionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHistoriqueActionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHistoriqueActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoriqueActionDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoriqueActionDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoriqueActionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/HistoriqueAction/user/{userId}": {
+      "get": {
+        "tags": [
+          "HistoriqueAction"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueActionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/HistoriqueAction/{id}": {
+      "delete": {
+        "tags": [
+          "HistoriqueAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MarketSegment": {
+      "get": {
+        "tags": [
+          "MarketSegment"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketSegmentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketSegmentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarketSegmentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MarketSegment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MarketSegment/{id}": {
+      "get": {
+        "tags": [
+          "MarketSegment"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketSegment"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MarketSegment"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketSegment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MarketSegment"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RFQ": {
+      "get": {
+        "tags": [
+          "RFQ"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQDetailsDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQDetailsDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RFQDetailsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RFQ"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRFQDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RFQ/{id}": {
+      "get": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRFQDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRFQDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRFQDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RFQ/{id}/valider": {
+      "post": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RFQ/{id}/rejeter": {
+      "post": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/RFQ/bystatut/{statut}": {
+      "get": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "statut",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/User/admin": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/User": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/User/by-role/{role}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ": {
+      "get": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVersionRFQDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVersionRFQDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVersionRFQDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ/{id}": {
+      "get": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVersionRFQDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVersionRFQDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVersionRFQDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Worker": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkerDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkerDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WorkerDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Worker/{id}": {
+      "get": {
+        "tags": [
+          "Worker"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Worker"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWorkerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWorkerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWorkerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Worker"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Worker/create-materialLeader": {
+      "post": {
+        "tags": [
+          "Worker"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Worker/create-testLeader": {
+      "post": {
+        "tags": [
+          "Worker"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWorkerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Client": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sales": {
+            "type": "string",
+            "nullable": true
+          },
+          "rfQs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sales": {
+            "type": "string",
+            "nullable": true
+          },
+          "rfQs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQSummaryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sales": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Commentaire": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contenu": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validateur": {
+            "$ref": "#/components/schemas/User"
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rfqId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rfq": {
+            "$ref": "#/components/schemas/RFQ"
+          },
+          "versionRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "versionRFQ": {
+            "$ref": "#/components/schemas/VersionRFQ"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommentaireDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "contenu": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateC": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateClientDto": {
+        "type": "object",
+        "properties": {
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sales": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateCommentaireDto": {
+        "type": "object",
+        "properties": {
+          "contenu": {
+            "type": "string",
+            "nullable": true
+          },
+          "rfqId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "versionRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateHistoriqueActionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "cibleAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceCible": {
+            "type": "string",
+            "nullable": true
+          },
+          "detailsAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateAction": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateRFQDto": {
+        "type": "object",
+        "properties": {
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "nomUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleU"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateVersionRFQDto": {
+        "type": "object",
+        "properties": {
+          "rfqId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateWorkerDto": {
+        "type": "object",
+        "properties": {
+          "nom": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HistoriqueAction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "cibleAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceCible": {
+            "type": "string",
+            "nullable": true
+          },
+          "detailsAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateAction": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HistoriqueActionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "cibleAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceCible": {
+            "type": "string",
+            "nullable": true
+          },
+          "detailsAction": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateAction": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MarketSegment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          },
+          "rfQs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MarketSegmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RFQ": {
+        "type": "object",
+        "properties": {
+          "codeRFQ": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "valide": {
+            "type": "boolean"
+          },
+          "rejete": {
+            "type": "boolean"
+          },
+          "materialLeader": {
+            "$ref": "#/components/schemas/Worker"
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeader": {
+            "$ref": "#/components/schemas/Worker"
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegment": {
+            "$ref": "#/components/schemas/MarketSegment"
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "commentaires": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Commentaire"
+            },
+            "nullable": true
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          },
+          "ingenieurRFQ": {
+            "$ref": "#/components/schemas/User"
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateur": {
+            "$ref": "#/components/schemas/User"
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RFQDetailsDto": {
+        "type": "object",
+        "properties": {
+          "codeRFQ": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "materialLeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "testLeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "marketSegment": {
+            "type": "string",
+            "nullable": true
+          },
+          "ingenieurRFQ": {
+            "type": "string",
+            "nullable": true
+          },
+          "validateur": {
+            "type": "string",
+            "nullable": true
+          },
+          "client": {
+            "type": "string",
+            "nullable": true
+          },
+          "valide": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rejete": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RFQSummaryDto": {
+        "type": "object",
+        "properties": {
+          "codeRFQ": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Rapport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cheminFichier": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoleU": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "RoleW": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Statut": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "UpdateClientDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "sales": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateCommentaireDto": {
+        "type": "object",
+        "properties": {
+          "contenu": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateRFQDto": {
+        "type": "object",
+        "properties": {
+          "codeRFQ": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "valide": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rejete": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nomUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleU"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateVersionRFQDto": {
+        "type": "object",
+        "properties": {
+          "codeV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateWorkerDto": {
+        "type": "object",
+        "properties": {
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleW"
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nomUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleU"
+          },
+          "commentaires": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Commentaire"
+            },
+            "nullable": true
+          },
+          "historiqueActions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HistoriqueAction"
+            },
+            "nullable": true
+          },
+          "rapports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Rapport"
+            },
+            "nullable": true
+          },
+          "rfQsEnTantQueIngenieur": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          },
+          "rfQsEnTantQueValidateur": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          },
+          "versionRFQsEnTantQueIngenieur": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          },
+          "versionRFQsEnTantQueValidateur": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nomUser": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VersionRFQ": {
+        "type": "object",
+        "properties": {
+          "codeV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "materialLeader": {
+            "$ref": "#/components/schemas/Worker"
+          },
+          "materialLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "testLeader": {
+            "$ref": "#/components/schemas/Worker"
+          },
+          "testLeaderId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "marketSegment": {
+            "$ref": "#/components/schemas/MarketSegment"
+          },
+          "marketSegmentId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "rfq": {
+            "$ref": "#/components/schemas/RFQ"
+          },
+          "rfqId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "commentaires": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Commentaire"
+            },
+            "nullable": true
+          },
+          "ingenieurRFQ": {
+            "$ref": "#/components/schemas/User"
+          },
+          "ingenieurRFQId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "validateur": {
+            "$ref": "#/components/schemas/User"
+          },
+          "validateurId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VersionRFQDetailsDto": {
+        "type": "object",
+        "properties": {
+          "codeV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rfqId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sopDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "maxV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "statut": {
+            "$ref": "#/components/schemas/Statut"
+          },
+          "koDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "customerDataDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "mrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ldDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lrDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cdDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "approvalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateCreation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rfqQuoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "materialLeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "testLeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "marketSegment": {
+            "type": "string",
+            "nullable": true
+          },
+          "ingenieurRFQ": {
+            "type": "string",
+            "nullable": true
+          },
+          "validateur": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "VersionRFQSummaryDto": {
+        "type": "object",
+        "properties": {
+          "codeV": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "numRefQuoted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rfqId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Worker": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleW"
+          },
+          "vMaterialLeader": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          },
+          "vTestLeader": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
+            },
+            "nullable": true
+          },
+          "asMaterialLeader": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          },
+          "asTestLeader": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleW"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme (Example: 'Bearer {token}')",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

@@ -1,0 +1,244 @@
+<div class="container">
+  <div class="col-sm-12">
+    <app-card cardTitle="Basic Component" [options]="false">
+
+      <form [formGroup]="rfqForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+
+          <!-- Client -->
+          <div class="row" >
+            <h6> Client </h6>
+            <hr />
+            <div class="col-md-4 mb-3">
+          <div class="form-group">
+            <label for="clientId">Client</label>
+            <select id="clientId" class="form-control" formControlName="clientId">
+              <option *ngIf="clients.length === 0" disabled>Loading...</option>
+              <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
+            </select>
+          </div></div>
+        </div>
+
+            <!-- RFQ -->
+            <div class="row" >
+            <h6> RFQ</h6>
+            <hr />
+            <!-- Quote Name -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="quoteName">Quote Name</label>
+              <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
+            </div>
+            </div>
+
+            <!-- Market Segment -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="marketSegmentId">Market Segment</label>
+              <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
+                <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
+              </select>
+            </div>
+            </div>
+
+            <!-- Reference Number -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="numRefQuoted">Number of ref to be quoted</label>
+              <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
+            </div>
+            </div>
+
+            <!-- SOP Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="sopDate">SOP Date</label>
+              <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
+            </div>
+            </div>
+
+            <!-- Maximum Value -->
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="maxV">Maximum Value</label>
+                <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
+              </div>
+              </div>
+
+            <!-- Estimated Value -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="estV">Estimated Value</label>
+              <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
+            </div>
+            </div>
+            </div>
+
+            <!-- Matériels -->
+            <div class="row" >
+              <h6> Matériels</h6>
+              <hr />
+
+             <!-- KO Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="koDate">KO Date</label>
+              <input id="koDate" class="form-control" formControlName="koDate" type="date" />
+            </div></div>
+
+            <!-- Customer Data Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="customerDataDate">Customer Data Date</label>
+              <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
+            </div></div>
+
+            <!-- Material Leader -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="materialLeaderId">Material Leader</label>
+              <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
+                <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
+              </select>
+            </div>
+             </div>
+
+             <!-- MD Date -->
+             <div class="col-md-4 mb-3">
+             <div class="form-group">
+              <label for="mdDate">Material Due Date</label>
+              <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
+            </div>
+            </div>
+
+            <!-- MR Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="mrDate">Material Release </label>
+              <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
+            </div></div>
+            </div>
+
+             <!-- Test -->
+             <div class="row" >
+              <h6> Test</h6>
+              <hr />
+              <!-- Test Leader -->
+              <div class="col-md-4 mb-3">
+              <div class="form-group">
+              <label for="testLeaderId">Test Leader</label>
+              <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
+                <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
+              </select>
+            </div></div>
+
+            <!-- TD Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="tdDate">Test Due Date</label>
+              <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
+            </div></div>
+
+            <!-- TR Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="trDate">Test Release</label>
+              <input id="trDate" class="form-control" formControlName="trDate" type="date" />
+            </div>
+          </div>
+             </div>
+
+             <!-- VA -->
+             <div class="row" >
+              <h6> VA</h6>
+              <hr />
+              <!-- VA Leader -->
+              <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="validateurId">VA Leader</label>
+              <select id="validateurId" class="form-control" formControlName="validateurId">
+                <option *ngFor="let validator of validators" [value]="validator.id">{{ validator.nomUser }}</option>
+              </select>
+              </div>
+             </div>
+
+             <!-- LD Date -->
+             <div class="col-md-4 mb-3">
+             <div class="form-group">
+              <label for="ldDate">LD Date</label>
+              <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
+            </div></div>
+
+            <!-- LR Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="lrDate">LR Date</label>
+              <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
+            </div></div>
+
+            <!-- CD Date -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="cdDate">CD Date</label>
+              <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
+            </div></div>
+
+            <!-- Status -->
+            <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="statut">Status</label>
+              <select id="statut" class="form-control" formControlName="statut">
+                <option *ngFor="let statut of statutOptions" [value]="statut.value">{{ statut.label }}</option>
+              </select>
+            </div></div>
+
+             <!-- Approval Date -->
+             <div class="col-md-4 mb-3">
+             <div class="form-group">
+              <label for="approvalDate">Approval Date</label>
+              <input id="approvalDate" class="form-control" formControlName="approvalDate" type="date" />
+            </div></div>
+            </div>
+
+
+
+
+
+            <!-- RFQ Engineer -->
+            <div class="form-group">
+              <label for="ingenieurRFQId">RFQ Engineer</label>
+              <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
+                <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
+              </select>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Submit button -->
+        <div class="d-flex justify-content-center mt-4">
+          <button type="submit" class="btn btn-outline-primary" >
+            Create RFQ
+          </button>
+        </div>
+
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>
