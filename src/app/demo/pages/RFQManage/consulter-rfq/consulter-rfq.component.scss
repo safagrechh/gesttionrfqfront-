@@ -1,0 +1,35 @@
+.nav-pills {
+  li {
+    a.nav-link {
+      background-color: transparent; // Default state: no color
+      color: #171717; // Default text color
+      border: none;
+      margin-bottom: 0.5rem;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    a.nav-link.active {
+      color: #fff; // Text stays white when active
+    }
+
+    // En attente de validation (Yellow when active)
+    &:nth-child(1) a.nav-link.active {
+      background-color: #ffc107;
+    }
+
+    // Validée (Green when active)
+    &:nth-child(2) a.nav-link.active {
+      background-color: #28a745;
+    }
+
+    // Rejetée (Red when active)
+    &:nth-child(3) a.nav-link.active {
+      background-color: #dc3545;
+    }
+
+    // Settings (Blue when active)
+    &:nth-child(4) a.nav-link.active {
+      background-color: #17a2b8;
+    }
+  }
+}

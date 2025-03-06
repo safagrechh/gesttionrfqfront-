@@ -2633,14 +2633,18 @@
       "RFQDetailsDto": {
         "type": "object",
         "properties": {
-          "quoteName": {
-            "type": "string",
-            "nullable": true
-          },
           "cq": {
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "quoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
           },
           "numRefQuoted": {
             "type": "integer",
