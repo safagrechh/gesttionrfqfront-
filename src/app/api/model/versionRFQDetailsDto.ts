@@ -11,13 +11,15 @@ import { Statut } from './statut';
 
 
 export interface VersionRFQDetailsDto { 
-    codeV?: number;
+    cq?: number | null;
     quoteName?: string | null;
-    numRefQuoted?: number;
+    numRefQuoted?: number | null;
     rfqId?: number;
+    valide?: boolean;
+    rejete?: boolean;
     sopDate?: string | null;
-    maxV?: number;
-    estV?: number;
+    maxV?: number | null;
+    estV?: number | null;
     statut?: Statut;
     koDate?: string | null;
     customerDataDate?: string | null;
@@ -35,9 +37,7 @@ export interface VersionRFQDetailsDto {
     testLeader?: string | null;
     marketSegment?: string | null;
     ingenieurRFQ?: string | null;
-    validateur?: string | null;
-    valide?: boolean;
-    rejete?: boolean;
+    vaLeader?: string | null;
 }
 export namespace VersionRFQDetailsDto {
 }

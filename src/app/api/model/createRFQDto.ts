@@ -11,11 +11,12 @@ import { Statut } from './statut';
 
 
 export interface CreateRFQDto { 
+    cq?: number | null;
     quoteName?: string | null;
-    numRefQuoted?: number;
+    numRefQuoted?: number | null;
     sopDate?: string | null;
-    maxV?: number;
-    estV?: number;
+    maxV?: number | null;
+    estV?: number | null;
     koDate?: string | null;
     customerDataDate?: string | null;
     mdDate?: string | null;
@@ -33,7 +34,8 @@ export interface CreateRFQDto {
     marketSegmentId?: number | null;
     clientId?: number | null;
     ingenieurRFQId?: number | null;
-    validateurId?: number | null;
+    vaLeaderId?: number | null;
+    brouillon?: boolean;
 }
 export namespace CreateRFQDto {
 }

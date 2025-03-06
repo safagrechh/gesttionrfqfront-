@@ -12,11 +12,24 @@
             <div class="col-md-4 mb-3">
           <div class="form-group">
             <label for="clientId">Client</label>
-            <select id="clientId" class="form-control" formControlName="clientId">
+            <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
               <option *ngIf="clients.length === 0" disabled>Loading...</option>
               <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
             </select>
-          </div></div>
+          </div>
+            </div>
+          <div class="col-md-4 mb-3" *ngIf="selectedClient">
+            <div class="form-group">
+              <label for="clientSales">Sales</label>
+              <input type="text" id="clientSales" class="form-control" [value]="selectedClient.sales" disabled />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="CQ">CQ</label>
+              <input id="CQ" class="form-control" formControlName="CQ" placeholder="Enter CQ" />
+            </div>
+            </div>
         </div>
 
             <!-- RFQ -->
@@ -60,7 +73,7 @@
             <!-- Maximum Value -->
             <div class="col-md-4 mb-3">
               <div class="form-group">
-                <label for="maxV">Maximum Value</label>
+                <label for="maxV">Maximum Volume</label>
                 <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
               </div>
               </div>
@@ -68,7 +81,7 @@
             <!-- Estimated Value -->
             <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="estV">Estimated Value</label>
+              <label for="estV">Estimated Volume</label>
               <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
             </div>
             </div>
@@ -76,7 +89,7 @@
 
             <!-- Matériels -->
             <div class="row" >
-              <h6> Matériels</h6>
+              <h6> Materials</h6>
               <hr />
 
              <!-- KO Date -->
@@ -89,7 +102,7 @@
             <!-- Customer Data Date -->
             <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="customerDataDate">Customer Data Date</label>
+              <label for="customerDataDate">Customer Due Date</label>
               <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
             </div></div>
 
@@ -155,9 +168,9 @@
               <!-- VA Leader -->
               <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="validateurId">VA Leader</label>
-              <select id="validateurId" class="form-control" formControlName="validateurId">
-                <option *ngFor="let validator of validators" [value]="validator.id">{{ validator.nomUser }}</option>
+              <label for="valeaderId">VA Leader</label>
+              <select id="valeaderId" class="form-control" formControlName="valeaderId">
+                <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
               </select>
               </div>
              </div>
@@ -165,21 +178,21 @@
              <!-- LD Date -->
              <div class="col-md-4 mb-3">
              <div class="form-group">
-              <label for="ldDate">LD Date</label>
+              <label for="ldDate">Labour Due Date</label>
               <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
             </div></div>
 
             <!-- LR Date -->
             <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="lrDate">LR Date</label>
+              <label for="lrDate">Labour Release Date</label>
               <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
             </div></div>
 
             <!-- CD Date -->
             <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="cdDate">CD Date</label>
+              <label for="cdDate">Customer Due date</label>
               <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
             </div></div>
 
@@ -235,7 +248,7 @@
           <button type="submit" class="btn btn-outline-primary" >
             <i class="feather icon-save"></i> Ajouter
           </button>
-          <button type="submit" class="btn btn-outline-success" >
+          <button type="button" class="btn btn-outline-success" (click)="onSubmitBrouillon()" >
             <i class="feather icon-file-plus"></i> Sauvegarder en tant que Brouillon
           </button>
            <!-- Show only if user is Validateur -->

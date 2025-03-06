@@ -11,12 +11,12 @@ import { Statut } from './statut';
 
 
 export interface RFQDetailsDto { 
-    codeRFQ?: number;
     quoteName?: string | null;
-    numRefQuoted?: number;
+    cq?: number | null;
+    numRefQuoted?: number | null;
     sopDate?: string | null;
-    maxV?: number;
-    estV?: number;
+    maxV?: number | null;
+    estV?: number | null;
     koDate?: string | null;
     customerDataDate?: string | null;
     mdDate?: string | null;
@@ -33,10 +33,11 @@ export interface RFQDetailsDto {
     testLeader?: string | null;
     marketSegment?: string | null;
     ingenieurRFQ?: string | null;
-    validateur?: string | null;
+    vaLeader?: string | null;
     client?: string | null;
     valide?: boolean;
     rejete?: boolean;
+    brouillon?: boolean;
 }
 export namespace RFQDetailsDto {
 }

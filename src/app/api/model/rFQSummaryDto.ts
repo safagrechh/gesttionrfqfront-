@@ -10,7 +10,7 @@
 
 
 export interface RFQSummaryDto { 
-    codeRFQ?: number;
+    cq?: number | null;
     quoteName?: string | null;
 }
 

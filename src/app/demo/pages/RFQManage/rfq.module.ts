@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateRFQComponent } from './create-rfq/create-rfq.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsulterRFQComponent } from './consulter-rfq/consulter-rfq.component';
+import { BrouillonsComponent } from './brouillons/brouillons.component';
 
 
 
@@ -16,7 +17,12 @@ const routes: Routes = [
   {
     path: 'get-rfqs',
     component:ConsulterRFQComponent
+  } ,
+  {
+    path: 'get-brouillons',
+    component:BrouillonsComponent
   }
+
 ];
 
 @NgModule({
@@ -26,7 +32,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     CreateRFQComponent,
     ReactiveFormsModule,
-    ConsulterRFQComponent
+    ConsulterRFQComponent,
+    BrouillonsComponent
   ]
 })
 export class RFQModule { }

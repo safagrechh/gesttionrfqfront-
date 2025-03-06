@@ -17,12 +17,13 @@ import { VersionRFQ } from './versionRFQ';
 
 
 export interface RFQ { 
-    codeRFQ?: number;
+    id?: number;
+    cq?: number | null;
     quoteName?: string | null;
-    numRefQuoted?: number;
+    numRefQuoted?: number | null;
     sopDate?: string | null;
-    maxV?: number;
-    estV?: number;
+    maxV?: number | null;
+    estV?: number | null;
     koDate?: string | null;
     customerDataDate?: string | null;
     mdDate?: string | null;
@@ -37,6 +38,7 @@ export interface RFQ {
     statut?: Statut;
     valide?: boolean;
     rejete?: boolean;
+    brouillon?: boolean;
     materialLeader?: Worker;
     materialLeaderId?: number | null;
     testLeader?: Worker;
@@ -49,8 +51,8 @@ export interface RFQ {
     versions?: Array<VersionRFQ> | null;
     ingenieurRFQ?: User;
     ingenieurRFQId?: number | null;
-    validateur?: User;
-    validateurId?: number | null;
+    vaLeader?: User;
+    vaLeaderId?: number | null;
 }
 export namespace RFQ {
 }

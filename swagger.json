@@ -985,7 +985,24 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              }
+            }
           }
         }
       },
@@ -2041,13 +2058,19 @@
       "CreateRFQDto": {
         "type": "object",
         "properties": {
+          "cq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "quoteName": {
             "type": "string",
             "nullable": true
           },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "sopDate": {
             "type": "string",
@@ -2056,11 +2079,13 @@
           },
           "maxV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "estV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "koDate": {
             "type": "string",
@@ -2144,10 +2169,13 @@
             "format": "int32",
             "nullable": true
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "brouillon": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -2179,6 +2207,11 @@
           "rfqId": {
             "type": "integer",
             "format": "int32"
+          },
+          "cq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -2277,7 +2310,7 @@
             "format": "int32",
             "nullable": true
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2433,9 +2466,14 @@
       "RFQ": {
         "type": "object",
         "properties": {
-          "codeRFQ": {
+          "id": {
             "type": "integer",
             "format": "int32"
+          },
+          "cq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -2443,7 +2481,8 @@
           },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "sopDate": {
             "type": "string",
@@ -2452,11 +2491,13 @@
           },
           "maxV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "estV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "koDate": {
             "type": "string",
@@ -2519,6 +2560,9 @@
             "type": "boolean"
           },
           "rejete": {
+            "type": "boolean"
+          },
+          "brouillon": {
             "type": "boolean"
           },
           "materialLeader": {
@@ -2575,10 +2619,10 @@
             "format": "int32",
             "nullable": true
           },
-          "validateur": {
+          "vaLeader": {
             "$ref": "#/components/schemas/User"
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2589,17 +2633,19 @@
       "RFQDetailsDto": {
         "type": "object",
         "properties": {
-          "codeRFQ": {
-            "type": "integer",
-            "format": "int32"
-          },
           "quoteName": {
             "type": "string",
             "nullable": true
           },
+          "cq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "sopDate": {
             "type": "string",
@@ -2608,11 +2654,13 @@
           },
           "maxV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "estV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "koDate": {
             "type": "string",
@@ -2687,7 +2735,7 @@
             "type": "string",
             "nullable": true
           },
-          "validateur": {
+          "vaLeader": {
             "type": "string",
             "nullable": true
           },
@@ -2700,6 +2748,9 @@
           },
           "rejete": {
             "type": "boolean"
+          },
+          "brouillon": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -2707,9 +2758,10 @@
       "RFQSummaryDto": {
         "type": "object",
         "properties": {
-          "codeRFQ": {
+          "cq": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -2805,9 +2857,10 @@
       "UpdateRFQDto": {
         "type": "object",
         "properties": {
-          "codeRFQ": {
+          "cq": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -2911,7 +2964,7 @@
             "format": "int32",
             "nullable": true
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2921,6 +2974,10 @@
             "nullable": true
           },
           "rejete": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "brouillon": {
             "type": "boolean",
             "nullable": true
           }
@@ -2955,9 +3012,10 @@
       "UpdateVersionRFQDto": {
         "type": "object",
         "properties": {
-          "codeV": {
+          "cq": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -3056,7 +3114,7 @@
             "format": "int32",
             "nullable": true
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3182,9 +3240,14 @@
       "VersionRFQ": {
         "type": "object",
         "properties": {
-          "codeV": {
+          "id": {
             "type": "integer",
             "format": "int32"
+          },
+          "cq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -3192,7 +3255,8 @@
           },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "sopDate": {
             "type": "string",
@@ -3201,11 +3265,13 @@
           },
           "maxV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "estV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "koDate": {
             "type": "string",
@@ -3270,6 +3336,9 @@
           "rejete": {
             "type": "boolean"
           },
+          "brouillon": {
+            "type": "boolean"
+          },
           "materialLeader": {
             "$ref": "#/components/schemas/Worker"
           },
@@ -3316,10 +3385,10 @@
             "format": "int32",
             "nullable": true
           },
-          "validateur": {
+          "vaLeader": {
             "$ref": "#/components/schemas/User"
           },
-          "validateurId": {
+          "vaLeaderId": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3330,9 +3399,10 @@
       "VersionRFQDetailsDto": {
         "type": "object",
         "properties": {
-          "codeV": {
+          "cq": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -3340,11 +3410,18 @@
           },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "rfqId": {
             "type": "integer",
             "format": "int32"
+          },
+          "valide": {
+            "type": "boolean"
+          },
+          "rejete": {
+            "type": "boolean"
           },
           "sopDate": {
             "type": "string",
@@ -3353,11 +3430,13 @@
           },
           "maxV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "estV": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "statut": {
             "$ref": "#/components/schemas/Statut"
@@ -3436,15 +3515,9 @@
             "type": "string",
             "nullable": true
           },
-          "validateur": {
+          "vaLeader": {
             "type": "string",
             "nullable": true
-          },
-          "valide": {
-            "type": "boolean"
-          },
-          "rejete": {
-            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3452,9 +3525,10 @@
       "VersionRFQSummaryDto": {
         "type": "object",
         "properties": {
-          "codeV": {
+          "cq": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "quoteName": {
             "type": "string",
@@ -3462,7 +3536,8 @@
           },
           "numRefQuoted": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "rfqId": {
             "type": "integer",

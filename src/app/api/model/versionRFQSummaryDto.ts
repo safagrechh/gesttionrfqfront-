@@ -10,9 +10,9 @@
 
 
 export interface VersionRFQSummaryDto { 
-    codeV?: number;
+    cq?: number | null;
     quoteName?: string | null;
-    numRefQuoted?: number;
+    numRefQuoted?: number | null;
     rfqId?: number;
     valide?: boolean;
     rejete?: boolean;

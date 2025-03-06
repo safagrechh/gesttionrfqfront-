@@ -59,6 +59,14 @@ export const NavigationItems: NavigationItem[] = [
             url: '/rfq-manage/get-rfqs',
 
             classes: 'nav-item'
+          },
+          {
+            id: 'get-brouillons',
+            title: 'Brouillons ',
+            type: 'item',
+            url: '/rfq-manage/get-brouillons',
+            
+            classes: 'nav-item'
           }
 
         ]

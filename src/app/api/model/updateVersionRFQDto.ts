@@ -11,7 +11,7 @@ import { Statut } from './statut';
 
 
 export interface UpdateVersionRFQDto { 
-    codeV?: number;
+    cq?: number | null;
     quoteName?: string | null;
     numRefQuoted?: number | null;
     sopDate?: string | null;
@@ -32,7 +32,7 @@ export interface UpdateVersionRFQDto {
     testLeaderId?: number | null;
     marketSegmentId?: number | null;
     ingenieurRFQId?: number | null;
-    validateurId?: number | null;
+    vaLeaderId?: number | null;
     valide?: boolean | null;
     rejete?: boolean | null;
 }

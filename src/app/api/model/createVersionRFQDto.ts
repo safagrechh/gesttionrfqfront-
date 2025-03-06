@@ -12,6 +12,7 @@ import { Statut } from './statut';
 
 export interface CreateVersionRFQDto { 
     rfqId?: number;
+    cq?: number | null;
     quoteName?: string | null;
     numRefQuoted?: number | null;
     sopDate?: string | null;
@@ -32,7 +33,7 @@ export interface CreateVersionRFQDto {
     testLeaderId?: number | null;
     marketSegmentId?: number | null;
     ingenieurRFQId?: number | null;
-    validateurId?: number | null;
+    vaLeaderId?: number | null;
     valide?: boolean | null;
     rejete?: boolean | null;
 }
