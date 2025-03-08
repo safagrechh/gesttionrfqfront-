@@ -1,38 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RFQService } from 'src/app/api';  // Ajustez le chemin si nécessaire
-import { RFQDetailsDto } from 'src/app/api';  // Ajustez le chemin si nécessaire
+import { RFQService } from 'src/app/api';  // Adjust the path if necessary
+import { RFQDetailsDto } from 'src/app/api';  // Adjust the path if necessary
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { interval } from 'rxjs';
-import { NavSearchComponent } from 'src/app/theme/layout/admin/nav-bar/nav-left/nav-search/nav-search.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-consulter-rfq',
   templateUrl: './consulter-rfq.component.html',
   styleUrls: ['./consulter-rfq.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule , NavSearchComponent],
+  imports: [CommonModule, SharedModule, RouterModule],
 })
 export class ConsulterRFQComponent implements OnInit {
   rfqs: Array<RFQDetailsDto> = [];
-  currentFilter: string = 'pending'; // Valeurs possibles : 'validated', 'rejected', 'pending'
+  currentFilter: string = 'pending';
+  searchCQ: number | null = null; // Stores the CQ entered in the search bar
+  filteredRFQ: RFQDetailsDto | null = null; // Stores the searched RFQ
 
   constructor(private rfqService: RFQService) {}
 
   ngOnInit(): void {
     this.fetchRFQDetails();
-    // Rafraîchir les données toutes les 60 secondes (vous pouvez adapter si nécessaire)
     interval(60000).subscribe(() => {
       this.rfqs = [...this.rfqs];
     });
+
+
   }
 
   fetchRFQDetails(): void {
     this.rfqService.apiRFQGet().subscribe(
       (response: any) => {
-        // Récupère tous les RFQ sans filtrage ici
         this.rfqs = response.$values;
       },
       (error) => {
@@ -41,19 +43,13 @@ export class ConsulterRFQComponent implements OnInit {
     );
   }
 
-  // Change le filtre actuel selon le bouton cliqué
-  setFilter(filter: string): void {
-    this.currentFilter = filter;
-  }
-
-  // Renvoie la liste des RFQ filtrée en fonction du filtre sélectionné
   getRFQsByStatus(status: string): RFQDetailsDto[] {
     if (status === 'validated') {
-      return this.rfqs.filter(rfq => rfq.valide === true);
+      return this.rfqs.filter(rfq => rfq.valide === true && rfq.brouillon !==true);
     } else if (status === 'rejected') {
-      return this.rfqs.filter(rfq => rfq.rejete === true);
+      return this.rfqs.filter(rfq => rfq.rejete === true && rfq.brouillon !==true);
     } else { // pending
-      return this.rfqs.filter(rfq => rfq.valide !== true && rfq.rejete !== true);
+      return this.rfqs.filter(rfq => rfq.valide !== true && rfq.rejete !== true && rfq.brouillon !==true);
     }
   }
 
@@ -66,8 +62,17 @@ export class ConsulterRFQComponent implements OnInit {
     return format(new Date(date), "dd MMMM yyyy HH:mm", { locale: fr });
   }
 
+  /** Search RFQ by CQ (Quote Code) */
+  searchByCQ(): void {
+    if (!this.searchCQ) {
+      this.filteredRFQ = null;
+      return;
+    }
+    console.log("search :", this.searchCQ)
 
-
-
-
+    this.filteredRFQ = this.rfqs.find(rfq => rfq.cq === this.searchCQ && rfq.brouillon !==true ) || null;
+    console.log("filtred", this.filteredRFQ)
+  }
 }
+
+

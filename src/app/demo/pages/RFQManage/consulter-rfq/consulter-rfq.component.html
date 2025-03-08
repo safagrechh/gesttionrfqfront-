@@ -4,28 +4,49 @@
       <h5 class="mb-3">Consulter les RFQS</h5>
       <div class="row">
         <!-- Navigation verticale -->
-        <div class="col-md-3 col-sm-12 ">
+        <div class="col-md-3 col-sm-12">
           <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
             <!-- RFQs en attente de validation -->
             <li [ngbNavItem]="1" class="nav-item">
-              <a class="nav-link " ngbNavLink>En attente de Validation</a>
+              <a class="nav-link" ngbNavLink>En attente de Validation</a>
               <ng-template ngbNavContent>
                 <div class="table-responsive">
                   <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>RFQ N°</th>
+                        <th>Nom de Devis</th>
+                        <th>Client</th>
+                        <th>Date de Création</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr *ngFor="let rfq of getRFQsByStatus('pending'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
-                        <td> ass {{ rfq.cq }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td><span class="badge bg-warning ">En attente</span></td>
+                        <td>
+                          <span class="badge bg-warning">En attente</span>
+                        </td>
+                        <td>
+                          <!-- Change the link for viewing the RFQ -->
+                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                            <i class="feather icon-eye"></i>
+                          </a>
+                          <a [routerLink]="['/rfq', rfq.id, 'edit']" title="Edit RFQ" class="ms-2">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </ng-template>
-            <hr /></li>
+              <hr />
+            </li>
 
             <!-- RFQs validées -->
             <li [ngbNavItem]="2" class="nav-item">
@@ -33,14 +54,33 @@
               <ng-template ngbNavContent>
                 <div class="table-responsive">
                   <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>RFQ N°</th>
+                        <th>Nom de Devis</th>
+                        <th>Client</th>
+                        <th>Date de Création</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr *ngFor="let rfq of getRFQsByStatus('validated'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
-                        <td>{{ rfq.cq }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td><span class="badge bg-success">Validée</span></td>
+                        <td>
+                          <span class="badge bg-success">Validée</span>
+                        </td>
+                        <td>
+                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                            <i class="feather icon-eye"></i>
+                          </a>
+                          <a [routerLink]="['/rfq', rfq.id, 'edit']" title="Edit RFQ" class="ms-2">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -55,14 +95,33 @@
               <ng-template ngbNavContent>
                 <div class="table-responsive">
                   <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>RFQ N°</th>
+                        <th>Nom de Devis</th>
+                        <th>Client</th>
+                        <th>Date de Création</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr *ngFor="let rfq of getRFQsByStatus('rejected'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
-                        <td>{{ rfq.cq }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td><span class="badge bg-danger">Rejeté</span></td>
+                        <td>
+                          <span class="badge bg-danger">Rejeté</span>
+                        </td>
+                        <td>
+                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                            <i class="feather icon-eye"></i>
+                          </a>
+                          <a [routerLink]="['/rfq', rfq.id, 'edit']" title="Edit RFQ" class="ms-2">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -70,18 +129,68 @@
               </ng-template>
               <hr />
             </li>
+
             <!-- Onglet Settings (optionnel) -->
-            <li [ngbNavItem]="4" class="nav-item">
-              <a class="nav-link" ngbNavLink>Consulter par code RFQ</a>
-              <ng-template ngbNavContent>
-                <!-- Content goes here -->
+<!-- Consulter par code RFQ -->
+<li [ngbNavItem]="4" class="nav-item">
+  <a class="nav-link" ngbNavLink>Consulter par code RFQ</a>
+  <ng-template ngbNavContent>
+    <div class="p-3">
+      <div class="input-group search-bar">
+        <input type="number" class="form-control search-input" placeholder="Rechercher par CQ..." [(ngModel)]="searchCQ">
+        <button class="btn search-button" (click)="searchByCQ()">
+          <i class="feather icon-search"></i>
+        </button>
+      </div>
 
+      <div *ngIf="filteredRFQ">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>RFQ N°</th>
+                <th>Nom de Devis</th>
+                <th>Client</th>
+                <th>Date de Création</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RFQ N°{{ filteredRFQ.id }}</td>
+                <td>{{ filteredRFQ.quoteName || 'No quote name provided' }}</td>
+                <td>{{ filteredRFQ.client || 'Unknown Client' }}</td>
+                <td>{{ getFormattedDate(filteredRFQ.dateCreation) }}</td>
+                <td>
+                  <span [ngClass]="{
+                    'badge bg-warning': !filteredRFQ.valide && !filteredRFQ.rejete,
+                    'badge bg-success': filteredRFQ.valide,
+                    'badge bg-danger': filteredRFQ.rejete
+                  }">
+                    {{ filteredRFQ.valide ? 'Validée' : (filteredRFQ.rejete ? 'Rejetée' : 'En attente') }}
+                  </span>
+                </td>
+                <td>
+                  <a [routerLink]="'/rfq-manage/get-rfq/' + filteredRFQ.id" title="View RFQ">
+                    <i class="feather icon-eye text-primary"></i>
+                  </a>
+                  <a [routerLink]="'/rfq-manage/get-rfq/' + filteredRFQ.id" title="Edit RFQ" class="ms-2">
+                    <i class="feather icon-edit text-success"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
+      <p *ngIf="searchCQ && !filteredRFQ" class="text-danger mt-2">Aucun RFQ trouvé avec ce CQ.</p>
+    </div>
+  </ng-template>
+  <hr />
+</li>
 
-
-              </ng-template>
-              <hr />
-            </li>
 
           </ul>
         </div>

@@ -5,6 +5,7 @@ import { CreateRFQComponent } from './create-rfq/create-rfq.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsulterRFQComponent } from './consulter-rfq/consulter-rfq.component';
 import { BrouillonsComponent } from './brouillons/brouillons.component';
+import { RFQComponent } from './rfq/rfq.component';
 
 
 
@@ -21,7 +22,12 @@ const routes: Routes = [
   {
     path: 'get-brouillons',
     component:BrouillonsComponent
+  },
+  {
+    path: 'get-rfq/:id',
+    component:RFQComponent
   }
+
 
 ];
 
@@ -33,7 +39,8 @@ const routes: Routes = [
     CreateRFQComponent,
     ReactiveFormsModule,
     ConsulterRFQComponent,
-    BrouillonsComponent
+    BrouillonsComponent,
+    RFQComponent
   ]
 })
 export class RFQModule { }

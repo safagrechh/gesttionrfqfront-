@@ -1,0 +1,62 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="RFQ Details">
+      <div *ngIf="rfq">
+        <div class="mb-3">
+          <strong>Nom du Devis:</strong> {{ rfq.quoteName }}
+        </div>
+        <div class="mb-3">
+          <strong>Numéro de Référence:</strong> {{ rfq.numRefQuoted }}
+        </div>
+        <div class="mb-3">
+          <strong>Client:</strong> {{ rfq.client }}
+        </div>
+        <div class="mb-3">
+          <strong>Statut:</strong>
+          <span [ngClass]="{
+            'badge bg-warning': !rfq.valide && !rfq.rejete && !rfq.brouillon,
+            'badge bg-success': rfq.valide,
+            'badge bg-danger': rfq.rejete,
+            'badge bg-secondary': rfq.brouillon
+          }">
+            {{ rfq.valide ? 'Validée' : (rfq.rejete ? 'Rejetée' : (rfq.brouillon ? 'Brouillon' : 'En attente')) }}
+          </span>
+        </div>
+        <div class="mb-3">
+          <strong>Le Leader du Matériel:</strong> {{ rfq.materialLeader }}
+        </div>
+        <div class="mb-3">
+          <strong>Le Leader des Tests:</strong> {{ rfq.testLeader }}
+        </div>
+        <div class="mb-3">
+          <strong>Segment du Marché:</strong> {{ rfq.marketSegment }}
+        </div>
+        <div class="mb-3">
+          <strong>Ingénieur RFQ:</strong> {{ rfq.ingenieurRFQ }}
+        </div>
+        <div class="mb-3">
+          <strong>Leader VA:</strong> {{ rfq.vaLeader }}
+        </div>
+        <div class="mb-3">
+          <strong>Date de Création:</strong> {{ rfq.dateCreation | date: 'short' }}
+        </div>
+        <div class="mb-3">
+          <strong>Dates importantes:</strong>
+          <ul>
+            <li><strong>Date SOP:</strong> {{ rfq.sopDate | date: 'short' }}</li>
+            <li><strong>Date KO:</strong> {{ rfq.koDate | date: 'short' }}</li>
+            <li><strong>Date Client Data:</strong> {{ rfq.customerDataDate | date: 'short' }}</li>
+            <li><strong>Date MD:</strong> {{ rfq.mdDate | date: 'short' }}</li>
+            <li><strong>Date MR:</strong> {{ rfq.mrDate | date: 'short' }}</li>
+            <li><strong>Date TD:</strong> {{ rfq.tdDate | date: 'short' }}</li>
+            <li><strong>Date TR:</strong> {{ rfq.trDate | date: 'short' }}</li>
+            <li><strong>Date LD:</strong> {{ rfq.ldDate | date: 'short' }}</li>
+            <li><strong>Date LR:</strong> {{ rfq.lrDate | date: 'short' }}</li>
+            <li><strong>Date CD:</strong> {{ rfq.cdDate | date: 'short' }}</li>
+            <li><strong>Date d'Approbation:</strong> {{ rfq.approvalDate | date: 'short' }}</li>
+          </ul>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>
