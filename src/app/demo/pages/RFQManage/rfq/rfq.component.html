@@ -2,7 +2,8 @@
   <div class="col-sm-12">
     <app-card cardTitle="Basic Component" [options]="false">
 
-      <div class="d-flex justify-content-between align-items-center">
+      <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>RFQ N°{{ idrfq }}</h3>
         <span
           class="badge rounded-pill px-3 py-2"
@@ -15,11 +16,11 @@
         </span>
       </div>
 
+
+      <!-- Formulaire RFQ en lecture seule -->
       <form [formGroup]="rfqForm">
         <div class="row">
-
-
-          <!-- Client -->
+          <!-- Client Section -->
           <div class="row">
             <hr />
             <div class="col-md-4 mb-3">
@@ -28,14 +29,6 @@
                 <input type="text" class="form-control" [value]="rfq.client" disabled />
               </div>
             </div>
-
-            <!-- <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label>Sales</label>
-                <input type="text" class="form-control" [value]="selectedClient?.sales" disabled />
-              </div>
-            </div> -->
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>CQ</label>
@@ -44,46 +37,40 @@
             </div>
           </div>
 
-          <!-- RFQ -->
+          <!-- RFQ Section -->
           <div class="row">
             <h6>RFQ</h6>
             <hr />
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Quote Name</label>
                 <input class="form-control" [value]="rfq.quoteName" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Market Segment</label>
                 <input class="form-control" [value]="rfq.marketSegment" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Number of ref to be quoted</label>
                 <input class="form-control" [value]="rfq.numRefQuoted" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>SOP Date</label>
                 <input class="form-control" [value]="rfq.sopDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Maximum Value</label>
                 <input class="form-control" [value]="rfq.maxV" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Estimated Value</label>
@@ -92,153 +79,173 @@
             </div>
           </div>
 
-
-
-          <!-- Materials -->
+          <!-- Materials Section -->
           <div class="row">
             <h6>Materials</h6>
             <hr />
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>KO Date</label>
                 <input class="form-control" [value]="rfq.koDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Customer Due Date</label>
                 <input class="form-control" [value]="rfq.customerDataDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Material Leader</label>
                 <input class="form-control" [value]="rfq.materialLeader" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Material Due Date</label>
                 <input class="form-control" [value]="rfq.mdDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Material Release Date</label>
                 <input class="form-control" [value]="rfq.mrDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
-
           </div>
 
-          <!-- Test -->
+          <!-- Test Section -->
           <div class="row">
             <h6>Test</h6>
             <hr />
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Test Leader</label>
                 <input class="form-control" [value]="rfq.testLeader" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Test Due Date</label>
                 <input class="form-control" [value]="rfq.tdDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Test Release Date</label>
                 <input class="form-control" [value]="rfq.trDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
           </div>
 
-          <!-- VA -->
+          <!-- VA Section -->
           <div class="row">
             <h6>VA</h6>
             <hr />
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>VA Leader</label>
                 <input class="form-control" [value]="rfq.vaLeader" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Labour Due Date</label>
-                <input class="form-control" [value]="rfq.ldDate|date:'yyyy-MM-dd'" disabled />
+                <input class="form-control" [value]="rfq.ldDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Labour Release Date</label>
-                <input class="form-control" [value]="rfq.lrDate|date:'yyyy-MM-dd'" disabled />
+                <input class="form-control" [value]="rfq.lrDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
-                <label>Customer Due date</label>
-                <input class="form-control" [value]="rfq.cdDate| date:'yyyy-MM-dd'" disabled />
+                <label>Customer Due Date</label>
+                <input class="form-control" [value]="rfq.cdDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
             <div class="col-md-4 mb-3">
               <div class="form-group">
-                <label>Approval Date </label>
-                <input class="form-control" [value]="rfq.approvalDate| date:'yyyy-MM-dd'" disabled />
+                <label>Approval Date</label>
+                <input class="form-control" [value]="rfq.approvalDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
-
-
           </div>
 
-          <!-- RFQ Engineer -->
+          <!-- RFQ Engineer Section -->
           <div class="form-group">
             <label>RFQ Engineer</label>
             <input class="form-control" [value]="rfq.ingenieurRFQ" disabled />
           </div>
-
         </div>
-
-        <div class="d-flex justify-content-center mt-4">
-
-          <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
-                  type="button" class="btn btn-outline-danger"
-                  (click)="onSubmitRejeter()">
-            <i class="feather icon-x-circle"></i> Rejeter
-          </button>
-
-          <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
-                  type="button" class="btn btn-outline-success"
-                  (click)="onSubmitValider()">
-            <i class="feather icon-check-circle"></i> Valider
-          </button>
-
-          <button *ngIf="rfq?.valide === false"
-                  type="button" class="btn btn-outline-warning"
-                  (click)="onSubmitEditer()">
-            <i class="feather icon-edit"></i> Editer
-          </button>
-
-        </div>
-
       </form>
+      <br/>
+      <hr/>
+      <!-- Affichage des commentaires existants -->
+      <div class="mb-3">
+        <h5>Commentaires</h5>
+        <div *ngIf="comments && comments.length > 0; else noComments">
+          <ul class="list-group">
+            <li *ngFor="let comment of comments" class="list-group-item">
+              <div class="d-flex align-items-center">
+                <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
+                <img src="assets/images/user/avatar-2.jpg" class="img-radius" alt="User-Profile-Image"   style="width: 40px; height: 40px;" />
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
+                    <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
+                  </div>
+                  <p class="mb-0">{{ comment.contenu }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <ng-template #noComments>
+          <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
+        </ng-template>
+      </div>
+
+
+      <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
+      <div *ngIf="showRejectForm" class="mt-4">
+        <app-card cardTitle="Rejet de la RFQ">
+          <div class="form-group">
+            <label>Commentaire de rejet</label>
+            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
+          </div>
+          <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-danger" (click)="submitRejection()">
+              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
+            </button>
+            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
+              Annuler
+            </button>
+          </div>
+        </app-card>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="d-flex justify-content-center mt-4">
+        <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+                type="button" class="btn btn-outline-danger"
+                (click)="onSubmitRejeter()">
+          <i class="feather icon-x-circle"></i> Rejeter
+        </button>
+        <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+                type="button" class="btn btn-outline-success"
+                (click)="onSubmitValider()">
+          <i class="feather icon-check-circle"></i> Valider
+        </button>
+        <button *ngIf="rfq?.valide === false"
+                type="button" class="btn btn-outline-warning"
+                (click)="onSubmitEditer()">
+          <i class="feather icon-edit"></i> Editer
+        </button>
+      </div>
     </app-card>
   </div>
 </div>

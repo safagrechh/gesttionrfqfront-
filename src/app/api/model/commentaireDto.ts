@@ -14,5 +14,6 @@ export interface CommentaireDto {
     contenu?: string | null;
     dateC?: string;
     validateurId?: number;
+    nomUser?: string | null;
 }
 

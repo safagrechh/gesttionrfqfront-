@@ -1983,6 +1983,10 @@
           "validateurId": {
             "type": "integer",
             "format": "int32"
+          },
+          "nomUser": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
