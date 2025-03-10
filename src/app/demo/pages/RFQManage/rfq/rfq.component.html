@@ -1,62 +1,244 @@
-<div class="row">
+<div class="container">
   <div class="col-sm-12">
-    <app-card cardTitle="RFQ Details">
-      <div *ngIf="rfq">
-        <div class="mb-3">
-          <strong>Nom du Devis:</strong> {{ rfq.quoteName }}
-        </div>
-        <div class="mb-3">
-          <strong>Numéro de Référence:</strong> {{ rfq.numRefQuoted }}
-        </div>
-        <div class="mb-3">
-          <strong>Client:</strong> {{ rfq.client }}
-        </div>
-        <div class="mb-3">
-          <strong>Statut:</strong>
-          <span [ngClass]="{
-            'badge bg-warning': !rfq.valide && !rfq.rejete && !rfq.brouillon,
-            'badge bg-success': rfq.valide,
-            'badge bg-danger': rfq.rejete,
-            'badge bg-secondary': rfq.brouillon
+    <app-card cardTitle="Basic Component" [options]="false">
+
+      <div class="d-flex justify-content-between align-items-center">
+        <h3>RFQ N°{{ idrfq }}</h3>
+        <span
+          class="badge rounded-pill px-3 py-2"
+          [ngClass]="{
+            'bg-warning text-dark': !rfq.valide && !rfq.rejete,
+            'bg-success': rfq.valide,
+            'bg-danger': rfq.rejete
           }">
-            {{ rfq.valide ? 'Validée' : (rfq.rejete ? 'Rejetée' : (rfq.brouillon ? 'Brouillon' : 'En attente')) }}
-          </span>
-        </div>
-        <div class="mb-3">
-          <strong>Le Leader du Matériel:</strong> {{ rfq.materialLeader }}
-        </div>
-        <div class="mb-3">
-          <strong>Le Leader des Tests:</strong> {{ rfq.testLeader }}
-        </div>
-        <div class="mb-3">
-          <strong>Segment du Marché:</strong> {{ rfq.marketSegment }}
-        </div>
-        <div class="mb-3">
-          <strong>Ingénieur RFQ:</strong> {{ rfq.ingenieurRFQ }}
-        </div>
-        <div class="mb-3">
-          <strong>Leader VA:</strong> {{ rfq.vaLeader }}
-        </div>
-        <div class="mb-3">
-          <strong>Date de Création:</strong> {{ rfq.dateCreation | date: 'short' }}
-        </div>
-        <div class="mb-3">
-          <strong>Dates importantes:</strong>
-          <ul>
-            <li><strong>Date SOP:</strong> {{ rfq.sopDate | date: 'short' }}</li>
-            <li><strong>Date KO:</strong> {{ rfq.koDate | date: 'short' }}</li>
-            <li><strong>Date Client Data:</strong> {{ rfq.customerDataDate | date: 'short' }}</li>
-            <li><strong>Date MD:</strong> {{ rfq.mdDate | date: 'short' }}</li>
-            <li><strong>Date MR:</strong> {{ rfq.mrDate | date: 'short' }}</li>
-            <li><strong>Date TD:</strong> {{ rfq.tdDate | date: 'short' }}</li>
-            <li><strong>Date TR:</strong> {{ rfq.trDate | date: 'short' }}</li>
-            <li><strong>Date LD:</strong> {{ rfq.ldDate | date: 'short' }}</li>
-            <li><strong>Date LR:</strong> {{ rfq.lrDate | date: 'short' }}</li>
-            <li><strong>Date CD:</strong> {{ rfq.cdDate | date: 'short' }}</li>
-            <li><strong>Date d'Approbation:</strong> {{ rfq.approvalDate | date: 'short' }}</li>
-          </ul>
-        </div>
+          {{ rfq.valide ? 'Validée' : (rfq.rejete ? 'Rejetée' : 'En attente') }}
+        </span>
       </div>
+
+      <form [formGroup]="rfqForm">
+        <div class="row">
+
+
+          <!-- Client -->
+          <div class="row">
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Client</label>
+                <input type="text" class="form-control" [value]="rfq.client" disabled />
+              </div>
+            </div>
+
+            <!-- <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Sales</label>
+                <input type="text" class="form-control" [value]="selectedClient?.sales" disabled />
+              </div>
+            </div> -->
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>CQ</label>
+                <input class="form-control" [value]="rfq.cq" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- RFQ -->
+          <div class="row">
+            <h6>RFQ</h6>
+            <hr />
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Quote Name</label>
+                <input class="form-control" [value]="rfq.quoteName" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Market Segment</label>
+                <input class="form-control" [value]="rfq.marketSegment" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Number of ref to be quoted</label>
+                <input class="form-control" [value]="rfq.numRefQuoted" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>SOP Date</label>
+                <input class="form-control" [value]="rfq.sopDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Maximum Value</label>
+                <input class="form-control" [value]="rfq.maxV" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Estimated Value</label>
+                <input class="form-control" [value]="rfq.estV" disabled />
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Materials -->
+          <div class="row">
+            <h6>Materials</h6>
+            <hr />
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>KO Date</label>
+                <input class="form-control" [value]="rfq.koDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Customer Due Date</label>
+                <input class="form-control" [value]="rfq.customerDataDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Leader</label>
+                <input class="form-control" [value]="rfq.materialLeader" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Due Date</label>
+                <input class="form-control" [value]="rfq.mdDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Release Date</label>
+                <input class="form-control" [value]="rfq.mrDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Test -->
+          <div class="row">
+            <h6>Test</h6>
+            <hr />
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Leader</label>
+                <input class="form-control" [value]="rfq.testLeader" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Due Date</label>
+                <input class="form-control" [value]="rfq.tdDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Release Date</label>
+                <input class="form-control" [value]="rfq.trDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+          </div>
+
+          <!-- VA -->
+          <div class="row">
+            <h6>VA</h6>
+            <hr />
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>VA Leader</label>
+                <input class="form-control" [value]="rfq.vaLeader" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Labour Due Date</label>
+                <input class="form-control" [value]="rfq.ldDate|date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Labour Release Date</label>
+                <input class="form-control" [value]="rfq.lrDate|date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Customer Due date</label>
+                <input class="form-control" [value]="rfq.cdDate| date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Approval Date </label>
+                <input class="form-control" [value]="rfq.approvalDate| date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- RFQ Engineer -->
+          <div class="form-group">
+            <label>RFQ Engineer</label>
+            <input class="form-control" [value]="rfq.ingenieurRFQ" disabled />
+          </div>
+
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+
+          <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+                  type="button" class="btn btn-outline-danger"
+                  (click)="onSubmitRejeter()">
+            <i class="feather icon-x-circle"></i> Rejeter
+          </button>
+
+          <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+                  type="button" class="btn btn-outline-success"
+                  (click)="onSubmitValider()">
+            <i class="feather icon-check-circle"></i> Valider
+          </button>
+
+          <button *ngIf="rfq?.valide === false"
+                  type="button" class="btn btn-outline-warning"
+                  (click)="onSubmitEditer()">
+            <i class="feather icon-edit"></i> Editer
+          </button>
+
+        </div>
+
+      </form>
     </app-card>
   </div>
 </div>

@@ -163,7 +163,9 @@
                 <td>{{ filteredRFQ.client || 'Unknown Client' }}</td>
                 <td>{{ getFormattedDate(filteredRFQ.dateCreation) }}</td>
                 <td>
-                  <span [ngClass]="{
+                  <span
+                   class="badge rounded-pill px-3 py-2"
+                   [ngClass]="{
                     'badge bg-warning': !filteredRFQ.valide && !filteredRFQ.rejete,
                     'badge bg-success': filteredRFQ.valide,
                     'badge bg-danger': filteredRFQ.rejete
