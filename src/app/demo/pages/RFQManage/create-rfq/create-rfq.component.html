@@ -10,13 +10,13 @@
             <h6> Client </h6>
             <hr />
             <div class="col-md-4 mb-3">
-          <div class="form-group">
+           <div class="form-group">
             <label for="clientId">Client</label>
             <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
               <option *ngIf="clients.length === 0" disabled>Loading...</option>
               <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
             </select>
-          </div>
+           </div>
             </div>
           <div class="col-md-4 mb-3" *ngIf="selectedClient">
             <div class="form-group">
@@ -26,8 +26,8 @@
           </div>
           <div class="col-md-4 mb-3">
             <div class="form-group">
-              <label for="CQ">CQ</label>
-              <input id="CQ" class="form-control" formControlName="CQ" placeholder="Enter CQ" />
+              <label for="cq">CQ</label>
+              <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
             </div>
             </div>
         </div>

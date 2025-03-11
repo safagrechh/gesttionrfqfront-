@@ -64,7 +64,8 @@ export class CreateRFQComponent implements OnInit {
       ldDate: [''],
       lrDate: [''],
       cdDate: [''],
-      approvalDate: ['']
+      approvalDate: [''],
+      cq: ['', Validators.required]
     });
 
     this.getClients();
@@ -173,7 +174,8 @@ export class CreateRFQComponent implements OnInit {
       marketSegmentId: this.rfqForm.value.marketSegmentId || null,
       clientId: this.rfqForm.value.clientId || null,
       ingenieurRFQId: this.rfqForm.value.ingenieurRFQId || null,
-      valeaderId: this.rfqForm.value.valeaderId || null
+      valeaderId: this.rfqForm.value.valeaderId || null ,
+      cq: this.rfqForm.value.cq || null? this.rfqForm.value.cq : 0
   };
 
 
@@ -197,6 +199,7 @@ export class CreateRFQComponent implements OnInit {
 
     // Assurer que le statut soit un nombre
     const formValue = this.rfqForm.value;
+    console.log("form" , formValue) ;
     formValue.statut = Number(formValue.statut); // Convertir en nombre si c'est une chaîne
 
     const createRFQDto: CreateRFQDto = formValue;

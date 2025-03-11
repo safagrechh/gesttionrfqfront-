@@ -5,13 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 import { CommentaireDto, CommentaireService, RFQService, UserService } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { CreateCommentaireDto } from 'src/app/api';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-rfq',
   templateUrl: './rfq.component.html',
   styleUrls: ['./rfq.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SharedModule],
+  imports: [CommonModule, ReactiveFormsModule, SharedModule , RouterModule],
 })
 export class RFQComponent implements OnInit {
   rfqForm!: FormGroup;
@@ -109,6 +111,7 @@ export class RFQComponent implements OnInit {
   // Bouton "Rejeter avec commentaire" : enregistre le commentaire et rejette la RFQ
   submitRejection() {
     const commentText = this.rejectForm.value.comment;
+    console.log("comment" , commentText);
     if (commentText && commentText.trim() !== '') {
       this.saveComment(commentText);
     }
@@ -117,14 +120,17 @@ export class RFQComponent implements OnInit {
   }
 
   saveComment(commentText: string) {
+    console.log("saveComment() a été appelé avec:", commentText);
     const newComment: CreateCommentaireDto = {
       contenu: commentText,
       rfqId: this.idrfq,
-      versionRFQId: this.rfq.versionRFQId || 0  // Si non défini, on envoie 0
+      versionRFQId: null
     };
     console.log('Commentaire à envoyer:', newComment);
+
     this.commentService.apiCommentairePost(newComment).subscribe({
       next: () => {
+        console.log("Commentaire ajouté avec succès");
         this.loadComments(this.idrfq);
       },
       error: (err) => {
@@ -132,6 +138,8 @@ export class RFQComponent implements OnInit {
       }
     });
   }
+
+
 
   onSubmitValider() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {
@@ -143,7 +151,7 @@ export class RFQComponent implements OnInit {
   }
 
   onSubmitEditer() {
-    // Implémentez la logique d'édition ici si nécessaire
+
   }
 
   // Rejette la RFQ (après enregistrement du commentaire si nécessaire)

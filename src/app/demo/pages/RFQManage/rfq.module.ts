@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConsulterRFQComponent } from './consulter-rfq/consulter-rfq.component';
 import { BrouillonsComponent } from './brouillons/brouillons.component';
 import { RFQComponent } from './rfq/rfq.component';
+import { EditRFQComponent } from './edit-rfq/edit-rfq.component';
 
 
 
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'get-rfq/:id',
     component:RFQComponent
+  } ,
+  {
+    path: 'edit-rfq/:id',
+    component:EditRFQComponent
   }
 
 
@@ -40,7 +45,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     ConsulterRFQComponent,
     BrouillonsComponent,
-    RFQComponent
+    RFQComponent ,
+    EditRFQComponent
   ]
 })
 export class RFQModule { }

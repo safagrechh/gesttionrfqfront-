@@ -184,49 +184,8 @@
       </form>
       <br/>
       <hr/>
-      <!-- Affichage des commentaires existants -->
-      <div class="mb-3">
-        <h5>Commentaires</h5>
-        <div *ngIf="comments && comments.length > 0; else noComments">
-          <ul class="list-group">
-            <li *ngFor="let comment of comments" class="list-group-item">
-              <div class="d-flex align-items-center">
-                <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
-                <img src="assets/images/user/avatar-2.jpg" class="img-radius" alt="User-Profile-Image"   style="width: 40px; height: 40px;" />
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
-                    <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
-                  </div>
-                  <p class="mb-0">{{ comment.contenu }}</p>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <ng-template #noComments>
-          <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
-        </ng-template>
-      </div>
 
 
-      <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
-      <div *ngIf="showRejectForm" class="mt-4">
-        <app-card cardTitle="Rejet de la RFQ">
-          <div class="form-group">
-            <label>Commentaire de rejet</label>
-            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
-          </div>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-outline-danger" (click)="submitRejection()">
-              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
-            </button>
-            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
-              Annuler
-            </button>
-          </div>
-        </app-card>
-      </div>
 
       <!-- Boutons d'action -->
       <div class="d-flex justify-content-center mt-4">
@@ -240,12 +199,66 @@
                 (click)="onSubmitValider()">
           <i class="feather icon-check-circle"></i> Valider
         </button>
-        <button *ngIf="rfq?.valide === false"
-                type="button" class="btn btn-outline-warning"
-                (click)="onSubmitEditer()">
+        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf="rfq?.valide === false"
+                type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
-        </button>
+        </a>
       </div>
     </app-card>
-  </div>
-</div>
+   </div>
+
+    <!-- Affichage des commentaires existants -->
+    <div class="col-sm-12">
+
+     <app-card cardTitle="Basic Component" [options]="false">
+      <h5>Commentaires</h5>
+      <hr/>
+      <div *ngIf="comments && comments.length > 0; else noComments">
+        <ul class="list-group">
+          <li *ngFor="let comment of comments" class="list-group-item">
+            <div class="d-flex align-items-center">
+              <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
+              <img src="assets/images/user/avatar-2.jpg" class="img-radius"
+              alt="User-Profile-Image"
+              style="width: 40px; height: 40px; border-radius: 50%;"
+              class="me-2" />
+         <div class="flex-grow-1 pl-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
+                  <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
+                </div>
+
+                <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noComments>
+        <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
+      </ng-template>
+     </app-card>
+
+     </div>
+
+
+      <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
+      <div *ngIf="showRejectForm" class="mt-4">
+        <app-card cardTitle="Rejet de la RFQ">
+          <form class="form-group" [formGroup]="rejectForm">
+            <label>Commentaire</label>
+            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
+          </form>
+          <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-danger" (click)="submitRejection()">
+              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
+            </button>
+            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
+              Annuler
+            </button>
+          </div>
+        </app-card>
+      </div>
+
+ </div>
+
