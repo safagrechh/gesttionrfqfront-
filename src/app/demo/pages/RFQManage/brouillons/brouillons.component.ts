@@ -14,6 +14,7 @@ import { interval } from 'rxjs';
   standalone: true,
   imports: [CommonModule, SharedModule],
 })
+
 export class BrouillonsComponent implements OnInit {
   rfqs: Array<RFQDetailsDto> = [];
 

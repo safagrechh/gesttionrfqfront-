@@ -198,11 +198,15 @@
 
           <!-- Submit button -->
           <div class="d-flex justify-content-center mt-4">
-            <button type="submit" class="btn btn-outline-primary">
+            <button *ngIf="!isBrouillon" type="submit" class="btn btn-outline-primary">
               <i class="feather icon-save"></i> Update
             </button>
 
+            <button *ngIf="isBrouillon" type="button" class="btn btn-outline-primary" (click)="FinaliserBrouillon()">
+              <i class="feather icon-save"></i> Finaliser Brouillon
+            </button>
           </div>
+
 
         </div>
       </form>

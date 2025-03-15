@@ -198,9 +198,42 @@
      <i class="feather icon-trash"></i>
     Brouillon</a>
 
-  <ng-template ngbNavContent>
-   
-  </ng-template>
+    <ng-template ngbNavContent>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>RFQ N°</th>
+              <th>Nom de Devis</th>
+              <th>Client</th>
+              <th>Date de Création</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rfq of getRFQsByStatus('brouillon'); trackBy: trackTable">
+              <td>RFQ N°{{ rfq.id }}</td>
+              <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
+              <td>{{ rfq.client || 'Unknown Client' }}</td>
+              <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
+              <td>
+                <span class="badge bg-warning">En attente</span>
+              </td>
+              <td>
+                <!-- Change the link for viewing the RFQ -->
+                <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                  <i class="feather icon-eye"></i>
+                </a>
+                <a [routerLink]="'/rfq-manage/edit-rfq/' +  rfq.id" title="Finaliser RFQ" class="ms-2">
+                  <i class="feather icon-edit"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
   <hr />
 </li>
 

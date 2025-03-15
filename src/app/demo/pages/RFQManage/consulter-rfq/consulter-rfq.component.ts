@@ -48,8 +48,10 @@ export class ConsulterRFQComponent implements OnInit {
       return this.rfqs.filter(rfq => rfq.valide === true && rfq.brouillon !==true);
     } else if (status === 'rejected') {
       return this.rfqs.filter(rfq => rfq.rejete === true && rfq.brouillon !==true);
-    } else { // pending
+    } else if (status === 'pending') { // pending
       return this.rfqs.filter(rfq => rfq.valide !== true && rfq.rejete !== true && rfq.brouillon !==true);
+    }else{
+      return this.rfqs.filter(rfq => rfq.brouillon == true);
     }
   }
 

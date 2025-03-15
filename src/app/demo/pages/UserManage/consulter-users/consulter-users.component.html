@@ -1,0 +1,135 @@
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="mb-3">Consulter les Utilisateurs</h5>
+
+      <!-- Formulaire de modification -->
+      <div *ngIf="selectedUser" class="card mb-3">
+        <div class="card-body">
+          <h5>Modifier l'utilisateur</h5>
+          <form (ngSubmit)="updateUser()">
+            <div class="mb-3">
+              <label class="form-label">Nom</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.nomUser" name="nomUser" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Mots de passe </label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Rôle</label>
+              <select class="form-control" [(ngModel)]="selectedUser.role" name="role" required>
+                <option [value]=0>Validateur</option>
+                <option [value]=1>Ingénieur</option>
+                <option [value]=2>Administrateur</option>
+                <option [value]=3>Lecteur</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+            <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Navigation verticale -->
+        <div class="col-md-3 col-sm-12">
+          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
+            <li *ngFor="let role of roleList; let i = index" [ngbNavItem]="i + 1" class="nav-item">
+              <a class="nav-link" ngbNavLink>{{ role.name }}</a>
+              <ng-template ngbNavContent>
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let user of getUsersByRole(role.id); trackBy: trackTable">
+                        <td>{{ user.nomUser }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                          <a href="javascript:void(0)" (click)="editUser(user)" title="Modifier Utilisateur">
+                            <i class="feather icon-edit text-warning"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteUser(user.id)" title="Supprimer Utilisateur" class="ms-2">
+                            <i class="feather icon-trash text-danger"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+
+            <!-- Recherche utilisateur -->
+            <li [ngbNavItem]="roleList.length + 1" class="nav-item">
+              <a class="nav-link" ngbNavLink>Rechercher par Nom</a>
+              <ng-template ngbNavContent>
+                <div class="p-3">
+                  <div class="input-group search-bar">
+                    <input type="text" class="form-control search-input" placeholder="Rechercher par nom..." [(ngModel)]="searchName">
+                    <button class="btn search-button" (click)="searchByName()">
+                      <i class="feather icon-search"></i>
+                    </button>
+                  </div>
+
+                  <div *ngIf="filteredUser">
+                    <div class="table-responsive">
+                      <table class="table table-hover mb-0">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{ filteredUser.nomUser }}</td>
+                            <td>{{ filteredUser.email }}</td>
+                            <td>{{ getRoleName(filteredUser.role) }}</td>
+                            <td>
+                              <a href="javascript:void(0)" (click)="editUser(filteredUser)" title="Modifier Utilisateur">
+                                <i class="feather icon-edit text-warning"></i>
+                              </a>
+                              <a href="javascript:void(0)" (click)="deleteUser(filteredUser.id)" title="Supprimer Utilisateur" class="ms-2">
+                                <i class="feather icon-trash text-danger"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <p *ngIf="searchName && !filteredUser" class="text-danger mt-2">Aucun utilisateur trouvé avec ce nom.</p>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+          </ul>
+        </div>
+
+        <!-- Contenu des onglets -->
+        <div class="col-md-9 col-sm-12">
+          <div [ngbNavOutlet]="nav3" class="ms-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

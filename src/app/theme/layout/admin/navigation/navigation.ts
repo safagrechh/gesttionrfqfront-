@@ -59,14 +59,6 @@ export const NavigationItems: NavigationItem[] = [
             url: '/rfq-manage/get-rfqs',
 
             classes: 'nav-item'
-          },
-          {
-            id: 'get-brouillons',
-            title: 'Brouillons ',
-            type: 'item',
-            url: '/rfq-manage/get-brouillons',
-            
-            classes: 'nav-item'
           }
 
         ]
@@ -81,12 +73,83 @@ export const NavigationItems: NavigationItem[] = [
     children: [
       {
         id: 'user-form',
-        title: 'Ajouter User',
-        type: 'item',
-        url: '/user-manage/user-form',
+        title: 'Manage User',
+        type: 'collapse',
         icon: 'feather icon-user-plus',
-        classes: 'nav-item'
+        children: [
+          {
+            id: 'create-user',
+            title: 'Ajouter User',
+            type: 'item',
+            url: '/user-manage/user-form',
+
+            classes: 'nav-item'
+          },
+          {
+            id: 'get-users',
+            title: 'Consulter users ',
+            type: 'item',
+            url: '/user-manage/get-users',
+
+            classes: 'nav-item'
+          }
+
+        ]
+
+      },
+      {
+        id: 'client-form',
+        title: 'Manage client',
+        type: 'collapse',
+        icon: 'feather icon-user-plus',
+        children: [
+          {
+            id: 'create-client',
+            title: 'Ajouter client',
+            type: 'item',
+            url: '/client-manage/client-form',
+
+            classes: 'nav-item'
+          },
+          {
+            id: 'get-clients',
+            title: 'Consulter clients ',
+            type: 'item',
+            url: '/client-manage/get-clients',
+
+            classes: 'nav-item'
+          }
+
+        ]
+
+      } ,
+      {
+        id: 'worker-form',
+        title: 'Manage workers',
+        type: 'collapse',
+        icon: 'feather icon-user-plus',
+        children: [
+          {
+            id: 'create-worker',
+            title: 'Ajouter workers',
+            type: 'item',
+            url: '/worker-manage/worker-form',
+
+            classes: 'nav-item'
+          },
+          {
+            id: 'get-workers',
+            title: 'Consulter workers ',
+            type: 'item',
+            url: '/worker-manage/get-workers',
+
+            classes: 'nav-item'
+          }
+
+        ]
+
       }
+
     ]
   },
   {

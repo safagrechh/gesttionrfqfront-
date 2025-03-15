@@ -189,19 +189,23 @@
 
       <!-- Boutons d'action -->
       <div class="d-flex justify-content-center mt-4">
-        <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+        <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
                 type="button" class="btn btn-outline-danger"
                 (click)="onSubmitRejeter()">
           <i class="feather icon-x-circle"></i> Rejeter
         </button>
-        <button *ngIf="isValidateur && rfq?.valide === false && rfq?.rejete === false"
+        <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
                 type="button" class="btn btn-outline-success"
                 (click)="onSubmitValider()">
           <i class="feather icon-check-circle"></i> Valider
         </button>
-        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf="rfq?.valide === false"
+        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" !isBrouillon && rfq?.valide === false"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
+        </a>
+        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" isBrouillon"
+                type="button" class="btn btn-outline-warning">
+          <i class="feather icon-edit"></i> Finaliser Brouillon
         </a>
       </div>
     </app-card>

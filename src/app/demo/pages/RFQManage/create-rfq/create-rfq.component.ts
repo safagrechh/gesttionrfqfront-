@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ClientService, ClientSummaryDto, MarketSegment, UserSummaryDto, WorkerDto } from 'src/app/api';
 import { WorkerService, UserService, MarketSegmentService, RFQService, CreateRFQDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-create-rfq',
@@ -38,7 +40,10 @@ export class CreateRFQComponent implements OnInit {
     private userService: UserService,
     private workerService: WorkerService,
     private marketSegmentService: MarketSegmentService,
-    private rfqService: RFQService
+    private rfqService: RFQService ,
+    private router: Router,
+
+
   ) {}
 
   ngOnInit(): void {
@@ -185,7 +190,8 @@ export class CreateRFQComponent implements OnInit {
 
     this.rfqService.apiRFQPost(createRFQDto).subscribe(response => {
         console.log('RFQ created successfully', response);
-        alert('RFQ added successfully!');
+        alert('Brouillon added successfully!');
+        this.router.navigate(['/rfq-manage/get-rfqs']);
     }, error => {
         console.error('Error creating RFQ', error);
         alert('There was an error adding the RFQ.');

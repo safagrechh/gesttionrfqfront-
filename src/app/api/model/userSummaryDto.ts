@@ -7,11 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RoleU } from './roleU';
 
 
 export interface UserSummaryDto { 
     id?: number;
     nomUser?: string | null;
     email?: string | null;
+    role?: RoleU;
+    password?: string | null;
 }
+export namespace UserSummaryDto {
+}
+
 

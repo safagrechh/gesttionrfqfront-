@@ -23,7 +23,9 @@ export class RFQComponent implements OnInit {
   isValidateur: boolean = false;
   showRejectForm = false; // Contrôle l'affichage du formulaire de rejet
   rejectForm!: FormGroup;
-  rejectionComment: string = ''; // Pour stocker le commentaire de rejet
+  rejectionComment: string = '';// Pour stocker le commentaire de rejet
+  isBrouillon: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -75,7 +77,6 @@ export class RFQComponent implements OnInit {
 
   checkUserRole() {
     this.userService.apiUserMeGet().subscribe(user => {
-      // On suppose que le rôle 0 correspond au validateur
       this.isValidateur = user.role === 0;
     });
   }
@@ -84,6 +85,7 @@ export class RFQComponent implements OnInit {
     this.rfqService.apiRFQIdGet(id).subscribe(data => {
       this.rfq = data;
       this.rfqForm.patchValue(data);
+      this.isBrouillon = data.brouillon ;
     });
   }
 

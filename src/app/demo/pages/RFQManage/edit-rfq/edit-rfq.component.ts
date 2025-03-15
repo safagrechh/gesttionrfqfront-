@@ -26,6 +26,7 @@ export class EditRFQComponent implements OnInit {
   testers: WorkerDto[] = [];
   marketSegments: MarketSegment[] = [];
   ws :WorkerDto[] = [];
+  isBrouillon: boolean = false;
 
 
 
@@ -100,6 +101,7 @@ export class EditRFQComponent implements OnInit {
 
         // Now patch the form with the data
         this.editForm.patchValue(data);
+        this.isBrouillon = data.brouillon;
       },
       error: (err) => {
         // Handle the error in case the request fails
@@ -160,6 +162,17 @@ export class EditRFQComponent implements OnInit {
         this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
       });
     }
+  }
+
+  FinaliserBrouillon(): void {
+
+    if (this.editForm.valid) {
+
+      this.rfqService.apiRFQIdFinaliserPut(this.rfqId, this.editForm.value).subscribe(() => {
+        this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
+      });
+    }
+
   }
 
 
