@@ -1,0 +1,72 @@
+.nav-pills {
+  li {
+    a.nav-link {
+      background-color: transparent; // Default state: no color
+      color: #171717; // Default text color
+      border: none;
+      margin-bottom: 0.5rem;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    a.nav-link.active {
+      color: #fff; // Text stays white when active
+    }
+
+    // En attente de validation (Yellow when active)
+    &:nth-child(1) a.nav-link.active {
+      background-color: #ffc107;
+    }
+
+    // Validée (Green when active)
+    &:nth-child(2) a.nav-link.active {
+      background-color: #28a745;
+    }
+
+    // Rejetée (Red when active)
+    &:nth-child(3) a.nav-link.active {
+      background-color: #17a2b8;
+    }
+
+    // Settings (Blue when active)
+    &:nth-child(4) a.nav-link.active {
+      background-color: #17a2b8;
+    }
+
+    &:nth-child(5) a.nav-link.active {
+      background-color: #0f3b4257;
+    }
+  }
+}
+i.icon-eye {
+  color: #215aaa !important;  // Custom Blue
+}
+
+i.icon-edit {
+  color: #a77028 !important;  // Custom Green
+}
+.search-bar {
+  border-radius: 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  // Effet léger d'ombre
+}
+
+.search-input {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 30px 0 0 30px; // Arrondi à gauche seulement
+}
+
+.search-button {
+  background: #17a2b8;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 0 30px 30px 0; // Arrondi à droite seulement
+  cursor: pointer;
+}
+
+.search-button i {
+  font-size: 18px;
+}
