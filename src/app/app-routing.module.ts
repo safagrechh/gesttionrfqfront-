@@ -45,6 +45,10 @@ const routes: Routes = [
         path: 'rfq-manage',
         loadChildren: () => import('./demo/pages/RFQManage/rfq.module').then(m => m.RFQModule)
       } ,
+      {
+        path: 'client-manage',
+        loadChildren: () => import('./demo/pages/client-manage/client-manage.module').then(m => m.ClientManageModule)
+      }
 
     ]
   },

@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateRFQComponent } from './create-rfq/create-rfq.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsulterRFQComponent } from './consulter-rfq/consulter-rfq.component';
-import { BrouillonsComponent } from './brouillons/brouillons.component';
 import { RFQComponent } from './rfq/rfq.component';
 import { EditRFQComponent } from './edit-rfq/edit-rfq.component';
 
@@ -20,10 +19,6 @@ const routes: Routes = [
     path: 'get-rfqs',
     component:ConsulterRFQComponent
   } ,
-  {
-    path: 'get-brouillons',
-    component:BrouillonsComponent
-  },
   {
     path: 'get-rfq/:id',
     component:RFQComponent
@@ -44,7 +39,6 @@ const routes: Routes = [
     CreateRFQComponent,
     ReactiveFormsModule,
     ConsulterRFQComponent,
-    BrouillonsComponent,
     RFQComponent ,
     EditRFQComponent
   ]

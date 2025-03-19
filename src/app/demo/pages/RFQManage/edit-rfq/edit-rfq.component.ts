@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClientService, ClientSummaryDto, MarketSegment, MarketSegmentService, RFQService, UserService, UserSummaryDto, WorkerDto, WorkerService } from 'src/app/api';
+import { ClientService, ClientSummaryDto, MarketSegment, MarketSegmentService, RFQDetailsDto, RFQService, UserService, UserSummaryDto, WorkerDto, WorkerService } from 'src/app/api';
 import { UpdateRFQDto } from 'src/app/api';
 import { Statut } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -27,6 +27,9 @@ export class EditRFQComponent implements OnInit {
   marketSegments: MarketSegment[] = [];
   ws :WorkerDto[] = [];
   isBrouillon: boolean = false;
+   rfqs: Array<RFQDetailsDto> = [];
+   cqExists: boolean = false;
+
 
 
 
@@ -113,6 +116,7 @@ export class EditRFQComponent implements OnInit {
     this.getIngenieurs();
     this.getWorkers();
     this.getMarketSegments();
+    this.fetchRFQDetails();
   }
 
   getClients() {
@@ -165,6 +169,11 @@ export class EditRFQComponent implements OnInit {
   }
 
   FinaliserBrouillon(): void {
+    this.onCQChange();
+    if (this.cqExists) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
+    }
 
     if (this.editForm.valid) {
 
@@ -178,5 +187,27 @@ export class EditRFQComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/rfq-manage/get-rfqs']);
+  }
+
+
+  fetchRFQDetails(): void {
+    this.rfqService.apiRFQGet().subscribe(
+      (response: any) => {
+        this.rfqs = response.$values;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des RFQ:', error);
+      }
+    );
+  }
+
+  onCQChange() {
+    const cqValue = Number(this.editForm.get('cq')?.value);  // Ensure it's a number
+    console.log('CQ value changed:', cqValue);
+    console.log('Existing RFQs:', this.rfqs); // Log the entire RFQ list
+
+    // Check if the CQ value exists in any of the RFQs, ignoring null values
+    this.cqExists = this.rfqs.some(rfq => rfq.cq !== null && Number(rfq.cq) === cqValue);
+    console.log('Does CQ exist?', this.cqExists);
   }
 }

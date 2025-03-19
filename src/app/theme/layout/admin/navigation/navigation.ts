@@ -98,31 +98,15 @@ export const NavigationItems: NavigationItem[] = [
 
       },
       {
-        id: 'client-form',
-        title: 'Manage client',
-        type: 'collapse',
-        icon: 'feather icon-user-plus',
-        children: [
-          {
-            id: 'create-client',
-            title: 'Ajouter client',
-            type: 'item',
-            url: '/client-manage/client-form',
 
-            classes: 'nav-item'
-          },
-          {
-            id: 'get-clients',
-            title: 'Consulter clients ',
+            id: 'client-manage',
+            title: 'Manage client',
             type: 'item',
-            url: '/client-manage/get-clients',
-
+            url: '/client-manage',
+            icon: 'feather icon-user-plus',
             classes: 'nav-item'
           }
-
-        ]
-
-      } ,
+         ,
       {
         id: 'worker-form',
         title: 'Manage workers',

@@ -1,43 +1,45 @@
 <div class="col-sm-12">
+
+  <!-- Formulaire de modification -->
+  <div *ngIf="selectedUser" class="card mb-3">
+    <div class="card-body">
+      <h5>Modifier l'utilisateur</h5>
+      <form (ngSubmit)="updateUser()">
+        <div class="mb-3">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-control" [(ngModel)]="selectedUser.nomUser" name="nomUser" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mots de passe </label>
+          <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Rôle</label>
+          <select class="form-control" [(ngModel)]="selectedUser.role" name="role" required>
+            <option [value]=0>Validateur</option>
+            <option [value]=1>Ingénieur</option>
+            <option [value]=2>Administrateur</option>
+            <option [value]=3>Lecteur</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-body">
       <h5 class="mb-3">Consulter les Utilisateurs</h5>
 
-      <!-- Formulaire de modification -->
-      <div *ngIf="selectedUser" class="card mb-3">
-        <div class="card-body">
-          <h5>Modifier l'utilisateur</h5>
-          <form (ngSubmit)="updateUser()">
-            <div class="mb-3">
-              <label class="form-label">Nom</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedUser.nomUser" name="nomUser" required />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Mots de passe </label>
-              <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Rôle</label>
-              <select class="form-control" [(ngModel)]="selectedUser.role" name="role" required>
-                <option [value]=0>Validateur</option>
-                <option [value]=1>Ingénieur</option>
-                <option [value]=2>Administrateur</option>
-                <option [value]=3>Lecteur</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-success">Enregistrer</button>
-            <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
-          </form>
-        </div>
-      </div>
 
       <div class="row">
         <!-- Navigation verticale -->

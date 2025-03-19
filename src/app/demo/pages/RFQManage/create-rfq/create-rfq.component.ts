@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ClientService, ClientSummaryDto, MarketSegment, UserSummaryDto, WorkerDto } from 'src/app/api';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ClientService, ClientSummaryDto, MarketSegment, RFQDetailsDto, UserSummaryDto, WorkerDto } from 'src/app/api';
 import { WorkerService, UserService, MarketSegmentService, RFQService, CreateRFQDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Router } from '@angular/router';
@@ -25,6 +25,8 @@ export class CreateRFQComponent implements OnInit {
   marketSegments: MarketSegment[] = [];
   isValidateur: boolean = false;
   selectedClient: any;
+  rfqs: Array<RFQDetailsDto> = [];
+  cqExists: boolean = false;
 
   statutOptions = [
     { value: 0, label: 'Complete' },
@@ -79,6 +81,10 @@ export class CreateRFQComponent implements OnInit {
     this.getWorkers();
     this.getMarketSegments();
     this.checkUserRole();
+
+    this.fetchRFQDetails();
+
+
   }
 
   checkUserRole() {
@@ -132,26 +138,44 @@ export class CreateRFQComponent implements OnInit {
   }
 
   onSubmit(): void {
+    // Check if the form is invalid
+    if (this.rfqForm.invalid) {
+      // Trigger validation messages for all fields
+      Object.keys(this.rfqForm.controls).forEach(field => {
+        const control = this.rfqForm.get(field);
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
+      });
+      return;
+    }
+
+    this.onCQChange();
+    if (this.cqExists) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
+    }
+
     console.log('Form content:', this.rfqForm.value);
-    console.log(this.rfqForm.valid); // Check form validity
     if (this.rfqForm.invalid) {
       alert('Form is invalid. Please check the fields and try again.');
-      return; // Return to stop further execution if the form is invalid
+      return;
     }
 
     const formValue = { ...this.rfqForm.value, statut: Number(this.rfqForm.value.statut), brouillon: false };
-
-
     const createRFQDto: CreateRFQDto = formValue;
+
     this.rfqService.apiRFQPost(createRFQDto).subscribe(response => {
       console.log('RFQ created successfully', response);
       alert('RFQ added successfully!');
+      this.router.navigate(['/rfq-manage/get-rfqs']);
     }, error => {
       console.error('Error creating RFQ', error);
       alert('There was an error adding the RFQ.');
-
     });
   }
+
+
   onSubmitBrouillon(): void {
     console.log('Form content:', this.rfqForm.value);
 
@@ -219,6 +243,30 @@ export class CreateRFQComponent implements OnInit {
       alert('There was an error validating the RFQ.');
     });
   }
+
+
+  fetchRFQDetails(): void {
+    this.rfqService.apiRFQGet().subscribe(
+      (response: any) => {
+        this.rfqs = response.$values;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des RFQ:', error);
+      }
+    );
+  }
+
+  onCQChange() {
+    const cqValue = Number(this.rfqForm.get('cq')?.value);  // Ensure it's a number
+    console.log('CQ value changed:', cqValue);
+    console.log('Existing RFQs:', this.rfqs); // Log the entire RFQ list
+
+    // Check if the CQ value exists in any of the RFQs, ignoring null values
+    this.cqExists = this.rfqs.some(rfq => rfq.cq !== null && Number(rfq.cq) === cqValue);
+    console.log('Does CQ exist?', this.cqExists);
+  }
+
+
 
 
 }
