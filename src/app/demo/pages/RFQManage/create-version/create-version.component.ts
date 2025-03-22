@@ -1,0 +1,196 @@
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, UpdateRFQDto, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService , CreateVersionRFQDto } from 'src/app/api';
+import { SharedModule } from 'src/app/theme/shared/shared.module';
+
+@Component({
+  selector: 'app-create-version',
+  imports: [CommonModule, ReactiveFormsModule, SharedModule] ,
+  providers: [DatePipe] ,
+  templateUrl: './create-version.component.html',
+  styleUrl: './create-version.component.scss'
+})
+export class CreateVersionComponent implements OnInit {
+
+  createForm!: FormGroup;
+  rfqId!: number;
+  selectedClient: any;
+  clients: ClientSummaryDto[] = [];
+  ingenieurs: UserSummaryDto[] = [];
+  materialLeaders: WorkerDto[] = [];
+  testers: WorkerDto[] = [];
+  marketSegments: MarketSegment[] = [];
+  ws :WorkerDto[] = [];
+  isBrouillon: boolean = false;
+  rfqs: Array<RFQDetailsDto> = [];
+  cqExists: boolean = false;
+
+
+
+
+
+  statutOptions = [
+    { value: 0, label: 'Complete' },
+    { value: 1, label: 'In Progress' },
+    { value: 2, label: 'Not Started' }
+  ];
+
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private rfqService: RFQService ,
+    private clientService: ClientService,
+    private userService: UserService,
+    private workerService: WorkerService,
+    private marketSegmentService: MarketSegmentService,
+    private datePipe: DatePipe ,
+    private versionService: VersionRFQService ,
+  ) {}
+
+  ngOnInit(): void {
+    this.rfqId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.createForm = this.fb.group({
+      cq: [''],
+      quoteName: ['', Validators.required],
+      numRefQuoted: [''],
+      sopDate: [''],
+      maxV: [''],
+      estV: [''],
+      koDate: [''],
+      customerDataDate: [''],
+      mdDate: [''],
+      mrDate: [''],
+      tdDate: [''],
+      trDate: [''],
+      ldDate: [''],
+      lrDate: [''],
+      cdDate: [''],
+      approvalDate: [''],
+      statut: [''],
+      materialLeaderId: [''],
+      testLeaderId: [''],
+      marketSegmentId: [''],
+      clientId: [''],
+      ingenieurRFQId: [''],
+      vaLeaderId: [''],
+      valide: [false],
+      rejete: [false],
+      brouillon: [false]
+    });
+
+    // Charger les listes AVANT d'appliquer patchValue()
+    Promise.all([
+      this.getClients(),
+      this.getIngenieurs(),
+      this.getWorkers(),
+      this.getMarketSegments()
+    ]).then(() => {
+      this.loadRFQData();  // Une fois les listes chargées, appliquer les valeurs du RFQ
+    });
+  }
+
+  loadRFQData() {
+    this.rfqService.apiRFQIdGet(this.rfqId).subscribe({
+      next: (data: any) => {
+        // Mapping fields correctly
+        data.sopDate = this.datePipe.transform(data.sopDate, 'yyyy-MM-dd');
+        data.koDate = this.datePipe.transform(data.koDate, 'yyyy-MM-dd');
+        data.customerDataDate = this.datePipe.transform(data.customerDataDate, 'yyyy-MM-dd');
+        data.mdDate = this.datePipe.transform(data.mdDate, 'yyyy-MM-dd');
+        data.mrDate = this.datePipe.transform(data.mrDate, 'yyyy-MM-dd');
+        data.tdDate = this.datePipe.transform(data.tdDate, 'yyyy-MM-dd');
+        data.trDate = this.datePipe.transform(data.trDate, 'yyyy-MM-dd');
+        data.ldDate = this.datePipe.transform(data.ldDate, 'yyyy-MM-dd');
+        data.lrDate = this.datePipe.transform(data.lrDate, 'yyyy-MM-dd');
+        data.cdDate = this.datePipe.transform(data.cdDate, 'yyyy-MM-dd');
+        data.approvalDate = this.datePipe.transform(data.approvalDate, 'yyyy-MM-dd');
+
+        // Map materialLeader name to materialLeaderId
+        const materialLeader = this.materialLeaders.find(leader => leader.nom === data.materialLeader);
+        if (materialLeader) {
+          data.materialLeaderId = materialLeader.id;
+        }
+
+        // Same for testLeader
+        const testLeader = this.testers.find(leader => leader.nom === data.testLeader);
+        if (testLeader) {
+          data.testLeaderId = testLeader.id;
+        }
+
+        // Patch Form after loading the data
+        this.createForm.patchValue(data);
+        console.log("Form after patchValue", this.createForm.value);
+        console.log('RFQ Data applied:', data);
+      },
+      error: (err) => {
+        console.error('Error loading RFQ:', err);
+      }
+    });
+  }
+
+
+
+  getClients() {
+    this.clientService.apiClientGet().subscribe(response => {
+      console.log('Clients Response:', response);
+      this.clients = (response as any).$values || [];
+    });
+  }
+  onClientChange(event: Event) {
+    const selectedClientId = Number((event.target as HTMLSelectElement).value);
+    this.selectedClient = this.clients.find(client => client.id === selectedClientId);
+  }
+  getIngenieurs() {
+    this.userService.apiUserByRoleRoleGet('IngenieurRFQ').subscribe(ingenieurs => {
+      console.log('Ingenieurs:', ingenieurs); // Debugging log
+      this.ingenieurs =  (ingenieurs as any).$values || [];
+    });
+  }
+
+  getWorkers() {
+    this.workerService.apiWorkerGet().subscribe(workers => {
+      console.log('Workers:', workers); // Debugging log
+      this.ws = (workers as any).$values || [];
+      this.materialLeaders = this.ws.filter(w => w.role === 0);
+      this.testers = this.ws.filter(w => w.role === 1);
+    });
+  }
+
+  getMarketSegments() {
+    this.marketSegmentService.apiMarketSegmentGet().subscribe(segments => {
+      console.log('Market Segments:', segments); // Debugging log
+
+      this.marketSegments = (segments as any).$values || [];;
+    });
+  }
+
+
+  onSubmit(): void {
+    if (this.createForm.valid) {
+      // Ensure the "rejete" field is set to false before submitting the data
+      this.createForm.patchValue({
+        rejete: false ,
+        rfqId : this.rfqId
+      });
+
+      // Now submit the updated form data
+      this.versionService.apiVersionRFQPost( this.createForm.value).subscribe(() => {
+        this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
+      });
+    }
+  }
+
+
+  trackById(index: number, item: any): number {
+    return item.id;
+  }
+
+
+
+
+}

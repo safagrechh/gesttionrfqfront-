@@ -1,5 +1,46 @@
 <div class="container">
   <div class="col-sm-12">
+    <app-card cardTitle="RFQ Versions" [options]="false">
+      <div class="workflow-container">
+        <h2> RFQ N°{{ idrfq }} - Versions </h2>
+        <div class="line"></div>
+        <div class="workflow">
+            <div class="step">
+                <div class="circle"><span>✔</span></div>
+                <h3>RFQ N°{{ idrfq }}</h3>
+                <p>{{ rfq.valide ? 'Validée' : (rfq.rejete ? 'Rejetée' : 'En attente') }}</p>
+            </div>
+            <div class="step">
+                <div class="circle"><span>✔</span></div>
+                <h3>Designing</h3>
+                <p>Creating UI/UX wireframes and mockups.</p>
+            </div>
+            <div class="step active">
+                <div class="circle"><span>✔</span></div>
+                <h3>Developing</h3>
+                <p>Writing code and integrating components.</p>
+            </div>
+            <div class="step">
+                <div class="circle"><span>✔</span></div>
+                <h3>Testing</h3>
+                <p> bla bla kaaljkzjd Performing QA and fixing bugs.</p>
+            </div>
+            <div class="step">
+                <div class="circle"><span>✔</span></div>
+                <h3>Distribution</h3>
+                <p>Writing code and integrating components.</p>
+            </div>
+        </div>
+      </div>
+
+    </app-card>
+  </div>
+</div>
+
+
+
+<div class="container">
+  <div class="col-sm-12">
     <app-card cardTitle="Basic Component" [options]="false">
 
       <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
@@ -203,6 +244,10 @@
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
+        <a [routerLink]="'/rfq-manage/ajouter-version/' + idrfq" *ngIf=" !isBrouillon "
+        type="button" class="btn btn-outline-success">
+  <i class="feather icon-plus"></i> Ajouter une nouvelle version
+</a>
         <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" isBrouillon"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Finaliser Brouillon

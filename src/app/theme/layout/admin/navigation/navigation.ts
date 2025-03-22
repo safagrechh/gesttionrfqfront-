@@ -114,18 +114,18 @@ export const NavigationItems: NavigationItem[] = [
         icon: 'feather icon-user-plus',
         children: [
           {
-            id: 'create-worker',
-            title: 'Ajouter workers',
+            id: 'create-Material-Leader',
+            title: 'Material Leaders',
             type: 'item',
-            url: '/worker-manage/worker-form',
+            url: '/worker-manage/material-leaders',
 
             classes: 'nav-item'
           },
           {
-            id: 'get-workers',
-            title: 'Consulter workers ',
+            id: 'create-Test-Leader',
+            title: 'Test Leaders',
             type: 'item',
-            url: '/worker-manage/get-workers',
+            url: '/worker-manage/test-leaders',
 
             classes: 'nav-item'
           }

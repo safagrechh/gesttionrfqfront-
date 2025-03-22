@@ -48,6 +48,10 @@ const routes: Routes = [
       {
         path: 'client-manage',
         loadChildren: () => import('./demo/pages/client-manage/client-manage.module').then(m => m.ClientManageModule)
+      } ,
+      {
+        path: 'worker-manage',
+        loadChildren: () => import('./demo/pages/worker-manage/worker-manage.module').then(m => m.WorkerManageModule)
       }
 
     ]

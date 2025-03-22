@@ -13,6 +13,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
   standalone: true,
   imports: [CommonModule, SharedModule, RouterModule],
 })
+
 export class ClientManageComponent implements OnInit {
   clients: ClientSummaryDto[] = [];
   searchName: string = '';
