@@ -11,6 +11,7 @@ import { Statut } from './statut';
 
 
 export interface VersionRFQDetailsDto { 
+    id?: number;
     cq?: number | null;
     quoteName?: string | null;
     numRefQuoted?: number | null;

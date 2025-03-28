@@ -52,7 +52,7 @@ export class CreateRFQComponent implements OnInit {
     this.rfqForm = this.fb.group({
       quoteName: ['', Validators.required],
       numRefQuoted: ['', Validators.required],
-      statut: ['', Validators.required],
+      statut: [null],
       clientId: ['', Validators.required],
       valeaderId: ['', Validators.required],
       ingenieurRFQId: ['', Validators.required],
@@ -61,17 +61,17 @@ export class CreateRFQComponent implements OnInit {
       testLeaderId: ['', Validators.required],
       estV: ['', [Validators.required, Validators.min(0)]],  // Add estV
       maxV: ['', [Validators.required, Validators.min(0)]],  // Add maxV
-      sopDate: [''],
-      koDate: [''],
-      customerDataDate: [''],
-      mdDate: [''],
+      sopDate: ['' ,Validators.required],
+      koDate: ['' ,Validators.required],
+      customerDataDate: ['',Validators.required],
+      mdDate: ['',Validators.required],
       mrDate: [''],
-      tdDate: [''],
+      tdDate: ['',Validators.required],
       trDate: [''],
-      ldDate: [''],
+      ldDate: ['',Validators.required],
       lrDate: [''],
-      cdDate: [''],
-      approvalDate: [''],
+      cdDate: ['',Validators.required],
+      approvalDate: [null],
       cq: ['', Validators.required]
     });
 

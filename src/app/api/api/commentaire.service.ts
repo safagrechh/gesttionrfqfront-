@@ -173,9 +173,9 @@ export class CommentaireService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<Commentaire>>;
-    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<Commentaire>>>;
-    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<Commentaire>>>;
+    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CommentaireDto>>;
+    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CommentaireDto>>>;
+    public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CommentaireDto>>>;
     public apiCommentaireByversionrfqVersionRfqIdGet(versionRfqId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (versionRfqId === null || versionRfqId === undefined) {
             throw new Error('Required parameter versionRfqId was null or undefined when calling apiCommentaireByversionrfqVersionRfqIdGet.');
@@ -227,7 +227,7 @@ export class CommentaireService {
         }
 
         let localVarPath = `/api/Commentaire/byversionrfq/${this.configuration.encodeParam({name: "versionRfqId", value: versionRfqId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<Array<Commentaire>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<CommentaireDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

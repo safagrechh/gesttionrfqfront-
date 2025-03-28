@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientService, ClientSummaryDto, MarketSegment, MarketSegmentService, RFQDetailsDto, RFQService, UserService, UserSummaryDto, WorkerDto, WorkerService } from 'src/app/api';
 import { UpdateRFQDto } from 'src/app/api';
@@ -29,6 +29,7 @@ export class EditRFQComponent implements OnInit {
   isBrouillon: boolean = false;
    rfqs: Array<RFQDetailsDto> = [];
    cqExists: boolean = false;
+   cq : number ;
 
 
 
@@ -57,29 +58,29 @@ export class EditRFQComponent implements OnInit {
     this.rfqId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.editForm = this.fb.group({
-      cq: [null],
       quoteName: ['', Validators.required],
-      numRefQuoted: [null],
-      sopDate: [''],
-      maxV: [null],
-      estV: [null],
-      koDate: [''],
-      customerDataDate: [''],
-      mdDate: [''],
-      mrDate: [''],
-      tdDate: [''],
+      numRefQuoted: ['', Validators.required],
+      statut: [null],
+      clientId: ['', Validators.required],
+      valeaderId: ['', Validators.required],
+      ingenieurRFQId: ['', Validators.required],
+      marketSegmentId: ['', Validators.required],
+      materialLeaderId: ['', Validators.required],
+      testLeaderId: ['', Validators.required],
+      estV: ['', [Validators.required, Validators.min(0)]],  // Add estV
+      maxV: ['', [Validators.required, Validators.min(0)]],  // Add maxV
+      sopDate: ['', Validators.required],
+      koDate: ['' , Validators.required],
+      customerDataDate: ['', Validators.required],
+      mdDate: ['' , Validators.required],
+      mrDate: ['' ],
+      tdDate: ['' , Validators.required],
       trDate: [''],
-      ldDate: [''],
+      ldDate: ['',Validators.required],
       lrDate: [''],
-      cdDate: [''],
-      approvalDate: [''],
-      statut: [null, Validators.required],
-      materialLeaderId: [null],
-      testLeaderId: [null],
-      marketSegmentId: [null],
-      clientId: [null],
-      ingenieurRFQId: [null],
-      vaLeaderId: [null],
+      cdDate: ['',Validators.required],
+      approvalDate: [null],
+      cq: ['', Validators.required],
       valide: [false],
       rejete: [false],
       brouillon: [false]
@@ -87,9 +88,10 @@ export class EditRFQComponent implements OnInit {
 
     // Charger les données existantes
     this.rfqService.apiRFQIdGet(this.rfqId).subscribe({
-      next: (data: UpdateRFQDto) => {
+      next: (data: any) => {
         // You can preprocess the data if needed before patching it
         // Example: Format date fields to 'yyyy-MM-dd'
+        console.log(data);
         data.sopDate = this.datePipe.transform(data.sopDate, 'yyyy-MM-dd');
         data.koDate = this.datePipe.transform(data.koDate, 'yyyy-MM-dd');
         data.customerDataDate = this.datePipe.transform(data.customerDataDate, 'yyyy-MM-dd');
@@ -102,9 +104,43 @@ export class EditRFQComponent implements OnInit {
         data.cdDate = this.datePipe.transform(data.cdDate, 'yyyy-MM-dd');
         data.approvalDate = this.datePipe.transform(data.approvalDate, 'yyyy-MM-dd');
 
+        const materialLeader = this.materialLeaders.find(leader => leader.nom === data.materialLeader);
+        if (materialLeader) {
+          data.materialLeaderId = materialLeader.id;
+        }
+
+        const testLeader = this.testers.find(leader => leader.nom === data.testLeader);
+        if (testLeader) {
+          data.testLeaderId = testLeader.id;
+        }
+
+        const vaLeader = this.ingenieurs.find(leader => leader.nomUser === data.vaLeader);
+        console.log("h ", vaLeader)
+
+        if (vaLeader) {
+          data.valeaderId = vaLeader.id;
+        }
+
+        const marketSegment = this.marketSegments.find(leader => leader.nom === data.marketSegment);
+        if (marketSegment) {
+          data.marketSegmentId = marketSegment.id;
+        }
+        const client = this.clients.find(leader => leader.nom === data.client);
+        if (client) {
+          data.clientId = client.id;
+        }
+
+        const ingenieur = this.ingenieurs.find(leader => leader.nomUser === data.ingenieurRFQ);
+        if (ingenieur) {
+          data.ingenieurRFQId = ingenieur.id;
+        }
+
         // Now patch the form with the data
         this.editForm.patchValue(data);
+        console.log("Form after patchValue", this.editForm.value);
+        console.log('RFQ Data applied:', data);
         this.isBrouillon = data.brouillon;
+        this.cq = data.cq ;
       },
       error: (err) => {
         // Handle the error in case the request fails
@@ -155,27 +191,59 @@ export class EditRFQComponent implements OnInit {
 
 
   onSubmit(): void {
-    if (this.editForm.valid) {
-      // Ensure the "rejete" field is set to false before submitting the data
-      this.editForm.patchValue({
-        rejete: false
-      });
 
-      // Now submit the updated form data
-      this.rfqService.apiRFQIdPut(this.rfqId, this.editForm.value).subscribe(() => {
-        this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
+    if (this.editForm.invalid) {
+      // Trigger validation messages for all fields
+      Object.keys(this.editForm.controls).forEach(field => {
+        const control = this.editForm.get(field);
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
       });
+      return;
     }
-  }
-
-  FinaliserBrouillon(): void {
-    this.onCQChange();
-    if (this.cqExists) {
+this.onCQChange();
+    if (this.cqExists ) {
       alert('CQ already exists. Please change it to proceed.');
       return;
     }
 
     if (this.editForm.valid) {
+      // Ensure the "rejete" field is set to false before submitting the data
+      this.editForm.patchValue({
+        rejete: false
+      });
+      console.log(this.editForm.value)
+      // Now submit the updated form data
+      this.rfqService.apiRFQIdPut(this.rfqId, this.editForm.value).subscribe({
+        
+      });
+      this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
+    }
+  }
+
+  FinaliserBrouillon(): void {
+     if (this.editForm.invalid) {
+          // Trigger validation messages for all fields
+          Object.keys(this.editForm.controls).forEach(field => {
+            const control = this.editForm.get(field);
+            if (control instanceof FormControl) {
+              control.markAsTouched();
+            }
+          });
+          return;
+        }
+
+    this.onCQChange();
+    if (this.cqExists ) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
+    }
+
+    if (this.editForm.valid) {
+      this.editForm.patchValue({
+        brouillon : true
+      });
 
       this.rfqService.apiRFQIdFinaliserPut(this.rfqId, this.editForm.value).subscribe(() => {
         this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
@@ -207,7 +275,7 @@ export class EditRFQComponent implements OnInit {
     console.log('Existing RFQs:', this.rfqs); // Log the entire RFQ list
 
     // Check if the CQ value exists in any of the RFQs, ignoring null values
-    this.cqExists = this.rfqs.some(rfq => rfq.cq !== null && Number(rfq.cq) === cqValue);
+    this.cqExists = this.rfqs.some(rfq => rfq.cq !== null && Number(rfq.cq) === cqValue && cqValue != this.cq);
     console.log('Does CQ exist?', this.cqExists);
   }
 }

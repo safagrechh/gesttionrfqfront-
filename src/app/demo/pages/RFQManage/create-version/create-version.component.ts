@@ -80,7 +80,8 @@ export class CreateVersionComponent implements OnInit {
       vaLeaderId: [''],
       valide: [false],
       rejete: [false],
-      brouillon: [false]
+      brouillon: [false] ,
+      rfqId: [''],
     });
 
     // Charger les listes AVANT d'appliquer patchValue()
@@ -110,17 +111,37 @@ export class CreateVersionComponent implements OnInit {
         data.cdDate = this.datePipe.transform(data.cdDate, 'yyyy-MM-dd');
         data.approvalDate = this.datePipe.transform(data.approvalDate, 'yyyy-MM-dd');
 
-        // Map materialLeader name to materialLeaderId
         const materialLeader = this.materialLeaders.find(leader => leader.nom === data.materialLeader);
         if (materialLeader) {
           data.materialLeaderId = materialLeader.id;
         }
 
-        // Same for testLeader
         const testLeader = this.testers.find(leader => leader.nom === data.testLeader);
         if (testLeader) {
           data.testLeaderId = testLeader.id;
         }
+
+        const vaLeader = this.ingenieurs.find(leader => leader.nomUser === data.vaLeader);
+        console.log("h ", vaLeader)
+
+        if (vaLeader) {
+          data.vaLeaderId = vaLeader.id;
+        }
+
+        const marketSegment = this.marketSegments.find(leader => leader.nom === data.marketSegment);
+        if (marketSegment) {
+          data.marketSegmentId = marketSegment.id;
+        }
+        const client = this.clients.find(leader => leader.nom === data.client);
+        if (client) {
+          data.clientId = client.id;
+        }
+
+        const ingenieur = this.ingenieurs.find(leader => leader.nomUser === data.ingenieurRFQ);
+        if (ingenieur) {
+          data.ingenieurRFQId = ingenieur.id;
+        }
+
 
         // Patch Form after loading the data
         this.createForm.patchValue(data);
@@ -177,7 +198,7 @@ export class CreateVersionComponent implements OnInit {
         rejete: false ,
         rfqId : this.rfqId
       });
-
+      console.log("form ", this.createForm.value)
       // Now submit the updated form data
       this.versionService.apiVersionRFQPost( this.createForm.value).subscribe(() => {
         this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour

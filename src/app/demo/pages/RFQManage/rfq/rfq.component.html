@@ -1,46 +1,44 @@
 <div class="container">
   <div class="col-sm-12">
     <app-card cardTitle="RFQ Versions" [options]="false">
-      <div class="workflow-container">
+      <div class="workflow-container" >
         <h2> RFQ N°{{ idrfq }} - Versions </h2>
         <div class="line"></div>
-        <div class="workflow">
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>RFQ N°{{ idrfq }}</h3>
-                <p>{{ rfq.valide ? 'Validée' : (rfq.rejete ? 'Rejetée' : 'En attente') }}</p>
+        <div class="workflow" >
+          <!-- RFQ Step -->
+          <div class="step" [ngClass]="{
+              'valid': rfqinitial?.valide,
+              'pending': !rfqinitial?.valide && !rfqinitial?.rejete,
+              'rejected': rfqinitial?.rejete
+            }" (click)="onRFQClick()">
+            <div class="circle">
+              <span>{{ rfqinitial?.valide ? '✔' : (rfqinitial?.rejete ? '✖' : '―') }}</span>
             </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Designing</h3>
-                <p>Creating UI/UX wireframes and mockups.</p>
+            <h3>RFQ N°{{ idrfq }}</h3>
+            <p>{{ rfqinitial?.valide ? 'Validé' : (rfqinitial?.rejete ? 'Rejeté' : 'En attente') }}</p>
+          </div>
+
+          <!-- Dynamically Generated Version Steps -->
+          <div class="step" *ngFor="let version of versions; let i = index" (click)="onVersionClick(version.id)" [ngClass]="{ 'valid': version?.valide, 'pending': !version?.valide && !version?.rejete, 'rejected': version?.rejete }">
+            <div class="circle">
+              <span>{{ version?.valide ? '✔' : (version?.rejete ? '✖' : '―') }}</span>
             </div>
-            <div class="step active">
-                <div class="circle"><span>✔</span></div>
-                <h3>Developing</h3>
-                <p>Writing code and integrating components.</p>
-            </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Testing</h3>
-                <p> bla bla kaaljkzjd Performing QA and fixing bugs.</p>
-            </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Distribution</h3>
-                <p>Writing code and integrating components.</p>
-            </div>
+            <h3>V{{i+1}}_{{ idrfq }}</h3>
+            <p>{{ version?.valide ? 'Validé' : (version?.rejete ? 'Rejeté' : 'En attente') }}</p>
+          </div>
+
         </div>
       </div>
-
     </app-card>
   </div>
 </div>
 
 
 
+
+
 <div class="container">
-  <div class="col-sm-12">
+  <div *ngIf="rfq" class="col-sm-12">
     <app-card cardTitle="Basic Component" [options]="false">
 
       <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
@@ -254,12 +252,8 @@
         </a>
       </div>
     </app-card>
-   </div>
 
-    <!-- Affichage des commentaires existants -->
-    <div class="col-sm-12">
-
-     <app-card cardTitle="Basic Component" [options]="false">
+    <app-card cardTitle="Basic Component" [options]="false">
       <h5>Commentaires</h5>
       <hr/>
       <div *ngIf="comments && comments.length > 0; else noComments">
@@ -288,10 +282,7 @@
       </ng-template>
      </app-card>
 
-     </div>
-
-
-      <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
+ <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
       <div *ngIf="showRejectForm" class="mt-4">
         <app-card cardTitle="Rejet de la RFQ">
           <form class="form-group" [formGroup]="rejectForm">
@@ -308,6 +299,280 @@
           </div>
         </app-card>
       </div>
+   </div>
+
+
+
+
+
+
+
+
+   <div *ngIf="selectedVersion" class="col-sm-12">
+    <app-card cardTitle="Basic Component" [options]="false">
+
+      <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Version </h3>
+        <span
+          class="badge rounded-pill px-3 py-2"
+          [ngClass]="{
+            'bg-warning text-dark': !selectedVersion.valide && !selectedVersion.rejete,
+            'bg-success': selectedVersion.valide,
+            'bg-danger': selectedVersion.rejete
+          }">
+          {{ selectedVersion.valide ? 'Validée' : (selectedVersion.rejete ? 'Rejetée' : 'En attente') }}
+        </span>
+      </div>
+
+
+      <!-- Formulaire selectedVersion en lecture seule -->
+      <form [formGroup]="rfqForm">
+        <div class="row">
+          <!-- Client Section -->
+          <div class="row">
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Client</label>
+                <input type="text" class="form-control" [value]="selectedVersion.client" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>CQ</label>
+                <input class="form-control" [value]="selectedVersion.cq" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- selectedVersion Section -->
+          <div class="row">
+            <h6>selectedVersion</h6>
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Quote Name</label>
+                <input class="form-control" [value]="selectedVersion.quoteName" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Market Segment</label>
+                <input class="form-control" [value]="selectedVersion.marketSegment" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Number of ref to be quoted</label>
+                <input class="form-control" [value]="selectedVersion.numRefQuoted" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>SOP Date</label>
+                <input class="form-control" [value]="selectedVersion.sopDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Maximum Value</label>
+                <input class="form-control" [value]="selectedVersion.maxV" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Estimated Value</label>
+                <input class="form-control" [value]="selectedVersion.estV" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- Materials Section -->
+          <div class="row">
+            <h6>Materials</h6>
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>KO Date</label>
+                <input class="form-control" [value]="selectedVersion.koDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Customer Due Date</label>
+                <input class="form-control" [value]="selectedVersion.customerDataDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Leader</label>
+                <input class="form-control" [value]="selectedVersion.materialLeader" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Due Date</label>
+                <input class="form-control" [value]="selectedVersion.mdDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Material Release Date</label>
+                <input class="form-control" [value]="selectedVersion.mrDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Section -->
+          <div class="row">
+            <h6>Test</h6>
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Leader</label>
+                <input class="form-control" [value]="selectedVersion.testLeader" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Due Date</label>
+                <input class="form-control" [value]="selectedVersion.tdDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Test Release Date</label>
+                <input class="form-control" [value]="selectedVersion.trDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- VA Section -->
+          <div class="row">
+            <h6>VA</h6>
+            <hr />
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>VA Leader</label>
+                <input class="form-control" [value]="selectedVersion.vaLeader" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Labour Due Date</label>
+                <input class="form-control" [value]="selectedVersion.ldDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Labour Release Date</label>
+                <input class="form-control" [value]="selectedVersion.lrDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Customer Due Date</label>
+                <input class="form-control" [value]="selectedVersion.cdDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>Approval Date</label>
+                <input class="form-control" [value]="selectedVersion.approvalDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+          </div>
+
+          <!-- RFQ Engineer Section -->
+          <div class="form-group">
+            <label>RFQ Engineer</label>
+            <input class="form-control" [value]="selectedVersion.ingenieurRFQ" disabled />
+          </div>
+        </div>
+      </form>
+      <br/>
+      <hr/>
+
+
+
+      <!-- Boutons d'action -->
+      <div class="d-flex justify-content-center mt-4">
+        <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
+                type="button" class="btn btn-outline-danger"
+                (click)="onSubmitRejeter()">
+          <i class="feather icon-x-circle"></i> Rejeter
+        </button>
+        <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
+                type="button" class="btn btn-outline-success"
+                (click)="onSubmitValiderV()">
+          <i class="feather icon-check-circle"></i> Valider
+        </button>
+        <a [routerLink]="'/rfq-manage/edit-Vrfq/' + idrfq" *ngIf=" !isBrouillon && selectedVersion?.valide === false"
+                type="button" class="btn btn-outline-warning">
+          <i class="feather icon-edit"></i> Editer
+        </a>
+        <a [routerLink]="'/rfq-manage/ajouter-version/' + idrfq" *ngIf=" !isBrouillon "
+        type="button" class="btn btn-outline-success">
+  <i class="feather icon-plus"></i> Ajouter une nouvelle version
+</a>
+        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" isBrouillon"
+                type="button" class="btn btn-outline-warning">
+          <i class="feather icon-edit"></i> Finaliser Brouillon
+        </a>
+      </div>
+    </app-card>
+
+    <app-card cardTitle="Basic Component" [options]="false">
+      <h5>Commentaires</h5>
+      <hr/>
+      <div *ngIf="comments && comments.length > 0; else noComments">
+        <ul class="list-group">
+          <li *ngFor="let comment of comments" class="list-group-item">
+            <div class="d-flex align-items-center">
+              <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
+              <img src="assets/images/user/avatar-2.jpg" class="img-radius"
+              alt="User-Profile-Image"
+              style="width: 40px; height: 40px; border-radius: 50%;"
+              class="me-2" />
+         <div class="flex-grow-1 pl-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
+                  <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
+                </div>
+
+                <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noComments>
+        <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
+      </ng-template>
+     </app-card>
+
+
+ <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
+      <div *ngIf="showRejectForm" class="mt-4">
+        <app-card cardTitle="Rejet de la RFQ">
+          <form class="form-group" [formGroup]="rejectForm">
+            <label>Commentaire</label>
+            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
+          </form>
+          <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-danger" (click)="submitRejectionV()">
+              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
+            </button>
+            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
+              Annuler
+            </button>
+          </div>
+        </app-card>
+      </div>
+   </div>
+
+
 
  </div>
 

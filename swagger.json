@@ -460,7 +460,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Commentaire"
+                    "$ref": "#/components/schemas/CommentaireDto"
                   }
                 }
               },
@@ -468,7 +468,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Commentaire"
+                    "$ref": "#/components/schemas/CommentaireDto"
                   }
                 }
               },
@@ -476,7 +476,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Commentaire"
+                    "$ref": "#/components/schemas/CommentaireDto"
                   }
                 }
               }
@@ -1627,6 +1627,101 @@
         }
       },
       "delete": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ/by-rfq/{rfqId}": {
+      "get": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "rfqId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionRFQSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ/{id}/valider": {
+      "post": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ/{id}/rejeter": {
+      "post": {
         "tags": [
           "VersionRFQ"
         ],
@@ -3456,6 +3551,10 @@
       "VersionRFQDetailsDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "cq": {
             "type": "integer",
             "format": "int32",
@@ -3582,6 +3681,10 @@
       "VersionRFQSummaryDto": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "cq": {
             "type": "integer",
             "format": "int32",

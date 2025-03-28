@@ -17,6 +17,9 @@
               <option *ngIf="clients.length === 0" disabled>Loading...</option>
               <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
             </select>
+            <div *ngIf="editForm.get('clientId')?.touched && editForm.get('clientId')?.invalid" class="text-danger">
+              <small *ngIf="editForm.get('clientId')?.hasError('required')">Client selection is required.</small>
+            </div>
            </div>
             </div>
           <div class="col-md-4 mb-3" *ngIf="selectedClient">
@@ -29,6 +32,9 @@
             <div class="form-group">
               <label for="cq">CQ</label>
               <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
+              <div *ngIf="editForm.get('cq')?.touched && editForm.get('cq')?.invalid" class="text-danger">
+                <small *ngIf="editForm.get('cq')?.hasError('required')">CQ is required.</small>
+              </div>
             </div>
             </div>
         </div>
@@ -42,6 +48,9 @@
               <div class="form-group">
                 <label for="quoteName">Quote Name</label>
                 <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
+                <div *ngIf="editForm.get('quoteName')?.touched && editForm.get('quoteName')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('quoteName')?.hasError('required')">Quote Name is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -50,30 +59,46 @@
                 <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
                   <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
                 </select>
+                <div *ngIf="editForm.get('marketSegmentId')?.touched && editForm.get('marketSegmentId')?.invalid" class="text-danger">
+                <small *ngIf="editForm.get('marketSegmentId')?.hasError('required')">Market Segment is required.</small>
               </div>
+              </div>
+
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="numRefQuoted">Number of ref to be quoted</label>
                 <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
+                <div *ngIf="editForm.get('numRefQuoted')?.touched && editForm.get('numRefQuoted')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('numRefQuoted')?.hasError('required')">Reference Number is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="sopDate">SOP Date</label>
                 <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
+                <div *ngIf="editForm.get('sopDate')?.touched && editForm.get('sopDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('sopDate')?.hasError('required')">SOP Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="maxV">Maximum Volume</label>
                 <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
+                <div *ngIf="editForm.get('maxV')?.touched && editForm.get('maxV')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('maxV')?.hasError('required')">Maximum Volume is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="estV">Estimated Volume</label>
                 <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
+                <div *ngIf="editForm.get('estV')?.touched && editForm.get('estV')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('estV')?.hasError('required')">Estimated Volume is required.</small>
+                </div>
               </div>
             </div>
           </div>
@@ -86,12 +111,18 @@
               <div class="form-group">
                 <label for="koDate">KO Date</label>
                 <input id="koDate" class="form-control" formControlName="koDate" type="date" />
+                <div *ngIf="editForm.get('koDate')?.touched && editForm.get('koDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('koDate')?.hasError('required')">KO Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="customerDataDate">Customer Due Date</label>
                 <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
+                <div *ngIf="editForm.get('customerDataDate')?.touched && editForm.get('customerDataDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('customerDataDate')?.hasError('required')">Customer Due Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -100,12 +131,18 @@
                 <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
                   <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
                 </select>
+                <div *ngIf="editForm.get('materialLeaderId')?.touched && editForm.get('materialLeaderId')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('materialLeaderId')?.hasError('required')">Material Leader is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="mdDate">Material Due Date</label>
                 <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
+                <div *ngIf="editForm.get('mdDate')?.touched && editForm.get('mdDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('mdDate')?.hasError('required')">Material Due Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -126,12 +163,18 @@
                 <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
                   <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
                 </select>
+                <div *ngIf="editForm.get('testLeaderId')?.touched && editForm.get('testLeaderId')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('testLeaderId')?.hasError('required')">Test Leader is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="tdDate">Test Due Date</label>
                 <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
+                <div *ngIf="editForm.get('tdDate')?.touched && editForm.get('tdDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('tdDate')?.hasError('required')">Test Due Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -152,12 +195,18 @@
                 <select id="valeaderId" class="form-control" formControlName="valeaderId">
                   <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
                 </select>
+                <div *ngIf="editForm.get('valeaderId')?.touched && editForm.get('valeaderId')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('valeaderId')?.hasError('required')">VA Leader is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="ldDate">Labour Due Date</label>
                 <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
+                <div *ngIf="editForm.get('ldDate')?.touched && editForm.get('ldDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('ldDate')?.hasError('required')">Labour Due Date is required.</small>
+                </div>
               </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -170,22 +219,13 @@
               <div class="form-group">
                 <label for="cdDate">Customer Due date</label>
                 <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
+                <div *ngIf="editForm.get('cdDate')?.touched && editForm.get('cdDate')?.invalid" class="text-danger">
+                  <small *ngIf="editForm.get('cdDate')?.hasError('required')">Customer Due Date is required.</small>
+                </div>
               </div>
             </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="statut">Status</label>
-                <select id="statut" class="form-control" formControlName="statut">
-                  <option *ngFor="let statut of statutOptions" [value]="statut.value">{{ statut.label }}</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="approvalDate">Approval Date</label>
-                <input id="approvalDate" class="form-control" formControlName="approvalDate" type="date" />
-              </div>
-            </div>
+
+
           </div>
 
           <!-- RFQ Engineer -->
@@ -194,6 +234,9 @@
             <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
               <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
             </select>
+            <div *ngIf="editForm.get('ingenieurRFQId')?.touched && editForm.get('ingenieurRFQId')?.invalid" class="text-danger">
+              <small *ngIf="editForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+            </div>
           </div>
 
           <!-- Submit button -->

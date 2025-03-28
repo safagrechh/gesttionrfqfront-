@@ -10,6 +10,7 @@
 
 
 export interface VersionRFQSummaryDto { 
+    id?: number;
     cq?: number | null;
     quoteName?: string | null;
     numRefQuoted?: number | null;

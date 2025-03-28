@@ -257,27 +257,9 @@
               </div>
             </div></div>
 
-            <!-- Status -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="statut">Status</label>
-              <select id="statut" class="form-control" formControlName="statut">
-                <option *ngFor="let statut of statutOptions" [value]="statut.value">{{ statut.label }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('statut')?.touched && rfqForm.get('statut')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('statut')?.hasError('required')">Status is required.</small>
-              </div>
-            </div></div>
+           
 
-             <!-- Approval Date -->
-             <div class="col-md-4 mb-3">
-             <div class="form-group">
-              <label for="approvalDate">Approval Date</label>
-              <input id="approvalDate" class="form-control" formControlName="approvalDate" type="date" />
-              <div *ngIf="rfqForm.get('approvalDate')?.touched && rfqForm.get('approvalDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('approvalDate')?.hasError('required')">Approval Date is required.</small>
-              </div>
-            </div></div>
+
             </div>
 
 
