@@ -36,6 +36,7 @@ export interface UpdateRFQDto {
     vaLeaderId?: number | null;
     valide?: boolean | null;
     rejete?: boolean | null;
+    file?: Blob | null;
     brouillon?: boolean | null;
 }
 export namespace UpdateRFQDto {

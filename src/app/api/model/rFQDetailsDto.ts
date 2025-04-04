@@ -39,6 +39,9 @@ export interface RFQDetailsDto {
     valide?: boolean;
     rejete?: boolean;
     brouillon?: boolean;
+    fileName?: string | null;
+    fileContentType?: string | null;
+    fileData?: string | null;
 }
 export namespace RFQDetailsDto {
 }

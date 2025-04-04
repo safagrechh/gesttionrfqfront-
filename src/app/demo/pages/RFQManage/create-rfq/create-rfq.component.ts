@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ClientService, ClientSummaryDto, MarketSegment, RFQDetailsDto, UserSummaryDto, WorkerDto } from 'src/app/api';
-import { WorkerService, UserService, MarketSegmentService, RFQService, CreateRFQDto } from 'src/app/api';
+import { ClientService, ClientSummaryDto, MarketSegment, RFQDetailsDto, UserSummaryDto, WorkerDto   } from 'src/app/api';
+import { WorkerService, UserService, MarketSegmentService, RFQService } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Router } from '@angular/router';
 
@@ -27,6 +27,9 @@ export class CreateRFQComponent implements OnInit {
   selectedClient: any;
   rfqs: Array<RFQDetailsDto> = [];
   cqExists: boolean = false;
+  selectedFile: File | null = null;
+  acceptedFileTypes = '.pdf,.xml';
+  maxFileSizeMB = 10;
 
   statutOptions = [
     { value: 0, label: 'Complete' },
@@ -49,43 +52,67 @@ export class CreateRFQComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initializeForm();
+    this.getClients();
+    this.getIngenieurs();
+    this.getWorkers();
+    this.getMarketSegments();
+    this.checkUserRole();
+    this.fetchRFQDetails();
+
+  }
+
+  initializeForm(): void {
     this.rfqForm = this.fb.group({
       quoteName: ['', Validators.required],
       numRefQuoted: ['', Validators.required],
-      statut: [null],
       clientId: ['', Validators.required],
       valeaderId: ['', Validators.required],
       ingenieurRFQId: ['', Validators.required],
       marketSegmentId: ['', Validators.required],
       materialLeaderId: ['', Validators.required],
       testLeaderId: ['', Validators.required],
-      estV: ['', [Validators.required, Validators.min(0)]],  // Add estV
-      maxV: ['', [Validators.required, Validators.min(0)]],  // Add maxV
-      sopDate: ['' ,Validators.required],
-      koDate: ['' ,Validators.required],
-      customerDataDate: ['',Validators.required],
-      mdDate: ['',Validators.required],
+      estV: ['', [Validators.required, Validators.min(0)]],
+      maxV: ['', [Validators.required, Validators.min(0)]],
+      sopDate: ['', Validators.required],
+      koDate: ['', Validators.required],
+      customerDataDate: ['', Validators.required],
+      mdDate: ['', Validators.required],
       mrDate: [''],
-      tdDate: ['',Validators.required],
+      tdDate: ['', Validators.required],
       trDate: [''],
-      ldDate: ['',Validators.required],
+      ldDate: ['', Validators.required],
       lrDate: [''],
-      cdDate: ['',Validators.required],
-      approvalDate: [null],
-      cq: ['', Validators.required]
+      cdDate: ['', Validators.required],
+      cq: ['', Validators.required],
+      file: [null] // Add file control
     });
-
-    this.getClients();
-    // this.getValidators();
-    this.getIngenieurs();
-    this.getWorkers();
-    this.getMarketSegments();
-    this.checkUserRole();
-
-    this.fetchRFQDetails();
-
-
   }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+
+    if (!file) return;
+
+    // Get file extension
+
+
+    if (file.size > this.maxFileSizeMB * 1024 * 1024) {
+        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        return;
+    }
+
+    this.selectedFile = file;
+    this.rfqForm.patchValue({ file: file });
+    this.rfqForm.get('file')?.updateValueAndValidity();
+}
+clearFile(): void {
+  this.selectedFile = null;
+  this.rfqForm.patchValue({ file: null });
+  // Reset the file input element
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
 
   checkUserRole() {
     this.userService.apiUserMeGet().subscribe(user => {
@@ -138,9 +165,7 @@ export class CreateRFQComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // Check if the form is invalid
     if (this.rfqForm.invalid) {
-      // Trigger validation messages for all fields
       Object.keys(this.rfqForm.controls).forEach(field => {
         const control = this.rfqForm.get(field);
         if (control instanceof FormControl) {
@@ -156,91 +181,135 @@ export class CreateRFQComponent implements OnInit {
       return;
     }
 
-    console.log('Form content:', this.rfqForm.value);
-    if (this.rfqForm.invalid) {
-      alert('Form is invalid. Please check the fields and try again.');
-      return;
-    }
+    const formValue = this.rfqForm.value;
 
-    const formValue = { ...this.rfqForm.value, statut: Number(this.rfqForm.value.statut), brouillon: false };
-    const createRFQDto: CreateRFQDto = formValue;
-
-    this.rfqService.apiRFQPost(createRFQDto).subscribe(response => {
-      console.log('RFQ created successfully', response);
-      alert('RFQ added successfully!');
-      this.router.navigate(['/rfq-manage/get-rfqs']);
-    }, error => {
-      console.error('Error creating RFQ', error);
-      alert('There was an error adding the RFQ.');
+    this.rfqService.apiRFQPost(
+      formValue.cq,
+      formValue.quoteName,
+      formValue.numRefQuoted,
+      formValue.sopDate,
+      formValue.maxV,
+      formValue.estV,
+      formValue.koDate,
+      formValue.customerDataDate,
+      formValue.mdDate,
+      formValue.mrDate,
+      formValue.tdDate,
+      formValue.trDate,
+      formValue.ldDate,
+      formValue.lrDate,
+      formValue.cdDate,
+      formValue.approvalDate,
+      new Date().toISOString(), // dateCreation
+      formValue.statut,
+      formValue.materialLeaderId,
+      formValue.testLeaderId,
+      formValue.marketSegmentId,
+      formValue.clientId,
+      formValue.ingenieurRFQId,
+      formValue.valeaderId,
+      this.selectedFile, // file
+      false, // brouillon
+      'body', // observe
+      false, // reportProgress
+      {} // options
+    ).subscribe({
+      next: (response) => {
+        console.log('RFQ created successfully', response);
+        alert('RFQ added successfully!');
+        this.router.navigate(['/rfq-manage/get-rfqs']);
+      },
+      error: (error) => {
+        console.error('Error creating RFQ', error);
+        alert('There was an error adding the RFQ.');
+      }
     });
   }
 
 
   onSubmitBrouillon(): void {
-    console.log('Form content:', this.rfqForm.value);
+    this.onCQChange();
+    if (this.cqExists) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
+    }
 
-    // Handle optional fields and ensure they are either null or undefined if not provided
-    const formValue = {
+    const draftData = {
       ...this.rfqForm.value,
-      statut: Number(this.rfqForm.value.statut) || null,
-      brouillon: true,
-      numRefQuoted: this.rfqForm.value.numRefQuoted || null? this.rfqForm.value.numRefQuoted : 0,
-      maxV: this.rfqForm.value.maxV || null? this.rfqForm.value.maxV : 0,
-      estV: this.rfqForm.value.estV || null ? this.rfqForm.value.estV : 0,  // Default to 0 if null
-      sopDate: this.rfqForm.value.sopDate || null,
-      koDate: this.rfqForm.value.koDate || null,
-      customerDataDate: this.rfqForm.value.customerDataDate || null,
-      mdDate: this.rfqForm.value.mdDate || null,
-      mrDate: this.rfqForm.value.mrDate || null,
-      tdDate: this.rfqForm.value.tdDate || null,
-      trDate: this.rfqForm.value.trDate || null,
-      ldDate: this.rfqForm.value.ldDate || null,
-      lrDate: this.rfqForm.value.lrDate || null,
-      cdDate: this.rfqForm.value.cdDate || null,
-      approvalDate: this.rfqForm.value.approvalDate || null,
-      materialLeaderId: this.rfqForm.value.materialLeaderId || null,
-      testLeaderId: this.rfqForm.value.testLeaderId || null,
-      marketSegmentId: this.rfqForm.value.marketSegmentId || null,
-      clientId: this.rfqForm.value.clientId || null,
-      ingenieurRFQId: this.rfqForm.value.ingenieurRFQId || null,
-      valeaderId: this.rfqForm.value.valeaderId || null ,
-      cq: this.rfqForm.value.cq || null? this.rfqForm.value.cq : 0
-  };
+      // No need for null fallbacks since all fields are optional
+    };
 
-
-    console.log('Form value', formValue);
-
-    const createRFQDto: CreateRFQDto = formValue;
-
-    this.rfqService.apiRFQPost(createRFQDto).subscribe(response => {
-        console.log('RFQ created successfully', response);
-        alert('Brouillon added successfully!');
+    this.rfqService.apiRFQDraftPost(draftData).subscribe({
+      next: (response) => {
+        console.log('Draft saved successfully', response);
         this.router.navigate(['/rfq-manage/get-rfqs']);
-    }, error => {
-        console.error('Error creating RFQ', error);
-        alert('There was an error adding the RFQ.');
+      },
+      error: (error) => {
+        console.error('Error saving draft:', error);
+        alert('Error saving draft. Please try again.');
+      }
     });
-}
+  }
 
   onSubmitValider(): void {
-    console.log('Form content for validation:', this.rfqForm.value);
-    console.log(this.rfqForm.valid); // Check form validity
-    if (this.rfqForm.invalid) return;
+    if (this.rfqForm.invalid) {
+      Object.keys(this.rfqForm.controls).forEach(field => {
+        const control = this.rfqForm.get(field);
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
+      });
+      return;
+    }
 
-    // Assurer que le statut soit un nombre
+    this.onCQChange();
+    if (this.cqExists) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
+    }
+
     const formValue = this.rfqForm.value;
-    console.log("form" , formValue) ;
-    formValue.statut = Number(formValue.statut); // Convertir en nombre si c'est une chaîne
 
-    const createRFQDto: CreateRFQDto = formValue;
-
-    // Appeler la méthode apiRFQCreateValidePost du service
-    this.rfqService.apiRFQCreateValidePost(createRFQDto).subscribe(response => {
-      console.log('RFQ  saved and validated successfully', response);
-      alert('RFQ  Saved and validated successfully!');
-    }, error => {
-      console.error('Error Saving and validating RFQ', error);
-      alert('There was an error validating the RFQ.');
+    this.rfqService.apiRFQCreateValidePost(
+      formValue.cq,
+      formValue.quoteName,
+      formValue.numRefQuoted,
+      formValue.sopDate,
+      formValue.maxV,
+      formValue.estV,
+      formValue.koDate,
+      formValue.customerDataDate,
+      formValue.mdDate,
+      formValue.mrDate,
+      formValue.tdDate,
+      formValue.trDate,
+      formValue.ldDate,
+      formValue.lrDate,
+      formValue.cdDate,
+      formValue.approvalDate,
+      new Date().toISOString(), // dateCreation
+      formValue.statut,
+      formValue.materialLeaderId,
+      formValue.testLeaderId,
+      formValue.marketSegmentId,
+      formValue.clientId,
+      formValue.ingenieurRFQId,
+      formValue.valeaderId,
+      this.selectedFile, // file
+      false, // brouillon
+      'body', // observe
+      false, // reportProgress
+      {} // options
+    ).subscribe({
+      next: (response) => {
+        console.log('RFQ created and validated successfully', response);
+        alert('RFQ added and validated  successfully!');
+        this.router.navigate(['/rfq-manage/get-rfqs']);
+      },
+      error: (error) => {
+        console.error('Error creating RFQ', error);
+        alert('There was an error adding the RFQ.');
+      }
     });
   }
 

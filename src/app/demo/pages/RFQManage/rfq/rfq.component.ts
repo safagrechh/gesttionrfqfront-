@@ -118,6 +118,8 @@ export class RFQComponent implements OnInit {
     this.VersionRFQService.apiVersionRFQIdGet(id).subscribe(data => {
       console.log(data);
       this.selectedVersion = data;
+      console.log("selected version" , data )
+
       this.loadCommentsV( this.selectedVersion.id);
     });
 
@@ -135,6 +137,55 @@ export class RFQComponent implements OnInit {
         console.error('Erreur lors de la récupération des RFQ:', error);
       });
   }
+
+  downloadFile(id: number) {
+    this.rfqService.apiRFQIdFileGet(
+      this.idrfq,
+      'body',
+      false,
+      {
+        httpHeaderAccept: 'application/octet-stream' as any
+      } as any // 👈 override the type system
+    ).subscribe(
+      (data: Blob) => {
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = this.rfq?.fileName || 'RFQ_Document.zip';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Error downloading file:', error);
+      }
+    );
+
+  }
+
+  downloadFileV(id: number) {
+    this.VersionRFQService.apiVersionRFQIdFileGet(
+      this.selectedVersion?.id,
+      'body',
+      false,
+      {
+        httpHeaderAccept: 'application/octet-stream' as any
+      } as any // 👈 override the type system
+    ).subscribe(
+      (data: Blob) => {
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = this.selectedVersion?.fileName || 'RFQ_Document.zip';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Error downloading file:', error);
+      }
+    );
+
+  }
+
 
   loadComments(id: number) {
     this.comments = null;

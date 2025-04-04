@@ -51,6 +51,9 @@ export interface VersionRFQ {
     ingenieurRFQId?: number | null;
     vaLeader?: User;
     vaLeaderId?: number | null;
+    fileName?: string | null;
+    fileContentType?: string | null;
+    fileData?: string | null;
 }
 export namespace VersionRFQ {
 }

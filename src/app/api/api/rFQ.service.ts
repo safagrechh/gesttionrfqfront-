@@ -17,11 +17,11 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { CreateRFQDto } from '../model/createRFQDto';
-// @ts-ignore
 import { RFQ } from '../model/rFQ';
 // @ts-ignore
 import { RFQDetailsDto } from '../model/rFQDetailsDto';
+// @ts-ignore
+import { Statut } from '../model/statut';
 // @ts-ignore
 import { UpdateRFQDto } from '../model/updateRFQDto';
 
@@ -59,6 +59,19 @@ export class RFQService {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
+    /**
+     * @param consumes string[] mime-types
+     * @return true: consumes contains 'multipart/form-data', false: otherwise
+     */
+    private canConsumeForm(consumes: string[]): boolean {
+        const form = 'multipart/form-data';
+        for (const consume of consumes) {
+            if (form === consume) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // @ts-ignore
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
@@ -169,14 +182,39 @@ export class RFQService {
     }
 
     /**
-     * @param createRFQDto 
+     * @param cQ 
+     * @param quoteName 
+     * @param numRefQuoted 
+     * @param sOPDate 
+     * @param maxV 
+     * @param estV 
+     * @param kODate 
+     * @param customerDataDate 
+     * @param mDDate 
+     * @param mRDate 
+     * @param tDDate 
+     * @param tRDate 
+     * @param lDDate 
+     * @param lRDate 
+     * @param cDDate 
+     * @param approvalDate 
+     * @param dateCreation 
+     * @param statut 
+     * @param materialLeaderId 
+     * @param testLeaderId 
+     * @param marketSegmentId 
+     * @param clientId 
+     * @param ingenieurRFQId 
+     * @param vALeaderId 
+     * @param file 
+     * @param brouillon 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiRFQCreateValidePost(createRFQDto?: CreateRFQDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
-    public apiRFQCreateValidePost(createRFQDto?: CreateRFQDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
-    public apiRFQCreateValidePost(createRFQDto?: CreateRFQDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
-    public apiRFQCreateValidePost(createRFQDto?: CreateRFQDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiRFQCreateValidePost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
+    public apiRFQCreateValidePost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
+    public apiRFQCreateValidePost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
+    public apiRFQCreateValidePost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -211,16 +249,102 @@ export class RFQService {
             localVarTransferCache = true;
         }
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (cQ !== undefined) {
+            localVarFormParams = localVarFormParams.append('CQ', <any>cQ) as any || localVarFormParams;
+        }
+        if (quoteName !== undefined) {
+            localVarFormParams = localVarFormParams.append('QuoteName', <any>quoteName) as any || localVarFormParams;
+        }
+        if (numRefQuoted !== undefined) {
+            localVarFormParams = localVarFormParams.append('NumRefQuoted', <any>numRefQuoted) as any || localVarFormParams;
+        }
+        if (sOPDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('SOPDate', <any>sOPDate) as any || localVarFormParams;
+        }
+        if (maxV !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaxV', <any>maxV) as any || localVarFormParams;
+        }
+        if (estV !== undefined) {
+            localVarFormParams = localVarFormParams.append('EstV', <any>estV) as any || localVarFormParams;
+        }
+        if (kODate !== undefined) {
+            localVarFormParams = localVarFormParams.append('KODate', <any>kODate) as any || localVarFormParams;
+        }
+        if (customerDataDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CustomerDataDate', <any>customerDataDate) as any || localVarFormParams;
+        }
+        if (mDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MDDate', <any>mDDate) as any || localVarFormParams;
+        }
+        if (mRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MRDate', <any>mRDate) as any || localVarFormParams;
+        }
+        if (tDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TDDate', <any>tDDate) as any || localVarFormParams;
+        }
+        if (tRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TRDate', <any>tRDate) as any || localVarFormParams;
+        }
+        if (lDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LDDate', <any>lDDate) as any || localVarFormParams;
+        }
+        if (lRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LRDate', <any>lRDate) as any || localVarFormParams;
+        }
+        if (cDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CDDate', <any>cDDate) as any || localVarFormParams;
+        }
+        if (approvalDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('ApprovalDate', <any>approvalDate) as any || localVarFormParams;
+        }
+        if (dateCreation !== undefined) {
+            localVarFormParams = localVarFormParams.append('DateCreation', <any>dateCreation) as any || localVarFormParams;
+        }
+        if (statut !== undefined) {
+            localVarFormParams = localVarFormParams.append('Statut', <any>statut) as any || localVarFormParams;
+        }
+        if (materialLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaterialLeaderId', <any>materialLeaderId) as any || localVarFormParams;
+        }
+        if (testLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('TestLeaderId', <any>testLeaderId) as any || localVarFormParams;
+        }
+        if (marketSegmentId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MarketSegmentId', <any>marketSegmentId) as any || localVarFormParams;
+        }
+        if (clientId !== undefined) {
+            localVarFormParams = localVarFormParams.append('ClientId', <any>clientId) as any || localVarFormParams;
+        }
+        if (ingenieurRFQId !== undefined) {
+            localVarFormParams = localVarFormParams.append('IngenieurRFQId', <any>ingenieurRFQId) as any || localVarFormParams;
+        }
+        if (vALeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('VALeaderId', <any>vALeaderId) as any || localVarFormParams;
+        }
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('File', <any>file) as any || localVarFormParams;
+        }
+        if (brouillon !== undefined) {
+            localVarFormParams = localVarFormParams.append('Brouillon', <any>brouillon) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -238,7 +362,183 @@ export class RFQService {
         return this.httpClient.request<RFQ>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: createRFQDto,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param cQ 
+     * @param quoteName 
+     * @param numRefQuoted 
+     * @param sOPDate 
+     * @param maxV 
+     * @param estV 
+     * @param kODate 
+     * @param customerDataDate 
+     * @param mDDate 
+     * @param mRDate 
+     * @param tDDate 
+     * @param tRDate 
+     * @param lDDate 
+     * @param lRDate 
+     * @param cDDate 
+     * @param materialLeaderId 
+     * @param testLeaderId 
+     * @param marketSegmentId 
+     * @param clientId 
+     * @param ingenieurRFQId 
+     * @param vALeaderId 
+     * @param file 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiRFQDraftPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
+    public apiRFQDraftPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
+    public apiRFQDraftPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
+    public apiRFQDraftPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (cQ !== undefined) {
+            localVarFormParams = localVarFormParams.append('CQ', <any>cQ) as any || localVarFormParams;
+        }
+        if (quoteName !== undefined) {
+            localVarFormParams = localVarFormParams.append('QuoteName', <any>quoteName) as any || localVarFormParams;
+        }
+        if (numRefQuoted !== undefined) {
+            localVarFormParams = localVarFormParams.append('NumRefQuoted', <any>numRefQuoted) as any || localVarFormParams;
+        }
+        if (sOPDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('SOPDate', <any>sOPDate) as any || localVarFormParams;
+        }
+        if (maxV !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaxV', <any>maxV) as any || localVarFormParams;
+        }
+        if (estV !== undefined) {
+            localVarFormParams = localVarFormParams.append('EstV', <any>estV) as any || localVarFormParams;
+        }
+        if (kODate !== undefined) {
+            localVarFormParams = localVarFormParams.append('KODate', <any>kODate) as any || localVarFormParams;
+        }
+        if (customerDataDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CustomerDataDate', <any>customerDataDate) as any || localVarFormParams;
+        }
+        if (mDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MDDate', <any>mDDate) as any || localVarFormParams;
+        }
+        if (mRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MRDate', <any>mRDate) as any || localVarFormParams;
+        }
+        if (tDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TDDate', <any>tDDate) as any || localVarFormParams;
+        }
+        if (tRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TRDate', <any>tRDate) as any || localVarFormParams;
+        }
+        if (lDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LDDate', <any>lDDate) as any || localVarFormParams;
+        }
+        if (lRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LRDate', <any>lRDate) as any || localVarFormParams;
+        }
+        if (cDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CDDate', <any>cDDate) as any || localVarFormParams;
+        }
+        if (materialLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaterialLeaderId', <any>materialLeaderId) as any || localVarFormParams;
+        }
+        if (testLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('TestLeaderId', <any>testLeaderId) as any || localVarFormParams;
+        }
+        if (marketSegmentId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MarketSegmentId', <any>marketSegmentId) as any || localVarFormParams;
+        }
+        if (clientId !== undefined) {
+            localVarFormParams = localVarFormParams.append('ClientId', <any>clientId) as any || localVarFormParams;
+        }
+        if (ingenieurRFQId !== undefined) {
+            localVarFormParams = localVarFormParams.append('IngenieurRFQId', <any>ingenieurRFQId) as any || localVarFormParams;
+        }
+        if (vALeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('VALeaderId', <any>vALeaderId) as any || localVarFormParams;
+        }
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('File', <any>file) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/RFQ/draft`;
+        return this.httpClient.request<RFQ>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -374,6 +674,75 @@ export class RFQService {
 
         let localVarPath = `/api/RFQ/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiRFQIdFileGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiRFQIdFileGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiRFQIdFileGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiRFQIdFileGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling apiRFQIdFileGet.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/RFQ/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/file`;
+        return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -542,14 +911,40 @@ export class RFQService {
 
     /**
      * @param id 
-     * @param updateRFQDto 
+     * @param cQ 
+     * @param quoteName 
+     * @param numRefQuoted 
+     * @param sOPDate 
+     * @param maxV 
+     * @param estV 
+     * @param kODate 
+     * @param customerDataDate 
+     * @param mDDate 
+     * @param mRDate 
+     * @param tDDate 
+     * @param tRDate 
+     * @param lDDate 
+     * @param lRDate 
+     * @param cDDate 
+     * @param approvalDate 
+     * @param statut 
+     * @param materialLeaderId 
+     * @param testLeaderId 
+     * @param marketSegmentId 
+     * @param clientId 
+     * @param ingenieurRFQId 
+     * @param vALeaderId 
+     * @param valide 
+     * @param rejete 
+     * @param file 
+     * @param brouillon 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiRFQIdPut(id: number, updateRFQDto?: UpdateRFQDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
-    public apiRFQIdPut(id: number, updateRFQDto?: UpdateRFQDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
-    public apiRFQIdPut(id: number, updateRFQDto?: UpdateRFQDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
-    public apiRFQIdPut(id: number, updateRFQDto?: UpdateRFQDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiRFQIdPut(id: number, cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, valide?: boolean, rejete?: boolean, file?: Blob, brouillon?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
+    public apiRFQIdPut(id: number, cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, valide?: boolean, rejete?: boolean, file?: Blob, brouillon?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
+    public apiRFQIdPut(id: number, cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, valide?: boolean, rejete?: boolean, file?: Blob, brouillon?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
+    public apiRFQIdPut(id: number, cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, valide?: boolean, rejete?: boolean, file?: Blob, brouillon?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling apiRFQIdPut.');
         }
@@ -587,16 +982,105 @@ export class RFQService {
             localVarTransferCache = true;
         }
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (cQ !== undefined) {
+            localVarFormParams = localVarFormParams.append('CQ', <any>cQ) as any || localVarFormParams;
+        }
+        if (quoteName !== undefined) {
+            localVarFormParams = localVarFormParams.append('QuoteName', <any>quoteName) as any || localVarFormParams;
+        }
+        if (numRefQuoted !== undefined) {
+            localVarFormParams = localVarFormParams.append('NumRefQuoted', <any>numRefQuoted) as any || localVarFormParams;
+        }
+        if (sOPDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('SOPDate', <any>sOPDate) as any || localVarFormParams;
+        }
+        if (maxV !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaxV', <any>maxV) as any || localVarFormParams;
+        }
+        if (estV !== undefined) {
+            localVarFormParams = localVarFormParams.append('EstV', <any>estV) as any || localVarFormParams;
+        }
+        if (kODate !== undefined) {
+            localVarFormParams = localVarFormParams.append('KODate', <any>kODate) as any || localVarFormParams;
+        }
+        if (customerDataDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CustomerDataDate', <any>customerDataDate) as any || localVarFormParams;
+        }
+        if (mDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MDDate', <any>mDDate) as any || localVarFormParams;
+        }
+        if (mRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MRDate', <any>mRDate) as any || localVarFormParams;
+        }
+        if (tDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TDDate', <any>tDDate) as any || localVarFormParams;
+        }
+        if (tRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TRDate', <any>tRDate) as any || localVarFormParams;
+        }
+        if (lDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LDDate', <any>lDDate) as any || localVarFormParams;
+        }
+        if (lRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LRDate', <any>lRDate) as any || localVarFormParams;
+        }
+        if (cDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CDDate', <any>cDDate) as any || localVarFormParams;
+        }
+        if (approvalDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('ApprovalDate', <any>approvalDate) as any || localVarFormParams;
+        }
+        if (statut !== undefined) {
+            localVarFormParams = localVarFormParams.append('Statut', <any>statut) as any || localVarFormParams;
+        }
+        if (materialLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaterialLeaderId', <any>materialLeaderId) as any || localVarFormParams;
+        }
+        if (testLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('TestLeaderId', <any>testLeaderId) as any || localVarFormParams;
+        }
+        if (marketSegmentId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MarketSegmentId', <any>marketSegmentId) as any || localVarFormParams;
+        }
+        if (clientId !== undefined) {
+            localVarFormParams = localVarFormParams.append('ClientId', <any>clientId) as any || localVarFormParams;
+        }
+        if (ingenieurRFQId !== undefined) {
+            localVarFormParams = localVarFormParams.append('IngenieurRFQId', <any>ingenieurRFQId) as any || localVarFormParams;
+        }
+        if (vALeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('VALeaderId', <any>vALeaderId) as any || localVarFormParams;
+        }
+        if (valide !== undefined) {
+            localVarFormParams = localVarFormParams.append('Valide', <any>valide) as any || localVarFormParams;
+        }
+        if (rejete !== undefined) {
+            localVarFormParams = localVarFormParams.append('Rejete', <any>rejete) as any || localVarFormParams;
+        }
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('File', <any>file) as any || localVarFormParams;
+        }
+        if (brouillon !== undefined) {
+            localVarFormParams = localVarFormParams.append('Brouillon', <any>brouillon) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -614,7 +1098,7 @@ export class RFQService {
         return this.httpClient.request<RFQ>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: updateRFQDto,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -764,14 +1248,39 @@ export class RFQService {
     }
 
     /**
-     * @param createRFQDto 
+     * @param cQ 
+     * @param quoteName 
+     * @param numRefQuoted 
+     * @param sOPDate 
+     * @param maxV 
+     * @param estV 
+     * @param kODate 
+     * @param customerDataDate 
+     * @param mDDate 
+     * @param mRDate 
+     * @param tDDate 
+     * @param tRDate 
+     * @param lDDate 
+     * @param lRDate 
+     * @param cDDate 
+     * @param approvalDate 
+     * @param dateCreation 
+     * @param statut 
+     * @param materialLeaderId 
+     * @param testLeaderId 
+     * @param marketSegmentId 
+     * @param clientId 
+     * @param ingenieurRFQId 
+     * @param vALeaderId 
+     * @param file 
+     * @param brouillon 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiRFQPost(createRFQDto?: CreateRFQDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
-    public apiRFQPost(createRFQDto?: CreateRFQDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
-    public apiRFQPost(createRFQDto?: CreateRFQDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
-    public apiRFQPost(createRFQDto?: CreateRFQDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiRFQPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<RFQ>;
+    public apiRFQPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RFQ>>;
+    public apiRFQPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RFQ>>;
+    public apiRFQPost(cQ?: number, quoteName?: string, numRefQuoted?: number, sOPDate?: string, maxV?: number, estV?: number, kODate?: string, customerDataDate?: string, mDDate?: string, mRDate?: string, tDDate?: string, tRDate?: string, lDDate?: string, lRDate?: string, cDDate?: string, approvalDate?: string, dateCreation?: string, statut?: Statut, materialLeaderId?: number, testLeaderId?: number, marketSegmentId?: number, clientId?: number, ingenieurRFQId?: number, vALeaderId?: number, file?: Blob, brouillon?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -806,16 +1315,102 @@ export class RFQService {
             localVarTransferCache = true;
         }
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (cQ !== undefined) {
+            localVarFormParams = localVarFormParams.append('CQ', <any>cQ) as any || localVarFormParams;
+        }
+        if (quoteName !== undefined) {
+            localVarFormParams = localVarFormParams.append('QuoteName', <any>quoteName) as any || localVarFormParams;
+        }
+        if (numRefQuoted !== undefined) {
+            localVarFormParams = localVarFormParams.append('NumRefQuoted', <any>numRefQuoted) as any || localVarFormParams;
+        }
+        if (sOPDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('SOPDate', <any>sOPDate) as any || localVarFormParams;
+        }
+        if (maxV !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaxV', <any>maxV) as any || localVarFormParams;
+        }
+        if (estV !== undefined) {
+            localVarFormParams = localVarFormParams.append('EstV', <any>estV) as any || localVarFormParams;
+        }
+        if (kODate !== undefined) {
+            localVarFormParams = localVarFormParams.append('KODate', <any>kODate) as any || localVarFormParams;
+        }
+        if (customerDataDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CustomerDataDate', <any>customerDataDate) as any || localVarFormParams;
+        }
+        if (mDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MDDate', <any>mDDate) as any || localVarFormParams;
+        }
+        if (mRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('MRDate', <any>mRDate) as any || localVarFormParams;
+        }
+        if (tDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TDDate', <any>tDDate) as any || localVarFormParams;
+        }
+        if (tRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('TRDate', <any>tRDate) as any || localVarFormParams;
+        }
+        if (lDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LDDate', <any>lDDate) as any || localVarFormParams;
+        }
+        if (lRDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('LRDate', <any>lRDate) as any || localVarFormParams;
+        }
+        if (cDDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('CDDate', <any>cDDate) as any || localVarFormParams;
+        }
+        if (approvalDate !== undefined) {
+            localVarFormParams = localVarFormParams.append('ApprovalDate', <any>approvalDate) as any || localVarFormParams;
+        }
+        if (dateCreation !== undefined) {
+            localVarFormParams = localVarFormParams.append('DateCreation', <any>dateCreation) as any || localVarFormParams;
+        }
+        if (statut !== undefined) {
+            localVarFormParams = localVarFormParams.append('Statut', <any>statut) as any || localVarFormParams;
+        }
+        if (materialLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MaterialLeaderId', <any>materialLeaderId) as any || localVarFormParams;
+        }
+        if (testLeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('TestLeaderId', <any>testLeaderId) as any || localVarFormParams;
+        }
+        if (marketSegmentId !== undefined) {
+            localVarFormParams = localVarFormParams.append('MarketSegmentId', <any>marketSegmentId) as any || localVarFormParams;
+        }
+        if (clientId !== undefined) {
+            localVarFormParams = localVarFormParams.append('ClientId', <any>clientId) as any || localVarFormParams;
+        }
+        if (ingenieurRFQId !== undefined) {
+            localVarFormParams = localVarFormParams.append('IngenieurRFQId', <any>ingenieurRFQId) as any || localVarFormParams;
+        }
+        if (vALeaderId !== undefined) {
+            localVarFormParams = localVarFormParams.append('VALeaderId', <any>vALeaderId) as any || localVarFormParams;
+        }
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('File', <any>file) as any || localVarFormParams;
+        }
+        if (brouillon !== undefined) {
+            localVarFormParams = localVarFormParams.append('Brouillon', <any>brouillon) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -833,7 +1428,7 @@ export class RFQService {
         return this.httpClient.request<RFQ>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: createRFQDto,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

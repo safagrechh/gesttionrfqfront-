@@ -1,8 +1,8 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, UpdateRFQDto, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService , CreateVersionRFQDto } from 'src/app/api';
+import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, UpdateRFQDto, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService , UpdateVersionRFQDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -26,7 +26,9 @@ export class CreateVersionComponent implements OnInit {
   isBrouillon: boolean = false;
   rfqs: Array<RFQDetailsDto> = [];
   cqExists: boolean = false;
-
+  selectedFile: File | null = null;
+  acceptedFileTypes = '.pdf,.xml';
+  maxFileSizeMB = 10;
 
 
 
@@ -55,33 +57,33 @@ export class CreateVersionComponent implements OnInit {
     this.rfqId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.createForm = this.fb.group({
-      cq: [''],
+      cq: ['', Validators.required],
       quoteName: ['', Validators.required],
-      numRefQuoted: [''],
-      sopDate: [''],
-      maxV: [''],
-      estV: [''],
-      koDate: [''],
-      customerDataDate: [''],
-      mdDate: [''],
+      numRefQuoted: ['', Validators.required],
+      sopDate: ['', Validators.required],
+      maxV: ['',  Validators.required],
+      estV: ['' ,  Validators.required],
+      koDate: ['' ,  Validators.required],
+      customerDataDate: ['',  Validators.required],
+      mdDate: ['',  Validators.required],
       mrDate: [''],
-      tdDate: [''],
+      tdDate: ['',  Validators.required],
       trDate: [''],
-      ldDate: [''],
+      ldDate: ['' ,  Validators.required],
       lrDate: [''],
-      cdDate: [''],
-      approvalDate: [''],
-      statut: [''],
-      materialLeaderId: [''],
-      testLeaderId: [''],
-      marketSegmentId: [''],
-      clientId: [''],
-      ingenieurRFQId: [''],
-      vaLeaderId: [''],
+      cdDate: ['',  Validators.required],
+      materialLeaderId: ['',  Validators.required],
+      testLeaderId: ['',  Validators.required],
+      marketSegmentId: ['',  Validators.required],
+      clientId: ['',  Validators.required],
+      ingenieurRFQId: ['',  Validators.required],
+      vaLeaderId: ['',  Validators.required],
       valide: [false],
       rejete: [false],
       brouillon: [false] ,
+      status: [''],
       rfqId: [''],
+      file: [null ,  Validators.required]
     });
 
     // Charger les listes AVANT d'appliquer patchValue()
@@ -192,20 +194,102 @@ export class CreateVersionComponent implements OnInit {
 
 
   onSubmit(): void {
+    console.log("im here 0")
+    if (this.createForm.invalid) {
+      console.log("im here 1")
+      Object.keys(this.createForm.controls).forEach(field => {
+        const control = this.createForm.get(field);
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
+      });
+      return;
+     }
+
     if (this.createForm.valid) {
+      console.log("im here")
       // Ensure the "rejete" field is set to false before submitting the data
       this.createForm.patchValue({
         rejete: false ,
         rfqId : this.rfqId
       });
       console.log("form ", this.createForm.value)
+      const formValue = this.createForm.value;
+
       // Now submit the updated form data
-      this.versionService.apiVersionRFQPost( this.createForm.value).subscribe(() => {
-        this.router.navigate(['/rfq-manage/get-rfqs']); // Redirection après mise à jour
+      this.versionService.apiVersionRFQPost(
+        formValue.rfqId,
+        formValue.cq,
+        formValue.quoteName,
+        formValue.numRefQuoted,
+        formValue.sopDate,
+        formValue.maxV,
+        formValue.estV,
+        formValue.statut,
+        formValue.koDate,
+        formValue.customerDataDate,
+        formValue.mdDate,
+        formValue.mrDate,
+        formValue.tdDate,
+        formValue.trDate,
+        formValue.ldDate,
+        formValue.lrDate,
+        formValue.cdDate,
+        formValue.approvalDate,
+        formValue.materialLeaderId,
+        formValue.testLeaderId,
+        formValue.marketSegmentId,
+        formValue.ingenieurRFQId,
+        formValue.valeaderId,
+        formValue.valide, // file
+        formValue.rejete,
+        this.selectedFile, // brouillon
+        'body', // observe
+        false, // reportProgress
+        {} // options
+      ).subscribe({
+        next: (response) => {
+          console.log('version created successfully', response);
+          alert('version added successfully!');
+          this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
+
+        },
+        error: (error) => {
+          console.error('Error creating version', error);
+          this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
+        }
       });
     }
-  }
 
+
+    }
+
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+
+    if (!file) return;
+
+    // Get file extension
+
+
+    if (file.size > this.maxFileSizeMB * 1024 * 1024) {
+        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        return;
+    }
+
+    this.selectedFile = file;
+    this.createForm.patchValue({ file: file });
+    this.createForm.get('file')?.updateValueAndValidity();
+}
+
+clearFile(): void {
+  this.selectedFile = null;
+  this.createForm.patchValue({ file: null });
+  // Reset the file input element
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
 
   trackById(index: number, item: any): number {
     return item.id;

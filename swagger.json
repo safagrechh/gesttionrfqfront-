@@ -869,19 +869,192 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
+                "type": "object",
+                "properties": {
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ApprovalDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "DateCreation": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Statut": {
+                    "$ref": "#/components/schemas/Statut"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Brouillon": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "ApprovalDate": {
+                  "style": "form"
+                },
+                "DateCreation": {
+                  "style": "form"
+                },
+                "Statut": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "ClientId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                },
+                "Brouillon": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -966,19 +1139,197 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateRFQDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRFQDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRFQDto"
+                "type": "object",
+                "properties": {
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ApprovalDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Statut": {
+                    "$ref": "#/components/schemas/Statut"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Valide": {
+                    "type": "boolean"
+                  },
+                  "Rejete": {
+                    "type": "boolean"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Brouillon": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "ApprovalDate": {
+                  "style": "form"
+                },
+                "Statut": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "ClientId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "Valide": {
+                  "style": "form"
+                },
+                "Rejete": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                },
+                "Brouillon": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1028,6 +1379,29 @@
         }
       }
     },
+    "/api/RFQ/{id}/file": {
+      "get": {
+        "tags": [
+          "RFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/RFQ/create-valide": {
       "post": {
         "tags": [
@@ -1035,19 +1409,387 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
+                "type": "object",
+                "properties": {
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ApprovalDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "DateCreation": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "Statut": {
+                    "$ref": "#/components/schemas/Statut"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Brouillon": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "ApprovalDate": {
+                  "style": "form"
+                },
+                "DateCreation": {
+                  "style": "form"
+                },
+                "Statut": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "ClientId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                },
+                "Brouillon": {
+                  "style": "form"
+                }
               }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RFQ"
+                }
               }
-            },
-            "application/*+json": {
+            }
+          }
+        }
+      }
+    },
+    "/api/RFQ/draft": {
+      "post": {
+        "tags": [
+          "RFQ"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateRFQDto"
+                "type": "object",
+                "properties": {
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "ClientId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1506,19 +2248,191 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateVersionRFQDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVersionRFQDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVersionRFQDto"
+                "type": "object",
+                "properties": {
+                  "RFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Statut": {
+                    "$ref": "#/components/schemas/Statut"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ApprovalDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Valide": {
+                    "type": "boolean"
+                  },
+                  "Rejete": {
+                    "type": "boolean"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "RFQId": {
+                  "style": "form"
+                },
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "Statut": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "ApprovalDate": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "Valide": {
+                  "style": "form"
+                },
+                "Rejete": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1622,11 +2536,51 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionRFQ"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/VersionRFQ/{id}/file": {
+      "get": {
         "tags": [
           "VersionRFQ"
         ],
@@ -2196,131 +3150,6 @@
         },
         "additionalProperties": false
       },
-      "CreateRFQDto": {
-        "type": "object",
-        "properties": {
-          "cq": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "quoteName": {
-            "type": "string",
-            "nullable": true
-          },
-          "numRefQuoted": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "sopDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "maxV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "estV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "koDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "customerDataDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "trDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ldDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "cdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "approvalDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "dateCreation": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "statut": {
-            "$ref": "#/components/schemas/Statut"
-          },
-          "materialLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "testLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "marketSegmentId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "clientId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ingenieurRFQId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "vaLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "brouillon": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -2338,131 +3167,6 @@
           },
           "role": {
             "$ref": "#/components/schemas/RoleU"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateVersionRFQDto": {
-        "type": "object",
-        "properties": {
-          "rfqId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "cq": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "quoteName": {
-            "type": "string",
-            "nullable": true
-          },
-          "numRefQuoted": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "sopDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "maxV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "estV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "statut": {
-            "$ref": "#/components/schemas/Statut"
-          },
-          "koDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "customerDataDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "trDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ldDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "cdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "approvalDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "materialLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "testLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "marketSegmentId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ingenieurRFQId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "vaLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "valide": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "rejete": {
-            "type": "boolean",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2767,6 +3471,19 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileContentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2896,6 +3613,19 @@
           },
           "brouillon": {
             "type": "boolean"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileContentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3122,6 +3852,11 @@
             "type": "boolean",
             "nullable": true
           },
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
           "brouillon": {
             "type": "boolean",
             "nullable": true
@@ -3270,6 +4005,11 @@
           },
           "rejete": {
             "type": "boolean",
+            "nullable": true
+          },
+          "file": {
+            "type": "string",
+            "format": "binary",
             "nullable": true
           }
         },
@@ -3544,6 +4284,19 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileContentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileData": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3673,6 +4426,19 @@
           },
           "vaLeader": {
             "type": "string",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileContentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileData": {
+            "type": "string",
+            "format": "byte",
             "nullable": true
           }
         },

@@ -39,6 +39,9 @@ export interface VersionRFQDetailsDto {
     marketSegment?: string | null;
     ingenieurRFQ?: string | null;
     vaLeader?: string | null;
+    fileName?: string | null;
+    fileContentType?: string | null;
+    fileData?: string | null;
 }
 export namespace VersionRFQDetailsDto {
 }

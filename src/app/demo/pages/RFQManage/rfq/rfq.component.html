@@ -212,6 +212,14 @@
                 <input class="form-control" [value]="rfq.approvalDate | date:'yyyy-MM-dd'" disabled />
               </div>
             </div>
+            <!-- Replace your current button with this -->
+<div class="col-md-4 mb-3" *ngIf="rfq?.fileName">
+  <div class="form-group">
+    <button type="button" class="btn btn-outline-primary" (click)="downloadFile(rfq.id)">
+      <i class="feather icon-download"></i> Download {{rfq.fileName}}
+    </button>
+  </div>
+</div>
           </div>
 
           <!-- RFQ Engineer Section -->
@@ -480,6 +488,13 @@
               <div class="form-group">
                 <label>Approval Date</label>
                 <input class="form-control" [value]="selectedVersion.approvalDate | date:'yyyy-MM-dd'" disabled />
+              </div>
+            </div>
+            <div class="col-md-4 mb-3" *ngIf="selectedVersion.fileName">
+              <div class="form-group">
+                <button type="button" class="btn btn-outline-primary" (click)="downloadFileV(selectedVersion.id)">
+                  <i class="feather icon-download"></i> Download {{selectedVersion.fileName}}
+                </button>
               </div>
             </div>
           </div>

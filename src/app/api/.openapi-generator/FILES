@@ -23,9 +23,7 @@ model/commentaireDto.ts
 model/createClientDto.ts
 model/createCommentaireDto.ts
 model/createHistoriqueActionDto.ts
-model/createRFQDto.ts
 model/createUserDto.ts
-model/createVersionRFQDto.ts
 model/createWorkerDto.ts
 model/historiqueAction.ts
 model/historiqueActionDto.ts
