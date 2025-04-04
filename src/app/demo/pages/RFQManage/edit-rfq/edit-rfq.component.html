@@ -224,6 +224,22 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label for="file">File max {{maxFileSizeMB}}MB</label>
+                <input type="file"
+         (change)="onFileSelected($event)"
+         accept=".pdf,.xml,application/pdf,text/xml,application/xml"
+         class="form-control">
+         <div *ngIf="selectedFile">
+   <small  class="form-text text-success">
+                  Selected: {{selectedFile.name}} ({{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB)
+                </small>
+          <button (click)="clearFile()">Remove</button>
+      </div>
+
+              </div>
+               </div>
 
 
           </div>

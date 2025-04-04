@@ -30,6 +30,9 @@ export class EditRFQComponent implements OnInit {
    rfqs: Array<RFQDetailsDto> = [];
    cqExists: boolean = false;
    cq : number ;
+   selectedFile: File | null = null;
+   acceptedFileTypes = '.pdf,.xml';
+   maxFileSizeMB = 10;
 
 
 
@@ -79,7 +82,6 @@ export class EditRFQComponent implements OnInit {
       ldDate: ['',Validators.required],
       lrDate: [''],
       cdDate: ['',Validators.required],
-      approvalDate: [null],
       cq: ['', Validators.required],
       valide: [false],
       rejete: [false],
@@ -102,7 +104,6 @@ export class EditRFQComponent implements OnInit {
         data.ldDate = this.datePipe.transform(data.ldDate, 'yyyy-MM-dd');
         data.lrDate = this.datePipe.transform(data.lrDate, 'yyyy-MM-dd');
         data.cdDate = this.datePipe.transform(data.cdDate, 'yyyy-MM-dd');
-        data.approvalDate = this.datePipe.transform(data.approvalDate, 'yyyy-MM-dd');
 
         const materialLeader = this.materialLeaders.find(leader => leader.nom === data.materialLeader);
         if (materialLeader) {
@@ -213,14 +214,80 @@ this.onCQChange();
       this.editForm.patchValue({
         rejete: false
       });
-      console.log(this.editForm.value)
+      console.log("editform" ,this.editForm.value)
       // Now submit the updated form data
-      this.rfqService.apiRFQIdPut(this.rfqId, this.editForm.value).subscribe({
-        
+      const formValue = this.editForm.value;
+      this.rfqService.apiRFQIdPut(
+        this.rfqId,
+        formValue.cq,
+        formValue.quoteName,
+        formValue.numRefQuoted,
+        formValue.sopDate,
+        formValue.maxV,
+        formValue.estV,
+        formValue.koDate,
+        formValue.customerDataDate,
+        formValue.mdDate,
+        formValue.mrDate,
+        formValue.tdDate,
+        formValue.trDate,
+        formValue.ldDate,
+        formValue.lrDate,
+        formValue.cdDate,
+        formValue.approvalDate,
+        formValue.statut,
+        formValue.materialLeaderId,
+        formValue.testLeaderId,
+        formValue.marketSegmentId,
+        formValue.clientId,
+        formValue.ingenieurRFQId,
+        formValue.valeaderId,
+        formValue.valide, // file
+        false,
+        this.selectedFile ,
+        false,// rejete
+        'body', // observe
+        false, // reportProgress
+        {} // options
+      ).subscribe({
+        next: (response) => {
+          console.log('RFQ updated successfully', response);
+          alert('RFQ updated successfully!');
+          this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
+        },
+        error: (error) => {
+          console.error('Error creating RFQ', error);
+          alert('There was an error adding the RFQ.');
+          this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
+
+        }
       });
-      this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
     }
   }
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+
+    if (!file) return;
+
+    // Get file extension
+
+
+    if (file.size > this.maxFileSizeMB * 1024 * 1024) {
+        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        return;
+    }
+
+    this.selectedFile = file;
+    this.editForm.patchValue({ file: file });
+    this.editForm.get('file')?.updateValueAndValidity();
+}
+clearFile(): void {
+  this.selectedFile = null;
+  this.editForm.patchValue({ file: null });
+  // Reset the file input element
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
 
   FinaliserBrouillon(): void {
      if (this.editForm.invalid) {

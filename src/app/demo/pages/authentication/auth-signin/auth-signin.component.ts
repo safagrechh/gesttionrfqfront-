@@ -38,7 +38,7 @@ export default class AuthSigninComponent {
           localStorage.setItem('token', token);  // Save the token to localStorage
         }
         // Navigate to dashboard after successful login
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/rfq-manage/get-rfqs/']);
       },
       error: (err) => {
         console.error('Login failed', err);

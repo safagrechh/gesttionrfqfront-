@@ -246,22 +246,29 @@
                 (click)="onSubmitValider()">
           <i class="feather icon-check-circle"></i> Valider
         </button>
-        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" !isBrouillon && rfq?.valide === false"
+        <a  [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" !isAdmin && !isBrouillon && rfq?.valide === false"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a [routerLink]="'/rfq-manage/ajouter-version/' + idrfq" *ngIf=" !isBrouillon "
+        <a  *ngIf="!isAdmin &&  !isBrouillon" [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
         type="button" class="btn btn-outline-success">
   <i class="feather icon-plus"></i> Ajouter une nouvelle version
 </a>
-        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" isBrouillon"
+        <a  *ngIf="!isAdmin && isBrouillon" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Finaliser Brouillon
         </a>
+        <a *ngIf="isAdmin"
+                          href="javascript:void(0)"
+                          (click)="delete(idrfq)"
+                          title="Delete RFQ"
+                          class="ms-2 text-danger">
+                         <i class="feather icon-trash-2"></i>
+                       </a>
       </div>
     </app-card>
 
-    <app-card cardTitle="Basic Component" [options]="false">
+    <app-card  *ngIf="!isAdmin" cardTitle="Basic Component" [options]="false">
       <h5>Commentaires</h5>
       <hr/>
       <div *ngIf="comments && comments.length > 0; else noComments">
@@ -523,22 +530,23 @@
                 (click)="onSubmitValiderV()">
           <i class="feather icon-check-circle"></i> Valider
         </button>
-        <a [routerLink]="'/rfq-manage/edit-Vrfq/' + idrfq" *ngIf=" !isBrouillon && selectedVersion?.valide === false"
+        <a   [routerLink]="'/rfq-manage/edit-Vrfq/' + idrfq" *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide === false"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a [routerLink]="'/rfq-manage/ajouter-version/' + idrfq" *ngIf=" !isBrouillon "
+        <a    *ngIf="!isAdmin && !isBrouillon"[routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
         type="button" class="btn btn-outline-success">
   <i class="feather icon-plus"></i> Ajouter une nouvelle version
 </a>
-        <a [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" isBrouillon"
+        <a   *ngIf="!isAdmin && isBrouillon" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Finaliser Brouillon
         </a>
+
       </div>
     </app-card>
 
-    <app-card cardTitle="Basic Component" [options]="false">
+    <app-card   *ngIf="!isAdmin" cardTitle="Basic Component" [options]="false">
       <h5>Commentaires</h5>
       <hr/>
       <div *ngIf="comments && comments.length > 0; else noComments">

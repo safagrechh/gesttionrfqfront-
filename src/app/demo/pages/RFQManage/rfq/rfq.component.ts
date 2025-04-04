@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommentaireDto, CommentaireService, RFQService, UserService , VersionRFQService, VersionRFQSummaryDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { CreateCommentaireDto } from 'src/app/api';
@@ -28,6 +28,7 @@ export class RFQComponent implements OnInit {
   rejectionComment: string = '';// Pour stocker le commentaire de rejet
   isBrouillon: boolean = false;
   versions: Array<VersionRFQSummaryDto> = [];
+  isAdmin: boolean = false;
 
 
 
@@ -38,6 +39,8 @@ export class RFQComponent implements OnInit {
     private userService: UserService,
     private commentService: CommentaireService ,
     private VersionRFQService: VersionRFQService ,
+        private router: Router,
+
 
   ) {}
 
@@ -87,6 +90,7 @@ export class RFQComponent implements OnInit {
   checkUserRole() {
     this.userService.apiUserMeGet().subscribe(user => {
       this.isValidateur = user.role === 0;
+      this.isAdmin = user.role === 2;
     });
   }
 
@@ -286,6 +290,8 @@ export class RFQComponent implements OnInit {
       this.rfqService.apiRFQIdValiderPost(this.idrfq).subscribe(() => {
         alert('RFQ validée avec succès');
         this.loadRFQDetails(this.idrfq);
+        window.location.reload();
+        this.router.navigate(['/rfq-manage/get-rfq/'+this.rfq.id]);
 
       });
     }
@@ -299,7 +305,19 @@ export class RFQComponent implements OnInit {
     }
   }
 
-
+  delete(id: number) {
+    if (confirm('Are you sure you want to delete this RFQ?')) {
+      this.rfqService.apiRFQIdDelete(id).subscribe(
+        () => {
+          alert("RFQ deleted successfully");
+          this.router.navigate(['/rfq-manage/get-rfqs/']);
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression de RFQ:', error);
+        }
+      );
+    }
+  }
   onSubmitEditer() {
 
   }

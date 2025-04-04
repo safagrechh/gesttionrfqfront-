@@ -1,7 +1,10 @@
 <ul class="navbar-nav">
   <li>
     <div class="dropdown" ngbDropdown placement="auto">
-      <a ngbDropdownToggle href="javascript:" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
+      <span class="pr-2 mr-2">{{ userName }} - {{ userRole }}</span>
+      <a ngbDropdownToggle href="javascript:" data-toggle="dropdown" class="ms-3">
+        <i class="icon feather icon-bell"></i>
+      </a>
       <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end notification">
         <div class="notification-head">
           <h6 class="d-inline-block m-b-0">Notifications</h6>

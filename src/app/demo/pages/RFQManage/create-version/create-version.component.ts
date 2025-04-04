@@ -83,7 +83,7 @@ export class CreateVersionComponent implements OnInit {
       brouillon: [false] ,
       status: [''],
       rfqId: [''],
-      file: [null ,  Validators.required]
+      file: [null]
     });
 
     // Charger les listes AVANT d'appliquer patchValue()
@@ -211,7 +211,8 @@ export class CreateVersionComponent implements OnInit {
       // Ensure the "rejete" field is set to false before submitting the data
       this.createForm.patchValue({
         rejete: false ,
-        rfqId : this.rfqId
+        rfqId : this.rfqId ,
+        valide: false
       });
       console.log("form ", this.createForm.value)
       const formValue = this.createForm.value;
@@ -243,7 +244,7 @@ export class CreateVersionComponent implements OnInit {
         formValue.valeaderId,
         formValue.valide, // file
         formValue.rejete,
-        this.selectedFile, // brouillon
+        this.selectedFile,
         'body', // observe
         false, // reportProgress
         {} // options
