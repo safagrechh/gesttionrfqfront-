@@ -1,24 +1,21 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClientService, ClientSummaryDto, MarketSegment, MarketSegmentService, RFQDetailsDto, RFQService, UserService, UserSummaryDto, WorkerDto, WorkerService } from 'src/app/api';
-import { UpdateRFQDto } from 'src/app/api';
-import { Statut } from 'src/app/api';
+import { ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment, RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, VersionRFQService } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { DatePipe } from '@angular/common';
-
 
 @Component({
-  selector: 'app-edit-rfq',
-  templateUrl: './edit-rfq.component.html',
-  styleUrls: ['./edit-rfq.component.scss'] ,
-   imports: [CommonModule, ReactiveFormsModule, SharedModule] ,
-   providers: [DatePipe]
+  selector: 'app-edit-version',
+    imports: [CommonModule, ReactiveFormsModule, SharedModule] ,
+     providers: [DatePipe] ,
+  templateUrl: './edit-version.component.html',
+  styleUrl: './edit-version.component.scss'
 })
-export class EditRFQComponent implements OnInit {
+export class EditVersionComponent implements OnInit {
   editForm!: FormGroup;
   rfqId!: number;
+  vID!:number;
   selectedClient: any;
   clients: ClientSummaryDto[] = [];
   ingenieurs: UserSummaryDto[] = [];
@@ -56,11 +53,14 @@ export class EditRFQComponent implements OnInit {
     private userService: UserService,
     private workerService: WorkerService,
     private marketSegmentService: MarketSegmentService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe ,
+    private versionService : VersionRFQService,
+
   ) {}
 
   ngOnInit(): void {
     this.rfqId = Number(this.route.snapshot.paramMap.get('id'));
+    this.vID = Number(this.route.snapshot.paramMap.get('idv'));
 
     this.editForm = this.fb.group({
       quoteName: ['', Validators.required],
@@ -91,7 +91,7 @@ export class EditRFQComponent implements OnInit {
     });
 
     // Charger les données existantes
-    this.rfqService.apiRFQIdGet(this.rfqId).subscribe({
+    this.versionService.apiVersionRFQIdGet(this.vID).subscribe({
       next: (data: any) => {
         // You can preprocess the data if needed before patching it
         // Example: Format date fields to 'yyyy-MM-dd'
@@ -140,8 +140,7 @@ export class EditRFQComponent implements OnInit {
 
         // Now patch the form with the data
         this.editForm.patchValue(data);
-        console.log("Form after patchValue", this.editForm.value);
-        console.log('RFQ Data applied:', data);
+       
         this.isBrouillon = data.brouillon;
         this.cq = data.cq ;
 
@@ -151,6 +150,7 @@ export class EditRFQComponent implements OnInit {
           this.existingFileSize = data.fileSize ? (data.fileSize / 1024 / 1024).toFixed(2) + 'MB' : 'N/A';
         }
       },
+
       error: (err) => {
         // Handle the error in case the request fails
         console.error('Error fetching RFQ data:', err);
@@ -200,91 +200,81 @@ export class EditRFQComponent implements OnInit {
 
 
   onSubmit(): void {
-    if (this.editForm.invalid) {
-        Object.keys(this.editForm.controls).forEach(field => {
-            const control = this.editForm.get(field);
-            if (control instanceof FormControl) {
-                control.markAsTouched();
-            }
-        });
-        return;
-    }
 
-    this.onCQChange();
-    if (this.cqExists) {
-        alert('CQ already exists. Please change it to proceed.');
-        return;
+    if (this.editForm.invalid) {
+      // Trigger validation messages for all fields
+      Object.keys(this.editForm.controls).forEach(field => {
+        const control = this.editForm.get(field);
+        if (control instanceof FormControl) {
+          control.markAsTouched();
+        }
+      });
+      return;
+    }
+this.onCQChange();
+    if (this.cqExists ) {
+      alert('CQ already exists. Please change it to proceed.');
+      return;
     }
 
     if (this.editForm.valid) {
-        this.editForm.patchValue({
-            rejete: false
-        });
+      // Ensure the "rejete" field is set to false before submitting the data
+      this.editForm.patchValue({
+        rejete: false
+      });
+      console.log("editform" ,this.editForm.value)
+      // Now submit the updated form data
+      const formValue = this.editForm.value;
 
-        const formValue = this.editForm.value;
+    // Convert dates to ISO string format if they exist
+    const formatDate = (date: any) => date ? new Date(date).toISOString() : undefined;
 
-        // Convert dates to ISO string format if they exist
-        const formatDate = (date: any) => date ? new Date(date).toISOString() : undefined;
+    // Only include file if a new one was selected
+    const fileToSend = this.selectedFile || undefined;
 
-        const fileToSend = this.selectedFile || undefined;
-
-        this.rfqService.apiRFQIdPut(
-            this.rfqId,
-            formValue.cq,
-            formValue.quoteName,
-            formValue.numRefQuoted,
-            formatDate(formValue.sopDate),
-            formValue.maxV,
-            formValue.estV,
-            formatDate(formValue.koDate),
-            formatDate(formValue.customerDataDate),
-            formatDate(formValue.mdDate),
-            formatDate(formValue.mrDate),
-            formatDate(formValue.tdDate),
-            formatDate(formValue.trDate),
-            formatDate(formValue.ldDate),
-            formatDate(formValue.lrDate),
-            formatDate(formValue.cdDate),
-            formatDate(formValue.approvalDate),
-            formValue.statut,
-            formValue.materialLeaderId,
-            formValue.testLeaderId,
-            formValue.marketSegmentId,
-            formValue.clientId,
-            formValue.ingenieurRFQId,
-            formValue.valeaderId,
-            formValue.valide,
-            false, // rejete
-            fileToSend, // file
-            formValue.brouillon,
-            'body', // observe
-            false, // reportProgress
-            { httpHeaderAccept: 'application/json' } // options
-        ).subscribe({
-            next: (response) => {
-                console.log('RFQ updated successfully', response);
-                alert('RFQ updated successfully!');
-                this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
-            },
-            error: (error) => {
-                console.error('Error updating RFQ', error);
-                if (error.status === 0) {
-                    // This might be the chunked encoding error - check if the update actually succeeded
-                    this.rfqService.apiRFQIdGet(this.rfqId).subscribe(latestData => {
-                        // Compare latestData with what we tried to send
-                        // If they match, the update probably succeeded despite the error
-                        alert('RFQ may have been updated successfully. Please verify.');
-                        this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
-                    });
-                } else {
-                    alert('There was an error updating the RFQ.');
-                }
-            }
-        });
-    }
+    this.versionService.apiVersionRFQIdPut(
+      this.vID,
+      formValue.cq,
+      formValue.quoteName,
+      formValue.numRefQuoted,
+      formatDate(formValue.sopDate),
+      formValue.maxV,
+      formValue.estV,
+      formatDate(formValue.koDate),
+      formatDate(formValue.customerDataDate),
+      formatDate(formValue.mdDate),
+      formatDate(formValue.mrDate),
+      formatDate(formValue.tdDate),
+      formatDate(formValue.trDate),
+      formatDate(formValue.ldDate),
+      formatDate(formValue.lrDate),
+      formatDate(formValue.cdDate),
+      formatDate(formValue.approvalDate),
+      formValue.materialLeaderId,
+      formValue.testLeaderId,
+      formValue.marketSegmentId,
+      formValue.ingenieurRFQId,
+      formValue.valeaderId,
+      formValue.clientId,
+      formValue.valide,
+      false,
+      fileToSend,  // Will be undefined if no new file selected
+      'body',
+      false,
+      { httpHeaderAccept: 'application/json' }
+    ).subscribe({
+      next: (response) => {
+        console.log('Version updated successfully', response);
+        alert('Version updated successfully!');
+        this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
+      },
+      error: (error) => {
+        console.error('Error Editing Version', error);
+        alert('There was an error Editing the version.');
+      }
+    });
+  }
 }
-
-
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
 
@@ -302,6 +292,7 @@ export class EditRFQComponent implements OnInit {
     this.editForm.patchValue({ file: file });
     this.editForm.get('file')?.updateValueAndValidity();
 }
+
 clearFile(): void {
   // If we had an existing file and are clearing a new selection
   if (this.selectedFile && this.existingFileName) {
@@ -321,6 +312,7 @@ clearFile(): void {
   const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
   if (fileInput) fileInput.value = '';
 }
+
   FinaliserBrouillon(): void {
      if (this.editForm.invalid) {
           // Trigger validation messages for all fields

@@ -16,6 +16,8 @@
                       <tr>
                         <th>RFQ N°</th>
                         <th>Nom de Devis</th>
+                        <th>CQ</th>
+                        <th>Versions</th>
                         <th>Client</th>
                         <th>Date de Création</th>
                         <th>Statut</th>
@@ -26,6 +28,8 @@
                       <tr *ngFor="let rfq of getRFQsByStatus('pending'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
+                        <td>{{rfq.cq}}</td>
+                        <td>{{rfq.versionsCount}}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
                         <td>
@@ -65,6 +69,8 @@
                       <tr>
                         <th>RFQ N°</th>
                         <th>Nom de Devis</th>
+                        <th>CQ</th>
+                        <th>Versions</th>
                         <th>Client</th>
                         <th>Date de Création</th>
                         <th>Statut</th>
@@ -75,6 +81,8 @@
                       <tr *ngFor="let rfq of getRFQsByStatus('validated'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
+                        <td>{{rfq.cq}}</td>
+                        <td>{{rfq.versionsCount}}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
                         <td>
@@ -110,6 +118,8 @@
                       <tr>
                         <th>RFQ N°</th>
                         <th>Nom de Devis</th>
+                        <th>CQ</th>
+                        <th>Versions</th>
                         <th>Client</th>
                         <th>Date de Création</th>
                         <th>Statut</th>
@@ -120,6 +130,8 @@
                       <tr *ngFor="let rfq of getRFQsByStatus('rejected'); trackBy: trackTable">
                         <td>RFQ N°{{ rfq.id }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
+                        <td>{{rfq.cq}}</td>
+                        <td>{{rfq.versionsCount}}</td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
                         <td>
@@ -169,6 +181,8 @@
               <tr>
                 <th>RFQ N°</th>
                 <th>Nom de Devis</th>
+                <th>CQ</th>
+                <th>Versions</th>
                 <th>Client</th>
                 <th>Date de Création</th>
                 <th>Statut</th>
@@ -179,6 +193,8 @@
               <tr>
                 <td>RFQ N°{{ filteredRFQ.id }}</td>
                 <td>{{ filteredRFQ.quoteName || 'No quote name provided' }}</td>
+                <td>{{filteredRFQ.cq}}</td>
+                <td>{{filteredRFQ.versionsCount}}</td>
                 <td>{{ filteredRFQ.client || 'Unknown Client' }}</td>
                 <td>{{ getFormattedDate(filteredRFQ.dateCreation) }}</td>
                 <td>
@@ -232,6 +248,7 @@
             <tr>
               <th>RFQ N°</th>
               <th>Nom de Devis</th>
+              <th>CQ</th>
               <th>Client</th>
               <th>Date de Création</th>
               <th>Statut</th>
@@ -242,6 +259,7 @@
             <tr *ngFor="let rfq of getRFQsByStatus('brouillon'); trackBy: trackTable">
               <td>RFQ N°{{ rfq.id }}</td>
               <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
+              <td>{{rfq.cq}}</td>
               <td>{{ rfq.client || 'Unknown Client' }}</td>
               <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
               <td>

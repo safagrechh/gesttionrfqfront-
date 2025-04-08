@@ -9,12 +9,13 @@
           <div class="step" [ngClass]="{
               'valid': rfqinitial?.valide,
               'pending': !rfqinitial?.valide && !rfqinitial?.rejete,
-              'rejected': rfqinitial?.rejete
+              'rejected': rfqinitial?.rejete,
+
             }" (click)="onRFQClick()">
             <div class="circle">
               <span>{{ rfqinitial?.valide ? '✔' : (rfqinitial?.rejete ? '✖' : '―') }}</span>
             </div>
-            <h3>RFQ N°{{ idrfq }}</h3>
+            <h3>RFQ N°{{ idrfq }} version 0 </h3>
             <p>{{ rfqinitial?.valide ? 'Validé' : (rfqinitial?.rejete ? 'Rejeté' : 'En attente') }}</p>
           </div>
 
@@ -236,11 +237,11 @@
 
       <!-- Boutons d'action -->
       <div class="d-flex justify-content-center mt-4">
-        <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
+        <!-- <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
                 type="button" class="btn btn-outline-danger"
                 (click)="onSubmitRejeter()">
           <i class="feather icon-x-circle"></i> Rejeter
-        </button>
+        </button> -->
         <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
                 type="button" class="btn btn-outline-success"
                 (click)="onSubmitValider()">
@@ -250,7 +251,7 @@
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a  *ngIf="!isAdmin &&  !isBrouillon" [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
+        <a  *ngIf="!isAdmin &&  !isBrouillon && rfq.valide" [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
         type="button" class="btn btn-outline-success">
   <i class="feather icon-plus"></i> Ajouter une nouvelle version
 </a>
@@ -328,8 +329,7 @@
 
       <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Version </h3>
-        <span
+        <h3>Version V{{selectedVersionIndex !== null ? selectedVersionIndex + 1 : ''}} - RFQ N°{{ idrfq }}</h3>        <span
           class="badge rounded-pill px-3 py-2"
           [ngClass]="{
             'bg-warning text-dark': !selectedVersion.valide && !selectedVersion.rejete,
@@ -520,28 +520,25 @@
 
       <!-- Boutons d'action -->
       <div class="d-flex justify-content-center mt-4">
-        <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
+        <!-- <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
                 type="button" class="btn btn-outline-danger"
                 (click)="onSubmitRejeter()">
           <i class="feather icon-x-circle"></i> Rejeter
-        </button>
+        </button> -->
         <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
                 type="button" class="btn btn-outline-success"
                 (click)="onSubmitValiderV()">
           <i class="feather icon-check-circle"></i> Valider
         </button>
-        <a   [routerLink]="'/rfq-manage/edit-Vrfq/' + idrfq" *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide === false"
+        <a   [routerLink]="'/rfq-manage/edit-version/' + idrfq +'/' + selectedVersion?.id " *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide === false"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a    *ngIf="!isAdmin && !isBrouillon"[routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
+        <a    *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide"[routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
         type="button" class="btn btn-outline-success">
   <i class="feather icon-plus"></i> Ajouter une nouvelle version
 </a>
-        <a   *ngIf="!isAdmin && isBrouillon" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq"
-                type="button" class="btn btn-outline-warning">
-          <i class="feather icon-edit"></i> Finaliser Brouillon
-        </a>
+
 
       </div>
     </app-card>

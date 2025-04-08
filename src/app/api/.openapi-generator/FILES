@@ -42,7 +42,6 @@ model/updateClientDto.ts
 model/updateCommentaireDto.ts
 model/updateRFQDto.ts
 model/updateUserDto.ts
-model/updateVersionRFQDto.ts
 model/updateWorkerDto.ts
 model/user.ts
 model/userSummaryDto.ts

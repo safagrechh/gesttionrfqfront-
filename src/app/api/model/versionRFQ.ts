@@ -12,6 +12,7 @@ import { Statut } from './statut';
 import { User } from './user';
 import { Worker } from './worker';
 import { Commentaire } from './commentaire';
+import { Client } from './client';
 import { RFQ } from './rFQ';
 
 
@@ -51,6 +52,8 @@ export interface VersionRFQ {
     ingenieurRFQId?: number | null;
     vaLeader?: User;
     vaLeaderId?: number | null;
+    client?: Client;
+    clientId?: number | null;
     fileName?: string | null;
     fileContentType?: string | null;
     fileData?: string | null;

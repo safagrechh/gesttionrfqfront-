@@ -42,6 +42,7 @@ export interface RFQDetailsDto {
     fileName?: string | null;
     fileContentType?: string | null;
     fileData?: string | null;
+    versionsCount?: number;
 }
 export namespace RFQDetailsDto {
 }

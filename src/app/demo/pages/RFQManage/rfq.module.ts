@@ -7,6 +7,7 @@ import { ConsulterRFQComponent } from './consulter-rfq/consulter-rfq.component';
 import { RFQComponent } from './rfq/rfq.component';
 import { EditRFQComponent } from './edit-rfq/edit-rfq.component';
 import { CreateVersionComponent } from './create-version/create-version.component';
+import { EditVersionComponent } from './edit-version/edit-version.component';
 
 
 
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'ajouter-version/:id',
     component: CreateVersionComponent
+  },
+  {
+    path: 'edit-version/:id/:idv',
+    component:EditVersionComponent
   }
 
 
@@ -45,7 +50,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     ConsulterRFQComponent,
     RFQComponent ,
-    EditRFQComponent
+    EditRFQComponent ,
+    EditVersionComponent
   ]
 })
 export class RFQModule { }

@@ -33,6 +33,7 @@ export interface UpdateVersionRFQDto {
     marketSegmentId?: number | null;
     ingenieurRFQId?: number | null;
     vaLeaderId?: number | null;
+    clientId?: number | null;
     valide?: boolean | null;
     rejete?: boolean | null;
     file?: Blob | null;

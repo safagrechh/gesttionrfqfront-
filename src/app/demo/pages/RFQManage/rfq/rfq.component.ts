@@ -29,6 +29,8 @@ export class RFQComponent implements OnInit {
   isBrouillon: boolean = false;
   versions: Array<VersionRFQSummaryDto> = [];
   isAdmin: boolean = false;
+  selectedVersionIndex: number | null = null;
+
 
 
 
@@ -112,6 +114,8 @@ export class RFQComponent implements OnInit {
   }
 
   onVersionClick(versionId: number) {
+    this.selectedVersionIndex = this.versions.findIndex(v => v.id === versionId);
+
     this.loadVersionDetails(versionId);
     this.rfq = null;
     this.loadCommentsV(versionId);
@@ -287,7 +291,7 @@ export class RFQComponent implements OnInit {
 
   onSubmitValider() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {
-      this.rfqService.apiRFQIdValiderPost(this.idrfq).subscribe(() => {
+      this.rfqService.apiRFQIdValiderPut(this.idrfq).subscribe(() => {
         alert('RFQ validée avec succès');
         this.loadRFQDetails(this.idrfq);
         window.location.reload();
@@ -325,7 +329,7 @@ export class RFQComponent implements OnInit {
   // Rejette la RFQ (après enregistrement du commentaire si nécessaire)
   rejectRFQ() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {
-      this.rfqService.apiRFQIdRejeterPost(this.idrfq).subscribe(() => {
+      this.rfqService.apiRFQIdRejeterPut(this.idrfq).subscribe(() => {
         alert('RFQ rejetée avec succès');
         this.loadRFQDetails(this.idrfq);
       });

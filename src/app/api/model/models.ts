@@ -24,7 +24,6 @@ export * from './updateClientDto';
 export * from './updateCommentaireDto';
 export * from './updateRFQDto';
 export * from './updateUserDto';
-export * from './updateVersionRFQDto';
 export * from './updateWorkerDto';
 export * from './user';
 export * from './userSummaryDto';

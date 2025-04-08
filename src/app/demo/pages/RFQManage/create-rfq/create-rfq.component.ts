@@ -236,7 +236,6 @@ clearFile(): void {
 
     const draftData = {
       ...this.rfqForm.value,
-      // No need for null fallbacks since all fields are optional
     };
 
     this.rfqService.apiRFQDraftPost(draftData).subscribe({

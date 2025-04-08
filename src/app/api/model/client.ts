@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { RFQ } from './rFQ';
+import { VersionRFQ } from './versionRFQ';
 
 
 export interface Client { 
@@ -16,5 +17,6 @@ export interface Client {
     email?: string | null;
     sales?: string | null;
     rfQs?: Array<RFQ> | null;
+    versions?: Array<VersionRFQ> | null;
 }
 

@@ -1861,7 +1861,7 @@
       }
     },
     "/api/RFQ/{id}/valider": {
-      "post": {
+      "put": {
         "tags": [
           "RFQ"
         ],
@@ -1884,7 +1884,7 @@
       }
     },
     "/api/RFQ/{id}/rejeter": {
-      "post": {
+      "put": {
         "tags": [
           "RFQ"
         ],
@@ -2342,6 +2342,10 @@
                     "type": "integer",
                     "format": "int32"
                   },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
                   "Valide": {
                     "type": "boolean"
                   },
@@ -2422,6 +2426,9 @@
                   "style": "form"
                 },
                 "VALeaderId": {
+                  "style": "form"
+                },
+                "ClientId": {
                   "style": "form"
                 },
                 "Valide": {
@@ -2517,19 +2524,185 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateVersionRFQDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVersionRFQDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVersionRFQDto"
+                "type": "object",
+                "properties": {
+                  "CQ": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "QuoteName": {
+                    "type": "string"
+                  },
+                  "NumRefQuoted": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "SOPDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaxV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EstV": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "KODate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CustomerDataDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "TRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "LRDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "CDDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "ApprovalDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "MaterialLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "TestLeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "MarketSegmentId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "IngenieurRFQId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VALeaderId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ClientId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Valide": {
+                    "type": "boolean"
+                  },
+                  "Rejete": {
+                    "type": "boolean"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "CQ": {
+                  "style": "form"
+                },
+                "QuoteName": {
+                  "style": "form"
+                },
+                "NumRefQuoted": {
+                  "style": "form"
+                },
+                "SOPDate": {
+                  "style": "form"
+                },
+                "MaxV": {
+                  "style": "form"
+                },
+                "EstV": {
+                  "style": "form"
+                },
+                "KODate": {
+                  "style": "form"
+                },
+                "CustomerDataDate": {
+                  "style": "form"
+                },
+                "MDDate": {
+                  "style": "form"
+                },
+                "MRDate": {
+                  "style": "form"
+                },
+                "TDDate": {
+                  "style": "form"
+                },
+                "TRDate": {
+                  "style": "form"
+                },
+                "LDDate": {
+                  "style": "form"
+                },
+                "LRDate": {
+                  "style": "form"
+                },
+                "CDDate": {
+                  "style": "form"
+                },
+                "ApprovalDate": {
+                  "style": "form"
+                },
+                "MaterialLeaderId": {
+                  "style": "form"
+                },
+                "TestLeaderId": {
+                  "style": "form"
+                },
+                "MarketSegmentId": {
+                  "style": "form"
+                },
+                "IngenieurRFQId": {
+                  "style": "form"
+                },
+                "VALeaderId": {
+                  "style": "form"
+                },
+                "ClientId": {
+                  "style": "form"
+                },
+                "Valide": {
+                  "style": "form"
+                },
+                "Rejete": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -2958,6 +3131,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RFQ"
+            },
+            "nullable": true
+          },
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VersionRFQ"
             },
             "nullable": true
           }
@@ -3626,6 +3806,10 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "versionsCount": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -3885,132 +4069,6 @@
           },
           "role": {
             "$ref": "#/components/schemas/RoleU"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateVersionRFQDto": {
-        "type": "object",
-        "properties": {
-          "cq": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "quoteName": {
-            "type": "string",
-            "nullable": true
-          },
-          "numRefQuoted": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "sopDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "maxV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "estV": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "statut": {
-            "$ref": "#/components/schemas/Statut"
-          },
-          "koDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "customerDataDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "mrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "trDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ldDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lrDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "cdDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "approvalDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "materialLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "testLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "marketSegmentId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "ingenieurRFQId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "vaLeaderId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "valide": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "rejete": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "file": {
-            "type": "string",
-            "format": "binary",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4285,6 +4343,14 @@
             "format": "int32",
             "nullable": true
           },
+          "client": {
+            "$ref": "#/components/schemas/Client"
+          },
+          "clientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "fileName": {
             "type": "string",
             "nullable": true
@@ -4425,6 +4491,10 @@
             "nullable": true
           },
           "vaLeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "client": {
             "type": "string",
             "nullable": true
           },

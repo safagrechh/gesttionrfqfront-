@@ -2,7 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, UpdateRFQDto, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService , UpdateVersionRFQDto } from 'src/app/api';
+import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService} from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -242,6 +242,7 @@ export class CreateVersionComponent implements OnInit {
         formValue.marketSegmentId,
         formValue.ingenieurRFQId,
         formValue.valeaderId,
+        formValue.clientId,
         formValue.valide, // file
         formValue.rejete,
         this.selectedFile,
