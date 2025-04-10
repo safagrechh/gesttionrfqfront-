@@ -18,7 +18,7 @@ import { VersionRFQ } from './versionRFQ';
 
 export interface RFQ { 
     id?: number;
-    cq?: number | null;
+    cq?: number;
     quoteName?: string | null;
     numRefQuoted?: number | null;
     sopDate?: string | null;
@@ -46,7 +46,7 @@ export interface RFQ {
     marketSegment?: MarketSegment;
     marketSegmentId?: number | null;
     client?: Client;
-    clientId?: number | null;
+    clientId?: number;
     commentaires?: Array<Commentaire> | null;
     versions?: Array<VersionRFQ> | null;
     ingenieurRFQ?: User;

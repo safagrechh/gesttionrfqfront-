@@ -63,27 +63,27 @@ export class EditVersionComponent implements OnInit {
     this.vID = Number(this.route.snapshot.paramMap.get('idv'));
 
     this.editForm = this.fb.group({
-      quoteName: ['', Validators.required],
-      numRefQuoted: ['', Validators.required],
+      quoteName: [''],
+      numRefQuoted: [''],
       statut: [null],
       clientId: ['', Validators.required],
-      valeaderId: ['', Validators.required],
-      ingenieurRFQId: ['', Validators.required],
-      marketSegmentId: ['', Validators.required],
-      materialLeaderId: ['', Validators.required],
-      testLeaderId: ['', Validators.required],
-      estV: ['', [Validators.required, Validators.min(0)]],  // Add estV
-      maxV: ['', [Validators.required, Validators.min(0)]],  // Add maxV
-      sopDate: ['', Validators.required],
-      koDate: ['' , Validators.required],
-      customerDataDate: ['', Validators.required],
-      mdDate: ['' , Validators.required],
+      valeaderId: [''],
+      ingenieurRFQId: [''],
+      marketSegmentId: [''],
+      materialLeaderId: [''],
+      testLeaderId: [''],
+      estV: [''],  // Add estV
+      maxV: [''],  // Add maxV
+      sopDate: [''],
+      koDate: ['' ],
+      customerDataDate: [''],
+      mdDate: [''],
       mrDate: ['' ],
-      tdDate: ['' , Validators.required],
+      tdDate: [''],
       trDate: [''],
-      ldDate: ['',Validators.required],
+      ldDate: [''],
       lrDate: [''],
-      cdDate: ['',Validators.required],
+      cdDate: [''],
       cq: ['', Validators.required],
       valide: [false],
       rejete: [false],
@@ -93,19 +93,19 @@ export class EditVersionComponent implements OnInit {
     // Charger les données existantes
     this.versionService.apiVersionRFQIdGet(this.vID).subscribe({
       next: (data: any) => {
-        // You can preprocess the data if needed before patching it
-        // Example: Format date fields to 'yyyy-MM-dd'
-        console.log(data);
-        data.sopDate = this.datePipe.transform(data.sopDate, 'yyyy-MM-dd');
-        data.koDate = this.datePipe.transform(data.koDate, 'yyyy-MM-dd');
-        data.customerDataDate = this.datePipe.transform(data.customerDataDate, 'yyyy-MM-dd');
-        data.mdDate = this.datePipe.transform(data.mdDate, 'yyyy-MM-dd');
-        data.mrDate = this.datePipe.transform(data.mrDate, 'yyyy-MM-dd');
-        data.tdDate = this.datePipe.transform(data.tdDate, 'yyyy-MM-dd');
-        data.trDate = this.datePipe.transform(data.trDate, 'yyyy-MM-dd');
-        data.ldDate = this.datePipe.transform(data.ldDate, 'yyyy-MM-dd');
-        data.lrDate = this.datePipe.transform(data.lrDate, 'yyyy-MM-dd');
-        data.cdDate = this.datePipe.transform(data.cdDate, 'yyyy-MM-dd');
+        const dateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
+          'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
+          'cdDate', 'approvalDate'];
+
+// Set default dates to null if they are '0001-01-01'
+dateFields.forEach(field => {
+if (data[field]?.startsWith('0001-01-01')) {
+data[field] = null;
+} else {
+data[field] = this.datePipe.transform(data[field], 'yyyy-MM-dd');
+}
+});
+
 
         const materialLeader = this.materialLeaders.find(leader => leader.nom === data.materialLeader);
         if (materialLeader) {
@@ -140,7 +140,7 @@ export class EditVersionComponent implements OnInit {
 
         // Now patch the form with the data
         this.editForm.patchValue(data);
-       
+
         this.isBrouillon = data.brouillon;
         this.cq = data.cq ;
 
@@ -236,7 +236,7 @@ this.onCQChange();
       this.vID,
       formValue.cq,
       formValue.quoteName,
-      formValue.numRefQuoted,
+      formValue.numRefQuoted || 0,
       formatDate(formValue.sopDate),
       formValue.maxV,
       formValue.estV,

@@ -228,39 +228,39 @@ export const NavigationItems: NavigationItem[] = [
   //     }
   //   ]
   // },
-  {
-    id: 'pages',
-    title: 'Pages',
-    type: 'group',
-    icon: 'icon-pages',
-    children: [
-      {
-        id: 'auth',
-        title: 'Authentication',
-        type: 'collapse',
-        icon: 'feather icon-lock',
-        children: [
-          // {
-          //   id: 'signup',
-          //   title: 'Sign up',
-          //   type: 'item',
-          //   url: '/auth/signup',
-          //   target: true,
-          //   breadcrumbs: false
-          // },
-          {
-            id: 'signin',
-            title: 'Sign in',
-            type: 'item',
-            url: '/auth/signin',
-            target: true,
-            breadcrumbs: false
-          }
-        ]
-      //
-       }
+  // {
+  //   id: 'pages',
+  //   title: 'Pages',
+  //   type: 'group',
+  //   icon: 'icon-pages',
+  //   children: [
+  //     {
+  //       id: 'auth',
+  //       title: 'Authentication',
+  //       type: 'collapse',
+  //       icon: 'feather icon-lock',
+  //       children: [
+  //         // {
+  //         //   id: 'signup',
+  //         //   title: 'Sign up',
+  //         //   type: 'item',
+  //         //   url: '/auth/signup',
+  //         //   target: true,
+  //         //   breadcrumbs: false
+  //         // },
+  //         {
+  //           id: 'signin',
+  //           title: 'Sign in',
+  //           type: 'item',
+  //           url: '/auth/signin',
+  //           target: true,
+  //           breadcrumbs: false
+  //         }
+  //       ]
+  //     //
+  //      }
 
-    ]
-  }
+  //   ]
+  // }
 
 ];

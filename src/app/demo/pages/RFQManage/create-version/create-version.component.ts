@@ -58,26 +58,26 @@ export class CreateVersionComponent implements OnInit {
 
     this.createForm = this.fb.group({
       cq: ['', Validators.required],
-      quoteName: ['', Validators.required],
-      numRefQuoted: ['', Validators.required],
-      sopDate: ['', Validators.required],
-      maxV: ['',  Validators.required],
-      estV: ['' ,  Validators.required],
-      koDate: ['' ,  Validators.required],
-      customerDataDate: ['',  Validators.required],
-      mdDate: ['',  Validators.required],
+      quoteName: [''],
+      numRefQuoted: [''],
+      sopDate: [''],
+      maxV: [0],
+      estV: [0],
+      koDate: [''],
+      customerDataDate: [''],
+      mdDate: [''],
       mrDate: [''],
-      tdDate: ['',  Validators.required],
+      tdDate: [''],
       trDate: [''],
-      ldDate: ['' ,  Validators.required],
-      lrDate: [''],
-      cdDate: ['',  Validators.required],
-      materialLeaderId: ['',  Validators.required],
-      testLeaderId: ['',  Validators.required],
-      marketSegmentId: ['',  Validators.required],
+      ldDate: [''],
+      lrDate: [null],
+      cdDate: [null],
+      materialLeaderId: [''],
+      testLeaderId: [''],
+      marketSegmentId: [''],
       clientId: ['',  Validators.required],
-      ingenieurRFQId: ['',  Validators.required],
-      vaLeaderId: ['',  Validators.required],
+      ingenieurRFQId: [''],
+      vaLeaderId: [''],
       valide: [false],
       rejete: [false],
       brouillon: [false] ,
@@ -194,9 +194,7 @@ export class CreateVersionComponent implements OnInit {
 
 
   onSubmit(): void {
-    console.log("im here 0")
     if (this.createForm.invalid) {
-      console.log("im here 1")
       Object.keys(this.createForm.controls).forEach(field => {
         const control = this.createForm.get(field);
         if (control instanceof FormControl) {
@@ -204,18 +202,41 @@ export class CreateVersionComponent implements OnInit {
         }
       });
       return;
-     }
+    }
 
     if (this.createForm.valid) {
-      console.log("im here")
-      // Ensure the "rejete" field is set to false before submitting the data
       this.createForm.patchValue({
-        rejete: false ,
-        rfqId : this.rfqId ,
-        valide: false
+        rejete: false,
+        rfqId: this.rfqId,
+        valide: false,
+        // Set default values for fields that can't be null
+        numRefQuoted: this.createForm.get('numRefQuoted')?.value || '',
+        sopDate: this.createForm.get('sopDate')?.value || '0001-01-01',
+        koDate: this.createForm.get('koDate')?.value || '0001-01-01',
+        customerDataDate: this.createForm.get('customerDataDate')?.value || '0001-01-01',
+        mdDate: this.createForm.get('mdDate')?.value || '0001-01-01',
+        mrDate: this.createForm.get('mrDate')?.value || '0001-01-01',
+        tdDate: this.createForm.get('tdDate')?.value || '0001-01-01',
+        trDate: this.createForm.get('trDate')?.value || '0001-01-01',
+        ldDate: this.createForm.get('ldDate')?.value || '0001-01-01',
+        lrDate: this.createForm.get('lrDate')?.value || '0001-01-01',
+        cdDate: this.createForm.get('cdDate')?.value || '0001-01-01'
       });
-      console.log("form ", this.createForm.value)
+
       const formValue = this.createForm.value;
+
+      // Convert dates to ISO strings
+      const isoDateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
+                            'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
+                            'cdDate', 'approvalDate'];
+
+      isoDateFields.forEach(field => {
+        if (formValue[field]) {
+          formValue[field] = new Date(formValue[field]).toISOString();
+        } else {
+          formValue[field] = new Date('0001-01-01').toISOString();
+        }
+      });
 
       // Now submit the updated form data
       this.versionService.apiVersionRFQPost(
@@ -224,8 +245,8 @@ export class CreateVersionComponent implements OnInit {
         formValue.quoteName,
         formValue.numRefQuoted,
         formValue.sopDate,
-        formValue.maxV,
-        formValue.estV,
+        formValue.maxV || 0,
+        formValue.estV || 0,
         formValue.statut,
         formValue.koDate,
         formValue.customerDataDate,
@@ -265,7 +286,6 @@ export class CreateVersionComponent implements OnInit {
 
 
     }
-
 
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];

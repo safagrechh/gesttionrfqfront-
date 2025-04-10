@@ -72,7 +72,7 @@ export class UserFormComponent implements OnInit {
       this.userService.apiUserPost(createUserDto).subscribe(
         (response) => {
           alert('User added successfully!');
-          this.router.navigate(['/']);
+          this.router.navigate(['/user-manage/get-users']);
         },
         (error) => {
           console.error('Error adding user:', error);

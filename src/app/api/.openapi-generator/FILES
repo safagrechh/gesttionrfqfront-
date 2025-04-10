@@ -41,6 +41,7 @@ model/statut.ts
 model/updateClientDto.ts
 model/updateCommentaireDto.ts
 model/updateRFQDto.ts
+model/updateStatutDto.ts
 model/updateUserDto.ts
 model/updateWorkerDto.ts
 model/user.ts

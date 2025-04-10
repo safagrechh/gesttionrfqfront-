@@ -23,6 +23,7 @@ export * from './statut';
 export * from './updateClientDto';
 export * from './updateCommentaireDto';
 export * from './updateRFQDto';
+export * from './updateStatutDto';
 export * from './updateUserDto';
 export * from './updateWorkerDto';
 export * from './user';

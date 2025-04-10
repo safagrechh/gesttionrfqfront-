@@ -7,10 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Statut } from './statut';
 
 
-export interface RFQSummaryDto { 
-    cq?: number;
-    quoteName?: string | null;
+export interface UpdateStatutDto { 
+    statut?: Statut;
 }
+export namespace UpdateStatutDto {
+}
+
 

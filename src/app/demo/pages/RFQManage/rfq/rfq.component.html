@@ -1,8 +1,14 @@
 <div class="container">
   <div class="col-sm-12">
     <app-card cardTitle="RFQ Versions" [options]="false">
-      <div class="workflow-container" >
-        <h2> RFQ N°{{ idrfq }} - Versions </h2>
+      <div class="workflow-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2>RFQ N°{{ idrfq }} - Versions</h2>
+          <div>
+            <span *ngIf="rfqinitial?.statut === 0" class="badge bg-success p-2">Won</span>
+            <span *ngIf="rfqinitial?.statut === 1" class="badge bg-danger p-2">Lost</span>
+          </div>
+        </div>
         <div class="line"></div>
         <div class="workflow" >
           <!-- RFQ Step -->
@@ -15,7 +21,7 @@
             <div class="circle">
               <span>{{ rfqinitial?.valide ? '✔' : (rfqinitial?.rejete ? '✖' : '―') }}</span>
             </div>
-            <h3>RFQ N°{{ idrfq }} version 0 </h3>
+            <h3>V0_{{ idrfq }}</h3>
             <p>{{ rfqinitial?.valide ? 'Validé' : (rfqinitial?.rejete ? 'Rejeté' : 'En attente') }}</p>
           </div>
 
@@ -29,6 +35,25 @@
           </div>
 
         </div>
+        <div *ngIf="!isAdmin  && areAllVersionsValid() " class="d-flex justify-content-end mb-3">
+          <button *ngIf="rfqinitial?.valide && rfqinitial?.statut === null"
+                  class="btn btn-success me-2"
+                  (click)="updateRFQStatus('win')">
+            <i class="feather icon-check-circle"></i> Win
+          </button>
+          <button *ngIf="rfqinitial?.valide && rfqinitial?.statut === null"
+                  class="btn btn-danger me-2"
+                  (click)="updateRFQStatus('lose')">
+            <i class="feather icon-x-circle"></i> Lose
+          </button>
+
+          <a
+             [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
+             class="btn btn-outline-success add-version-btn">
+            <i class="feather icon-plus"></i> une nouvelle version
+          </a>
+        </div>
+
       </div>
     </app-card>
   </div>
@@ -251,10 +276,7 @@
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a  *ngIf="!isAdmin &&  !isBrouillon && rfq.valide" [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
-        type="button" class="btn btn-outline-success">
-  <i class="feather icon-plus"></i> Ajouter une nouvelle version
-</a>
+
         <a  *ngIf="!isAdmin && isBrouillon" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq"
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Finaliser Brouillon
@@ -299,7 +321,7 @@
      </app-card>
 
  <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
-      <div *ngIf="showRejectForm" class="mt-4">
+      <div *ngIf="!rfq.valide" class="mt-4">
         <app-card cardTitle="Rejet de la RFQ">
           <form class="form-group" [formGroup]="rejectForm">
             <label>Commentaire</label>
@@ -307,11 +329,9 @@
           </form>
           <div class="d-flex justify-content-end mt-3">
             <button class="btn btn-outline-danger" (click)="submitRejection()">
-              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
+              <i class="feather icon-x-circle"></i> Ajouter un commentaire
             </button>
-            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
-              Annuler
-            </button>
+
           </div>
         </app-card>
       </div>
@@ -534,10 +554,7 @@
                 type="button" class="btn btn-outline-warning">
           <i class="feather icon-edit"></i> Editer
         </a>
-        <a    *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide"[routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
-        type="button" class="btn btn-outline-success">
-  <i class="feather icon-plus"></i> Ajouter une nouvelle version
-</a>
+
 
 
       </div>
@@ -574,7 +591,7 @@
 
 
  <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
-      <div *ngIf="showRejectForm" class="mt-4">
+      <div *ngIf="!selectedVersion?.valide" class="mt-4">
         <app-card cardTitle="Rejet de la RFQ">
           <form class="form-group" [formGroup]="rejectForm">
             <label>Commentaire</label>
@@ -582,11 +599,9 @@
           </form>
           <div class="d-flex justify-content-end mt-3">
             <button class="btn btn-outline-danger" (click)="submitRejectionV()">
-              <i class="feather icon-x-circle"></i> Rejeter avec commentaire
+              <i class="feather icon-x-circle"></i> Ajouter Commentaire
             </button>
-            <button class="btn btn-outline-secondary ms-2" (click)="showRejectForm = false">
-              Annuler
-            </button>
+
           </div>
         </app-card>
       </div>

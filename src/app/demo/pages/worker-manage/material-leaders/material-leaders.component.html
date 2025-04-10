@@ -1,40 +1,185 @@
-<div class="container">
-  <div class="col-sm-12">
-    <app-card cardTitle="Edit RFQ" [options]="false">
-      <div class="workflow-container">
-        <h2>The RFQ / Versions </h2>
-        <div class="line"></div>
-        <div class="workflow">
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Business Analysis</h3>
-                <p> and integrating components.</p>
-            </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Designing</h3>
-                <p>Creating UI/UX wireframes and mockups.</p>
-            </div>
-            <div class="step active">
-                <div class="circle"><span>✔</span></div>
-                <h3>Developing</h3>
-                <p>Writing code and integrating components.</p>
-            </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Testing</h3>
-                <p> bla bla kaaljkzjd Performing QA and fixing bugs.</p>
-            </div>
-            <div class="step">
-                <div class="circle"><span>✔</span></div>
-                <h3>Distribution</h3>
-                <p>Writing code and integrating components.</p>
-            </div>
+<div class="col-sm-12">
+  <!-- Formulaire de modification / création -->
+  <div *ngIf="selectedWorker" class="card mb-3">
+    <div class="card-body">
+      <h5>Modifier un Worker</h5>
+      <form (ngSubmit)="saveWorker()">
+        <div class="mb-3">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-control" [(ngModel)]="selectedWorker.nom" name="nom" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Enregistrer</button>
+        <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="mb-3">Gestion des Workers</h5>
+
+      <div class="row">
+        <!-- Navigation verticale -->
+        <div class="col-md-3 col-sm-12">
+          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
+
+            <!-- Création de Worker -->
+            <li [ngbNavItem]="1" class="nav-item">
+              <a class="nav-link" ngbNavLink>Créer un Worker</a>
+              <ng-template ngbNavContent>
+                <div class="p-3">
+                  <h5>Créer un Nouveau Worker</h5>
+                  <form [formGroup]="workerForm" (ngSubmit)="createWorker()">
+                    <div class="mb-3">
+                      <label class="form-label">Nom</label>
+                      <input type="text" class="form-control" formControlName="nom" required />
+                      <small class="text-danger" *ngIf="workerForm.get('nom')?.invalid && workerForm.get('nom')?.touched">
+                        Nom est requis.
+                      </small>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Role</label>
+                      <select class="form-control" formControlName="role" required>
+                        <option [value]="RoleW.NUMBER_0">Material Leader</option>
+                        <option [value]="RoleW.NUMBER_1">Tester</option>
+                      </select>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                      <button type="submit" class="btn btn-outline-primary" [disabled]="workerForm.invalid">
+                        <i class="feather icon-check-circle"></i> Ajouter
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <hr/>
+              </ng-template>
+              <hr />
+            </li>
+
+            <!-- Onglet Material Leaders -->
+            <li [ngbNavItem]="2" class="nav-item">
+              <a class="nav-link" ngbNavLink>Consulter Material Leaders</a>
+              <ng-template ngbNavContent>
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let worker of materialLeaders; trackBy: trackTable">
+                        <td>{{ worker.nom }}</td>
+                        <td>Material Leader</td>
+                        <td>
+                          <a href="javascript:void(0)" (click)="editWorker(worker)" title="Modifier">
+                            <i class="feather icon-edit text-warning"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteWorker(worker.id)" title="Supprimer" class="ms-2">
+                            <i class="feather icon-trash text-danger"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+
+            <!-- Onglet Testers -->
+            <li [ngbNavItem]="3" class="nav-item">
+              <a class="nav-link" ngbNavLink>Consulter Testers</a>
+              <ng-template ngbNavContent>
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let worker of testers; trackBy: trackTable">
+                        <td>{{ worker.nom }}</td>
+                        <td>Tester</td>
+                        <td>
+                          <a href="javascript:void(0)" (click)="editWorker(worker)" title="Modifier">
+                            <i class="feather icon-edit text-warning"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteWorker(worker.id)" title="Supprimer" class="ms-2">
+                            <i class="feather icon-trash text-danger"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+
+            <!-- Recherche Worker -->
+            <li [ngbNavItem]="4" class="nav-item">
+              <a class="nav-link" ngbNavLink>Rechercher un Worker</a>
+              <ng-template ngbNavContent>
+                <div class="p-3">
+                  <div class="input-group search-bar">
+                    <input type="text" class="form-control search-input"
+                           placeholder="Rechercher par nom..."
+                           [(ngModel)]="searchName">
+                    <button class="btn search-button" (click)="searchByName()">
+                      <i class="feather icon-search"></i>
+                    </button>
+                  </div>
+
+                  <div *ngIf="filteredWorker">
+                    <div class="table-responsive">
+                      <table class="table table-hover mb-0">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{ filteredWorker.nom }}</td>
+                            <td>{{ filteredWorker.role === RoleW.NUMBER_0 ? 'Material Leader' : 'Tester' }}</td>
+                            <td>
+                              <a href="javascript:void(0)" (click)="editWorker(filteredWorker)" title="Modifier">
+                                <i class="feather icon-edit text-warning"></i>
+                              </a>
+                              <a href="javascript:void(0)" (click)="deleteWorker(filteredWorker.id)" title="Supprimer" class="ms-2">
+                                <i class="feather icon-trash text-danger"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <p *ngIf="searchName && !filteredWorker" class="text-danger mt-2">Aucun worker trouvé avec ce nom.</p>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+          </ul>
+        </div>
+
+        <!-- Contenu des onglets -->
+        <div class="col-md-9 col-sm-12">
+          <div [ngbNavOutlet]="nav3" class="ms-4"></div>
         </div>
       </div>
-
-    </app-card>
+    </div>
   </div>
 </div>
-
-

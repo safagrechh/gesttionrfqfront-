@@ -6,6 +6,22 @@ import { GuestComponent } from './theme/layout/guest/guest.component';
 const routes: Routes = [
   {
     path: '',
+    component: GuestComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'auth/signin',
+        pathMatch: 'full'
+      },
+      {
+        path: 'auth',
+        loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
+      }
+    ]
+  },
+
+  {
+    path: '',
     component: AdminComponent,
     children: [
       {
@@ -54,16 +70,6 @@ const routes: Routes = [
         loadChildren: () => import('./demo/pages/worker-manage/worker-manage.module').then(m => m.WorkerManageModule)
       }
 
-    ]
-  },
-  {
-    path: '',
-    component: GuestComponent,
-    children: [
-      {
-        path: 'auth',
-        loadChildren: () => import('./demo/pages/authentication/authentication.module').then((m) => m.AuthenticationModule)
-      }
     ]
   }
 ];

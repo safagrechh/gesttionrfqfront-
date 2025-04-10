@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommentaireDto, CommentaireService, RFQService, UserService , VersionRFQService, VersionRFQSummaryDto } from 'src/app/api';
+import { CommentaireDto, CommentaireService, RFQService, Statut, UpdateStatutDto, UserService , VersionRFQService, VersionRFQSummaryDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { CreateCommentaireDto } from 'src/app/api';
 import { RouterModule } from '@angular/router';
@@ -107,10 +107,9 @@ export class RFQComponent implements OnInit {
   }
 
   onRFQClick() {
-    this.rfq = this.rfqinitial ;
+    this.rfq = this.rfqinitial;
     this.selectedVersion = null;
     this.loadComments(this.idrfq);
-    // Clear selected version
   }
 
   onVersionClick(versionId: number) {
@@ -122,17 +121,31 @@ export class RFQComponent implements OnInit {
   }
 
 
+  areAllVersionsValid(): boolean {
+    // Use rfqinitial instead of rfq since rfq might be null when a version is selected
+    if (!this.rfqinitial?.valide) return false;
+    // If RFQ is valid and has no versions, return true
+    if (this.versions.length === 0) return true;
+    // If RFQ has versions, check if all are valid
+    return this.versions.every(version => version.valide === true);
+  }
+
   loadVersionDetails(id: number) {
     this.VersionRFQService.apiVersionRFQIdGet(id).subscribe(data => {
-      console.log(data);
+      // Check and set default dates to null
+      const dateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
+                         'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
+                         'cdDate', 'approvalDate'];
+
+      dateFields.forEach(field => {
+        if (data[field]?.startsWith('0001-01-01')) {
+          data[field] = null;
+        }
+      });
+
       this.selectedVersion = data;
-      console.log("selected version" , data )
-
-      this.loadCommentsV( this.selectedVersion.id);
+      this.loadCommentsV(this.selectedVersion.id);
     });
-
-    console.log("version" , this.selectedVersion)
-
   }
 
   loadVersions(id: number) {
@@ -193,7 +206,22 @@ export class RFQComponent implements OnInit {
     );
 
   }
+  updateRFQStatus(status: 'win' | 'lose') {
+    const updateDto: UpdateStatutDto = {
+      statut: status === 'win' ? Statut.NUMBER_0 : Statut.NUMBER_1  // Using enum values
+    };
 
+    this.rfqService.apiRFQIdUpdateStatutPut(this.idrfq, updateDto).subscribe({
+      next: () => {
+        alert(`RFQ status updated to ${status} successfully`);
+        this.loadRFQDetails(this.idrfq);
+      },
+      error: (error) => {
+        console.error('Error updating RFQ status:', error);
+        alert('Failed to update RFQ status');
+      }
+    });
+  }
 
   loadComments(id: number) {
     this.comments = null;
@@ -236,8 +264,7 @@ export class RFQComponent implements OnInit {
     if (commentText && commentText.trim() !== '') {
       this.saveComment(commentText);
     }
-    this.rejectRFQ();
-    this.showRejectForm = false;
+
   }
   submitRejectionV() {
     const commentText = this.rejectForm.value.comment;
@@ -245,8 +272,6 @@ export class RFQComponent implements OnInit {
     if (commentText && commentText.trim() !== '') {
       this.saveCommentV(commentText);
     }
-    this.rejectVRFQ();
-    this.showRejectForm = false;
   }
   saveComment(commentText: string) {
     console.log("saveComment() a été appelé avec:", commentText);
@@ -272,21 +297,26 @@ export class RFQComponent implements OnInit {
     const newComment: CreateCommentaireDto = {
       contenu: commentText,
       rfqId: null,
-      versionRFQId: this.selectedVersion.id ,
+      versionRFQId: this.selectedVersion.id
     };
     console.log('Commentaire à envoyer:', newComment);
 
     this.commentService.apiCommentairePost(newComment).subscribe({
-      next: () => {
+      next: (response) => {
         console.log("Commentaire ajouté avec succès");
         this.loadCommentsV(this.selectedVersion.id);
+        // Clear the form after successful submission
+        this.rejectForm.reset();
+        // Optional: Show success message
+        alert('Commentaire ajouté avec succès');
       },
-      error: (err) => {
-        console.error("Erreur lors de l'ajout du commentaire:", err);
+      error: (error) => {
+        console.error("Erreur lors de l'ajout du commentaire:", error);
+        // Show error message to user
+        alert("Erreur lors de l'ajout du commentaire. Veuillez réessayer.");
       }
     });
   }
-
 
 
   onSubmitValider() {
@@ -300,14 +330,27 @@ export class RFQComponent implements OnInit {
       });
     }
   }
+
   onSubmitValiderV() {
     if (this.isValidateur && this.selectedVersion?.valide === false && this.selectedVersion?.rejete === false) {
-      this.VersionRFQService.apiVersionRFQIdValiderPost(this.selectedVersion.id).subscribe(() => {
-        alert(' version RFQ validée avec succès');
-        this.loadVersionDetails(this.selectedVersion.id);
+      this.VersionRFQService.apiVersionRFQIdValiderPost(this.selectedVersion.id).subscribe({
+        next: () => {
+          alert('Version RFQ validée avec succès');
+          this.loadVersionDetails(this.selectedVersion.id);
+          // Reload the page after a short delay to ensure data is updated
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la validation:', error);
+          alert('Erreur lors de la validation de la version RFQ');
+        }
       });
     }
   }
+
+
 
   delete(id: number) {
     if (confirm('Are you sure you want to delete this RFQ?')) {

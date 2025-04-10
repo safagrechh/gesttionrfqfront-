@@ -9,11 +9,10 @@
  */
 
 
-export type Statut = 0 | 1 | 2;
+export type Statut = 0 | 1;
 
 export const Statut = {
     NUMBER_0: 0 as Statut,
-    NUMBER_1: 1 as Statut,
-    NUMBER_2: 2 as Statut
+    NUMBER_1: 1 as Statut
 };
 

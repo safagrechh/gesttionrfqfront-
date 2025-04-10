@@ -11,7 +11,7 @@ import { Statut } from './statut';
 
 
 export interface RFQDetailsDto { 
-    cq?: number | null;
+    cq?: number;
     quoteName?: string | null;
     id?: number;
     numRefQuoted?: number | null;

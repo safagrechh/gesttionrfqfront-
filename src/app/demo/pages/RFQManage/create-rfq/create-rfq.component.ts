@@ -5,6 +5,7 @@ import { ClientService, ClientSummaryDto, MarketSegment, RFQDetailsDto, UserSumm
 import { WorkerService, UserService, MarketSegmentService, RFQService } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Router } from '@angular/router';
+import { HttpContext } from '@angular/common/http';
 
 
 @Component({
@@ -64,26 +65,26 @@ export class CreateRFQComponent implements OnInit {
 
   initializeForm(): void {
     this.rfqForm = this.fb.group({
-      quoteName: ['', Validators.required],
-      numRefQuoted: ['', Validators.required],
+      quoteName: [''],
+      numRefQuoted: [''],
       clientId: ['', Validators.required],
-      valeaderId: ['', Validators.required],
-      ingenieurRFQId: ['', Validators.required],
-      marketSegmentId: ['', Validators.required],
-      materialLeaderId: ['', Validators.required],
-      testLeaderId: ['', Validators.required],
-      estV: ['', [Validators.required, Validators.min(0)]],
-      maxV: ['', [Validators.required, Validators.min(0)]],
-      sopDate: ['', Validators.required],
-      koDate: ['', Validators.required],
-      customerDataDate: ['', Validators.required],
-      mdDate: ['', Validators.required],
+      valeaderId: [''],
+      ingenieurRFQId: [''],
+      marketSegmentId: [''],
+      materialLeaderId: [''],
+      testLeaderId: [''],
+      estV: [''],
+      maxV: [''],
+      sopDate: [''],
+      koDate: [''],
+      customerDataDate: [''],
+      mdDate: [''],
       mrDate: [''],
-      tdDate: ['', Validators.required],
+      tdDate: [''],
       trDate: [''],
-      ldDate: ['', Validators.required],
+      ldDate: [''],
       lrDate: [''],
-      cdDate: ['', Validators.required],
+      cdDate: [''],
       cq: ['', Validators.required],
       file: [null] // Add file control
     });
@@ -183,6 +184,18 @@ clearFile(): void {
 
     const formValue = this.rfqForm.value;
 
+    // Convert dates to ISO strings
+    const isoDateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
+                          'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
+                          'cdDate', 'approvalDate'];
+
+    isoDateFields.forEach(field => {
+      if (formValue[field]) {
+        formValue[field] = new Date(formValue[field]).toISOString();
+      }
+    });
+
+    // Call the service with proper parameters
     this.rfqService.apiRFQPost(
       formValue.cq,
       formValue.quoteName,
@@ -208,11 +221,15 @@ clearFile(): void {
       formValue.clientId,
       formValue.ingenieurRFQId,
       formValue.valeaderId,
-      this.selectedFile, // file
+      this.selectedFile, // file - must be a Blob or File object
       false, // brouillon
       'body', // observe
       false, // reportProgress
-      {} // options
+      {
+        // Optional options
+        httpHeaderAccept: 'application/json',
+        context: new HttpContext()
+      }
     ).subscribe({
       next: (response) => {
         console.log('RFQ created successfully', response);
@@ -221,11 +238,15 @@ clearFile(): void {
       },
       error: (error) => {
         console.error('Error creating RFQ', error);
-        alert('There was an error adding the RFQ.');
+        // More detailed error handling
+        if (error.error) {
+          alert(`Error: ${error.error.title || error.error.message || 'Unknown error'}`);
+        } else {
+          alert('There was an error adding the RFQ.');
+        }
       }
     });
   }
-
 
   onSubmitBrouillon(): void {
     this.onCQChange();

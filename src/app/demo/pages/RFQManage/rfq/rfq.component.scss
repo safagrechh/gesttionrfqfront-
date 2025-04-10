@@ -17,7 +17,7 @@ h2 {
   height: 4px;
   background: orange;
   position: absolute;
-  top: 140px; // Ajuster pour aligner avec les cercles
+  top: 150px; // Ajuster pour aligner avec les cercles
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
@@ -61,7 +61,7 @@ h2 {
     }
   }
 
-  
+
   h3 {
     margin-top: 10px;
     font-size: 18px;
@@ -111,5 +111,19 @@ h2 {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+.add-version-btn {
+  background-color: limegreen !important;
+  border-color: limegreen !important;
+  color: white !important;
+  font-size: 0.9rem;
+  padding: 0.375rem 0.75rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 }

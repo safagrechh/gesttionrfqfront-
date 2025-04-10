@@ -1,118 +1,72 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.nav-pills {
+  li {
+    a.nav-link {
+      background-color: transparent; // Default state: no color
+      color: #171717; // Default text color
+      border: none;
+      margin-bottom: 0.5rem;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    a.nav-link.active {
+      color: #fff; // Text stays white when active
+    }
+
+    // En attente de validation (Yellow when active)
+    &:nth-child(1) a.nav-link.active {
+      background-color: #ffc107;
+    }
+
+    // Validée (Green when active)
+    &:nth-child(2) a.nav-link.active {
+      background-color: #28a745;
+    }
+
+    // Rejetée (Red when active)
+    &:nth-child(3) a.nav-link.active {
+      background-color: #17a2b8;
+    }
+
+    // Settings (Blue when active)
+    &:nth-child(4) a.nav-link.active {
+      background-color: #17a2b8;
+    }
+
+    &:nth-child(5) a.nav-link.active {
+      background-color: #0f3b4257;
+    }
+  }
+}
+i.icon-eye {
+  color: #215aaa !important;  // Custom Blue
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  color: #000;
-  text-align: center;
-  padding: 40px;
+i.icon-edit {
+  color: #a77028 !important;  // Custom Green
 }
-
-.workflow-container {
-  max-width: 1200px;
-  margin: auto;
-  position: relative;
-}
-
-h2 {
-  font-size: 36px;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-// Line behind the circles
-.line {
-  width: 90%;
-  height: 4px;
-  background: orange;
-  position: absolute;
-  top: 140px; // Adjust this value to align with the circles
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-}
-
-.workflow {
+.search-bar {
+  border-radius: 30px;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  position: relative;
-  padding-top: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  // Effet léger d'ombre
 }
 
-.step {
-  text-align: center;
-  width: 20%;
-  position: relative;
-  z-index: 2; // Ensures circles are above the line
-
-  .circle {
-      width: 50px;
-      height: 50px;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: black;
-      margin: auto;
-      position: relative;
-      z-index: 10;
-      border: 2px solid #ddd;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-      &:hover {
-          transform: scale(1.2);
-          box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
-      }
-  }
-
-  h3 {
-      margin-top: 10px;
-      font-size: 18px;
-      font-weight: bold;
-  }
-
-  p {
-      font-size: 14px;
-      opacity: 0.8;
-      color: gray;
-  }
+.search-input {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 30px 0 0 30px; // Arrondi à gauche seulement
 }
 
-// Highlight the active step
-.step.active {
-  .circle {
-      background: limegreen;
-      color: white;
-      border-color: limegreen;
-  }
+.search-button {
+  background: #17a2b8;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 0 30px 30px 0; // Arrondi à droite seulement
+  cursor: pointer;
 }
 
-// Responsive for mobile
-@media (max-width: 768px) {
-  .workflow {
-      flex-direction: column;
-  }
-
-  .step {
-      width: 100%;
-      margin-bottom: 30px;
-  }
-
-  .line {
-      height: 100%;
-      width: 4px;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-  }
+.search-button i {
+  font-size: 18px;
 }

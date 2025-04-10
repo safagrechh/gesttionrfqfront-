@@ -18,7 +18,7 @@ import { RFQ } from './rFQ';
 
 export interface VersionRFQ { 
     id?: number;
-    cq?: number | null;
+    cq?: number;
     quoteName?: string | null;
     numRefQuoted?: number | null;
     sopDate?: string | null;
@@ -53,7 +53,7 @@ export interface VersionRFQ {
     vaLeader?: User;
     vaLeaderId?: number | null;
     client?: Client;
-    clientId?: number | null;
+    clientId?: number;
     fileName?: string | null;
     fileContentType?: string | null;
     fileData?: string | null;
