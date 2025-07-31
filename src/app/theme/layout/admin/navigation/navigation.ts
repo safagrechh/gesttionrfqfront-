@@ -115,17 +115,17 @@ export const NavigationItems: NavigationItem[] = [
         children: [
           {
             id: 'create-Material-Leader',
-            title: 'Material Leaders',
+            title: 'Material/Test Leaders',
             type: 'item',
             url: '/worker-manage/material-leaders',
 
             classes: 'nav-item'
           },
           {
-            id: 'create-Test-Leader',
-            title: 'Test Leaders',
+            id: 'create-market-segment',
+            title: 'Makrket Segment',
             type: 'item',
-            url: '/worker-manage/test-leaders',
+            url: '/worker-manage/market-segment',
 
             classes: 'nav-item'
           }

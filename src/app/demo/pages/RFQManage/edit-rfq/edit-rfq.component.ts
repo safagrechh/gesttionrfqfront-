@@ -66,7 +66,7 @@ export class EditRFQComponent implements OnInit {
     this.editForm = this.fb.group({
       quoteName: ['', Validators.required],
       numRefQuoted: ['', Validators.required],
-      statut: [null],
+      statut: [null as Statut | null],
       clientId: ['', Validators.required],
       valeaderId: ['', Validators.required],
       ingenieurRFQId: ['', Validators.required],
@@ -97,7 +97,7 @@ export class EditRFQComponent implements OnInit {
         const dateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
                          'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
                          'cdDate', 'approvalDate'];
-        
+
         // Set default dates to null if they are '0001-01-01'
         dateFields.forEach(field => {
           if (data[field]?.startsWith('0001-01-01')) {
@@ -221,7 +221,10 @@ export class EditRFQComponent implements OnInit {
             rejete: false
         });
 
-        const formValue = this.editForm.value;
+        const formValue = {
+          ...this.editForm.value,
+          statut: this.editForm.value.statut === null ? undefined : this.editForm.value.status
+      };
 
         // Convert dates to ISO string format if they exist
         const formatDate = (date: any) => date ? new Date(date).toISOString() : undefined;

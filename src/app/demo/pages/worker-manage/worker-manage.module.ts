@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialLeadersComponent } from './material-leaders/material-leaders.component';
-import { TestLeadersComponent } from './test-leaders/test-leaders.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MarketsegmentComponent } from './marketsegment/marketsegment.component';
 
 const routes: Routes = [
   {
@@ -12,8 +12,8 @@ const routes: Routes = [
   },
 
   {
-    path: 'test-leaders',
-    component: TestLeadersComponent
+    path: 'market-segment',
+    component: MarketsegmentComponent
   }
 
 
@@ -26,7 +26,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     MaterialLeadersComponent,
-    TestLeadersComponent
+    MarketsegmentComponent
 
   ]
 })
