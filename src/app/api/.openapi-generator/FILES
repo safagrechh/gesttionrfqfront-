@@ -7,6 +7,7 @@ api/client.service.ts
 api/commentaire.service.ts
 api/historiqueAction.service.ts
 api/marketSegment.service.ts
+api/notification.service.ts
 api/rFQ.service.ts
 api/user.service.ts
 api/versionRFQ.service.ts
@@ -31,6 +32,7 @@ model/loginDto.ts
 model/marketSegment.ts
 model/marketSegmentDto.ts
 model/models.ts
+model/notificationDto.ts
 model/rFQ.ts
 model/rFQDetailsDto.ts
 model/rFQSummaryDto.ts

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from 'src/app/api'; // Adjust import as needed
-import { LoginDto } from 'src/app/api';  // Adjust import as needed
+import { AuthService, LoginDto } from 'src/app/api';
+import { RealtimeNotificationService } from 'src/app/api/api/realtime-notification.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -11,40 +11,34 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
   templateUrl: './auth-signin.component.html',
   styleUrls: ['./auth-signin.component.scss'],
   standalone: true,
-    imports: [
-      CommonModule,
-      FormsModule,
-      SharedModule,
-      RouterModule,
-    ]
+  imports: [CommonModule, FormsModule, SharedModule, RouterModule]
 })
 export default class AuthSigninComponent {
+  email = '';
+  password = '';
 
-  email: string = '';
-  password: string = '';
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private realtime: RealtimeNotificationService
+  ) {}
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  // Handle form submission
   onSubmit() {
     const loginDto: LoginDto = { email: this.email, password: this.password };
 
     this.authService.apiAuthPost(loginDto).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
-        // Assuming the token is in the response
-        const token = response.token;
+        const token = (response as any)?.token;
         if (token) {
-          localStorage.setItem('token', token);  // Save the token to localStorage
+          localStorage.setItem('token', token);
+          // Start SignalR realtime notifications
+          this.realtime.start(token);
         }
-        // Navigate to dashboard after successful login
         this.router.navigate(['/rfq-manage/get-rfqs/']);
       },
       error: (err) => {
         console.error('Login failed', err);
-        // Handle error (display error message, etc.)
       }
     });
   }
-
 }

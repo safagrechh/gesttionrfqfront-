@@ -1,77 +1,114 @@
 <ul class="navbar-nav">
+  <!-- Notifications Dropdown -->
   <li>
     <div class="dropdown" ngbDropdown placement="auto">
       <span class="pr-2 mr-2">{{ userName }} - {{ userRole }}</span>
-      <a ngbDropdownToggle href="javascript:" data-toggle="dropdown" class="ms-3">
+
+      <a ngbDropdownToggle href="javascript:" class="ms-3 position-relative">
         <i class="icon feather icon-bell"></i>
+        <span *ngIf="unread"
+              class="badge bg-danger rounded-pill position-absolute"
+              style="top: -8px; right: -8px; font-size: 0.75rem; min-width: 18px; height: 18px; line-height: 18px;">
+          {{ unread }}
+        </span>
       </a>
+
       <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end notification">
         <div class="notification-head">
           <h6 class="d-inline-block m-b-0">Notifications</h6>
           <div class="float-end">
-            <a href="javascript:" class="m-r-10 text-decoration-none">mark as read</a>
-            <a href="javascript:" class="text-decoration-none">clear all</a>
+            <a href="javascript:" class="m-r-10 text-decoration-none" (click)="markAllAsRead()">mark as read</a>
+            <a href="javascript:" class="m-r-10 text-decoration-none" (click)="clearAll()">clear all</a>
+            <a href="javascript:" class="text-decoration-none text-info" (click)="checkSignalRConnection()" title="Debug SignalR">
+              <i class="feather icon-activity"></i>
+            </a>
           </div>
         </div>
+
+        <div *ngIf="connectionStatus !== 'connected'" class="px-3 py-2 text-center">
+          <small [ngClass]="{
+            'text-warning': connectionStatus === 'connecting' || connectionStatus === 'reconnecting',
+            'text-danger': connectionStatus === 'error' || connectionStatus === 'disconnected'
+          }">
+            <i class="feather icon-wifi-off me-1" *ngIf="connectionStatus === 'disconnected' || connectionStatus === 'error'"></i>
+            <i class="feather icon-loader me-1" *ngIf="connectionStatus === 'connecting' || connectionStatus === 'reconnecting'"></i>
+            {{ connectionStatus === 'connecting' ? 'Connecting...' : 
+               connectionStatus === 'reconnecting' ? 'Reconnecting...' : 
+               connectionStatus === 'error' ? 'Connection error' : 
+               'Disconnected' }}
+          </small>
+        </div>
+
         <ul class="notification-body">
-          <li class="n-title">
+          <li *ngIf="getNewNotifications().length > 0" class="n-title">
             <p class="m-b-0">NEW</p>
           </li>
-          <li class="notification">
-            <div class="d-flex">
-              <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image" />
+          <li *ngFor="let n of getNewNotifications()" 
+              class="notification" 
+              [ngClass]="{'unread-notification': !n.isRead}">
+            <div class="d-flex" (click)="markRead(n)" style="cursor: pointer;">
+              <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="User avatar" />
               <div class="flex-grow-1">
                 <p>
-                  <strong>John Doe</strong>
+                  <strong>{{ getUserName(n) }}</strong>
                   <span class="n-time text-muted">
                     <i class="icon feather icon-clock m-r-10"></i>
-                    now
+                    {{ getTimeAgo(n.createdAt) }}
                   </span>
                 </p>
-                <p>New ticket Added</p>
+                <p>{{ n.message }}</p>
+              </div>
+              <div class="notification-actions">
+                <span class="delete-btn" 
+                      (click)="$event.stopPropagation(); remove(n.id || 0)" 
+                      title="Delete notification">
+                  ×
+                </span>
               </div>
             </div>
           </li>
-          <li class="n-title">
+          
+          <li *ngIf="getEarlierNotifications().length > 0" class="n-title">
             <p class="m-b-0">EARLIER</p>
           </li>
-          <li class="notification">
-            <div class="d-flex">
-              <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image" />
+          <li *ngFor="let n of getEarlierNotifications()" 
+              class="notification" 
+              [ngClass]="{'unread-notification': !n.isRead, 'read-notification': n.isRead}">
+            <div class="d-flex" (click)="markRead(n)" style="cursor: pointer;">
+              <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="User avatar" />
               <div class="flex-grow-1">
                 <p>
-                  <strong>Joseph William</strong>
+                  <strong>{{ getUserName(n) }}</strong>
                   <span class="n-time text-muted">
                     <i class="icon feather icon-clock m-r-10"></i>
-                    10 min
+                    {{ getTimeAgo(n.createdAt) }}
                   </span>
                 </p>
-                <p>Prchace New Theme and make payment</p>
+                <p>{{ n.message }}</p>
+              </div>
+              <div class="notification-actions">
+                <span class="delete-btn" 
+                      (click)="$event.stopPropagation(); remove(n.id || 0)" 
+                      title="Delete notification">
+                  ×
+                </span>
               </div>
             </div>
           </li>
-          <li class="notification">
-            <div class="d-flex">
-              <img class="img-radius" src="assets/images/user/avatar-3.jpg" alt="Generic placeholder image" />
-              <div class="flex-grow-1">
-                <p>
-                  <strong>Sara Soudein</strong>
-                  <span class="n-time text-muted">
-                    <i class="icon feather icon-clock m-r-10"></i>
-                    30 min
-                  </span>
-                </p>
-                <p>currently login</p>
-              </div>
-            </div>
+          
+          <li *ngIf="!notifications.length" class="text-center text-muted p-3">
+            No notifications
           </li>
         </ul>
+
         <div class="notification-footer">
           <a href="javascript:">show all</a>
         </div>
       </div>
     </div>
   </li>
+
+  <!-- User Dropdown -->
   <li>
     <div class="dropdown drp-user" ngbDropdown placement="auto">
       <a href="javascript:" ngbDropdownToggle data-toggle="dropdown">
@@ -86,32 +123,13 @@
           </a>
         </div>
         <ul class="pro-body">
-          <li>
-            <a href="javascript:" class="dropdown-item">
-              <i class="feather icon-settings"></i>
-              Settings
-            </a>
-          </li>
-          <li>
-            <a href="javascript:" class="dropdown-item">
-              <i class="feather icon-user"></i>
-              Profile
-            </a>
-          </li>
-          <li>
-            <a href="javascript:" class="dropdown-item">
-              <i class="feather icon-mail"></i>
-              My Messages
-            </a>
-          </li>
-          <li>
-            <a href="javascript:" class="dropdown-item">
-              <i class="feather icon-lock"></i>
-              Lock Screen
-            </a>
-          </li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-settings"></i> Settings</a></li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
         </ul>
       </div>
     </div>
   </li>
 </ul>
+

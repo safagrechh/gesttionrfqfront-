@@ -13,6 +13,7 @@ export * from './historiqueActionDto';
 export * from './loginDto';
 export * from './marketSegment';
 export * from './marketSegmentDto';
+export * from './notificationDto';
 export * from './rFQ';
 export * from './rFQDetailsDto';
 export * from './rFQSummaryDto';
