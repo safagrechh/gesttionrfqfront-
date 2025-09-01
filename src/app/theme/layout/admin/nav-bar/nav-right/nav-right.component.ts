@@ -17,6 +17,7 @@ type NotificationVM = {
   rfqId?: number;
   createdAt?: string;
   isRead?: boolean;
+  actionUserName?: string;
 };
 
 @Component({
@@ -120,7 +121,8 @@ export class NavRightComponent implements OnInit, OnDestroy {
             message: latestMsg.message,
             rfqId: latestMsg.rfqId,
             createdAt: latestMsg.createdAt ?? new Date().toISOString(),
-            isRead: false
+            isRead: false,
+            actionUserName: latestMsg.actionUserName
           };
           
           console.log('Adding new real-time notification:', vm);
@@ -180,8 +182,8 @@ export class NavRightComponent implements OnInit, OnDestroy {
   }
 
   getUserName(notification: NotificationVM): string {
-    // Extract user name from message or use default
-    return 'System User';
+    // Use actionUserName from notification or fallback to default
+    return notification.actionUserName || 'System User';
   }
 
   getTimeAgo(createdAt?: string): string {
@@ -209,6 +211,10 @@ export class NavRightComponent implements OnInit, OnDestroy {
         notification.isRead = true;
         this.unread = Math.max(0, this.unread - 1);
       }
+      // Navigate to RFQ page if rfqId is available
+      if (notification.rfqId) {
+        this.router.navigate(['/rfq-manage/get-rfq', notification.rfqId]);
+      }
       return;
     }
 
@@ -225,6 +231,11 @@ export class NavRightComponent implements OnInit, OnDestroy {
         }
         // Refresh unread count from server to ensure accuracy
         this.refreshUnread();
+        
+        // Navigate to RFQ page if rfqId is available
+        if (notification.rfqId) {
+          this.router.navigate(['/rfq-manage/get-rfq', notification.rfqId]);
+        }
       },
       error: (err) => {
         console.error(`Failed to mark notification ${notification.id} as read:`, err);
@@ -334,7 +345,8 @@ export class NavRightComponent implements OnInit, OnDestroy {
             message: n.message ?? 'Notification',
             rfqId: n.rfqId,
             createdAt: n.createdAt,
-            isRead: !!n.isRead
+            isRead: !!n.isRead,
+            actionUserName: n.actionUserName
           }));
       },
       error: (error) => {

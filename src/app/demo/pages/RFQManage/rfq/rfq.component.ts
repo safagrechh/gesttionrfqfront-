@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommentaireDto, CommentaireService, RFQService, Statut, UpdateStatutDto, UserService , VersionRFQService, VersionRFQSummaryDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { CreateCommentaireDto } from 'src/app/api';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SharedModule , RouterModule],
 })
-export class RFQComponent implements OnInit {
+export class RFQComponent implements OnInit, OnDestroy {
   rfqForm!: FormGroup;
   rfq: any ;
   rfqinitial : any  ;
@@ -30,6 +31,7 @@ export class RFQComponent implements OnInit {
   versions: Array<VersionRFQSummaryDto> = [];
   isAdmin: boolean = false;
   selectedVersionIndex: number | null = null;
+  private routeSubscription!: Subscription;
 
 
 
@@ -76,17 +78,28 @@ export class RFQComponent implements OnInit {
       comment: ['']
     });
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.idrfq = +id;
-      this.loadRFQDetails(this.idrfq);
-      this.loadComments(this.idrfq);
-      this.loadVersions(this.idrfq);
-    }
-
-
+    // Subscribe to route parameter changes to handle navigation between different RFQs
+    this.routeSubscription = this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.idrfq = +id;
+        this.loadRFQDetails(this.idrfq);
+        this.loadComments(this.idrfq);
+        this.loadVersions(this.idrfq);
+        // Reset component state when switching RFQs
+        this.selectedVersion = null;
+        this.selectedVersionIndex = null;
+        this.showRejectForm = false;
+      }
+    });
 
     this.checkUserRole();
+  }
+
+  ngOnDestroy(): void {
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 
   checkUserRole() {
@@ -99,6 +112,7 @@ export class RFQComponent implements OnInit {
   loadRFQDetails(id: number) {
     this.rfqService.apiRFQIdGet(id).subscribe(data => {
       this.rfqinitial = data;
+      this.rfq = data; // Set rfq to display the form
       this.rfqForm.patchValue(data);
       this.isBrouillon = data.brouillon ;
     });

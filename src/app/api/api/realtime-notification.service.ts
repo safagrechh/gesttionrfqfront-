@@ -10,7 +10,7 @@ export class RealtimeNotificationService {
   private started = false;
   private connectionUrl = 'https://localhost:7107/hubs/notifications';
 
-  private _messages = new BehaviorSubject<{ message: string; rfqId?: number; createdAt?: string }[]>([]);
+  private _messages = new BehaviorSubject<{ message: string; rfqId?: number; createdAt?: string; actionUserName?: string }[]>([]);
   public messages$ = this._messages.asObservable();
 
   // Add a connection status subject
@@ -53,7 +53,8 @@ export class RealtimeNotificationService {
       const next = [{
         message: payload?.message ?? 'New notification',
         rfqId: payload?.rfqId,
-        createdAt: payload?.createdAt ?? new Date().toISOString()
+        createdAt: payload?.createdAt ?? new Date().toISOString(),
+        actionUserName: payload?.actionUserName
       }, ...this._messages.value].slice(0, 50); // keep a rolling buffer
       this._messages.next(next);
 
@@ -131,7 +132,8 @@ export class RealtimeNotificationService {
           const mapped = notificationList.map(n => ({
             message: n.message ?? 'Notification',
             rfqId: n.rfqId,
-            createdAt: n.createdAt
+            createdAt: n.createdAt,
+            actionUserName: n.actionUserName
           }));
           // Replace the messages instead of accumulating to prevent duplicates
           this._messages.next(mapped);
