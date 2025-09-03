@@ -6,10 +6,11 @@ import { Subscription } from 'rxjs';
 // project import
 import { SpinnerComponent } from './theme/shared/components/spinner/spinner.component';
 import { RealtimeNotificationService } from './api/api/realtime-notification.service';
+import { ToastNotificationComponent } from './components/toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-root',
-  imports: [SpinnerComponent, RouterModule],
+  imports: [SpinnerComponent, RouterModule, ToastNotificationComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

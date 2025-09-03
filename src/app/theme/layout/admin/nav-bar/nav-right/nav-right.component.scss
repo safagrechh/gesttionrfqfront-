@@ -227,3 +227,24 @@
     color: #856404;
   }
 }
+
+// Red bell icon animation
+.icon-bell.text-danger {
+  color: #dc3545 !important;
+  animation: bellShake 0.5s ease-in-out;
+}
+
+@keyframes bellShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+// Bell icon hover effect
+.icon-bell {
+  transition: color 0.3s ease, transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}

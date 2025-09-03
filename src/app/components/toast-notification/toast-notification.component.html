@@ -1,0 +1,28 @@
+<div class="toast-container">
+  <div 
+    *ngFor="let toast of toasts; trackBy: trackByToastId" 
+    class="toast toast-{{toast.type}}"
+    [@slideIn]
+    (click)="onToastClick(toast)"
+    style="cursor: pointer;"
+  >
+    <div class="toast-content">
+      <div class="toast-icon">
+        <i [class]="getToastIcon(toast.type)"></i>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title" *ngIf="toast.actionUserName">
+          {{toast.actionUserName}}
+        </div>
+        <div class="toast-message">{{toast.message}}</div>
+      </div>
+      <button 
+        class="toast-close" 
+        (click)="removeToast(toast.id); $event.stopPropagation()"
+        type="button"
+      >
+        <i class="pi pi-times"></i>
+      </button>
+    </div>
+  </div>
+</div>

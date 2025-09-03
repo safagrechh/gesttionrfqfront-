@@ -10,6 +10,7 @@ import { UserService } from 'src/app/api';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 type NotificationVM = {
   id?: number;                 // server id (may be missing for live-only entries)
@@ -51,7 +52,8 @@ export class NavRightComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private api: NotificationService,
-    public realtime: RealtimeNotificationService
+    public realtime: RealtimeNotificationService,
+    private toastService: ToastNotificationService
   ) {
     const config = inject(NgbDropdownConfig);
     config.placement = 'bottom-right';
@@ -131,7 +133,17 @@ export class NavRightComponent implements OnInit, OnDestroy {
           this.notifications = [vm, ...this.notifications].slice(0, 5);
           this.unread++;
           
-          // Optional: Show a toast notification
+          // Show a toast notification popup
+          console.log('Attempting to show toast notification:', vm.message);
+          this.toastService.showToast({
+            message: vm.message,
+            type: 'info',
+            actionUserName: vm.actionUserName,
+            rfqId: vm.rfqId?.toString(),
+            duration: 10000
+          });
+          console.log('Toast service called successfully');
+          
           console.log(`📢 New notification: ${vm.message}`);
         }
       })

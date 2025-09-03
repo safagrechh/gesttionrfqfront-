@@ -5,10 +5,10 @@
       <span class="pr-2 mr-2">{{ userName }} - {{ userRole }}</span>
 
       <a ngbDropdownToggle href="javascript:" class="ms-3 position-relative">
-        <i class="icon feather icon-bell"></i>
+        <i class="icon feather icon-bell" [ngClass]="{'text-danger': unread > 0}"></i>
         <span *ngIf="unread"
               class="badge bg-danger rounded-pill position-absolute"
-              style="top: -8px; right: -8px; font-size: 0.75rem; min-width: 18px; height: 18px; line-height: 18px;">
+              style="top: 6px; right: -1px; font-size: 0.7rem; min-width: 16px; height: 16px; line-height: 16px; display: flex; align-items: center; justify-content: center; z-index: 8;">
           {{ unread }}
         </span>
       </a>
