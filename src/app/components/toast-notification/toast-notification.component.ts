@@ -49,11 +49,11 @@ export class ToastNotificationComponent implements OnInit, OnDestroy {
   }
 
   onToastClick(toast: ToastNotification) {
-    // Navigate to specific RFQ if rfqId is available, otherwise go to general RFQ on action page
+    // Navigate to specific RFQ if rfqId is available, otherwise go to general RFQ list page
     if (toast.rfqId) {
-      this.router.navigate(['/admin/rfq-on-action', toast.rfqId]);
+      this.router.navigate(['/rfq-manage/get-rfq', toast.rfqId]);
     } else {
-      this.router.navigate(['/admin/rfq-on-action']);
+      this.router.navigate(['/rfq-manage/get-rfqs']);
     }
     // Optionally remove the toast after clicking
     this.removeToast(toast.id);
