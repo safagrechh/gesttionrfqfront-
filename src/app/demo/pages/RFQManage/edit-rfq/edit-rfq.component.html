@@ -272,9 +272,14 @@
               <i class="feather icon-save"></i> Update
             </button>
 
-            <button *ngIf="isBrouillon" type="button" class="btn btn-outline-primary" (click)="FinaliserBrouillon()">
-              <i class="feather icon-save"></i> Finaliser Brouillon
-            </button>
+            <ng-container *ngIf="isBrouillon">
+              <button type="button" class="btn btn-outline-primary me-2" (click)="saveDraft()">
+                <i class="feather icon-save"></i> Enregistrer le Brouillon
+              </button>
+              <button type="button" class="btn btn-outline-success" (click)="FinaliserBrouillon()">
+                <i class="feather icon-check-circle"></i> Finaliser
+              </button>
+            </ng-container>
           </div>
 
 

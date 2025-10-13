@@ -100,6 +100,19 @@ export class ConsulterRFQComponent implements OnInit {
       );
     }
   }
+   deletedraft(id: number) {
+    if (confirm('Are you sure you want to delete this draftRFQ?')) {
+      this.rfqService.apiRFQIdDelete(id).subscribe(
+        () => {
+          alert("Draft deleted successfully");
+          this.fetchRFQDetails(); // Refresh the list
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression de RFQ:', error);
+        }
+      );
+    }
+  }
 }
 
 

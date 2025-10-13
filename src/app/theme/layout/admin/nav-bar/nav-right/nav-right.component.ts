@@ -109,14 +109,14 @@ export class NavRightComponent implements OnInit, OnDestroy {
 
         // Get the latest message (first in array since it's prepended)
         const latestMsg = msgs[0];
-        
+
         // Check if this message is already in our notifications list
-        const exists = this.notifications.some(n => 
-          n.message === latestMsg.message && 
-          n.rfqId === latestMsg.rfqId && 
+        const exists = this.notifications.some(n =>
+          n.message === latestMsg.message &&
+          n.rfqId === latestMsg.rfqId &&
           n.createdAt === latestMsg.createdAt
         );
-        
+
         // Only add if it doesn't already exist
         if (!exists) {
           const vm: NotificationVM = {
@@ -126,13 +126,13 @@ export class NavRightComponent implements OnInit, OnDestroy {
             isRead: false,
             actionUserName: latestMsg.actionUserName
           };
-          
+
           console.log('Adding new real-time notification:', vm);
-          
+
           // Prepend the new notification and keep only 5 for the dropdown
           this.notifications = [vm, ...this.notifications].slice(0, 5);
           this.unread++;
-          
+
           // Show a toast notification popup
           console.log('Attempting to show toast notification:', vm.message);
           this.toastService.showToast({
@@ -143,7 +143,7 @@ export class NavRightComponent implements OnInit, OnDestroy {
             duration: 10000
           });
           console.log('Toast service called successfully');
-          
+
           console.log(`📢 New notification: ${vm.message}`);
         }
       })
@@ -158,15 +158,32 @@ export class NavRightComponent implements OnInit, OnDestroy {
   // ========== Template actions ==========
 
   clearAll(): void {
-    this.api.apiNotificationMarkAllReadPost().subscribe({
-      next: () => {
-        // Mark all as read locally and reset badge
-        this.notifications = this.notifications.map(n => ({ ...n, isRead: true }));
-        this.unread = 0;
-      },
-      error: (err) => {
-        console.error('Failed to mark all as read:', err);
-      }
+    // Fallback: mark each notification as read using existing endpoint
+    const ids = this.notifications
+      .filter(n => !!n.id && !n.isRead)
+      .map(n => n.id!)
+      .slice(0, 50); // safety cap
+
+    if (!ids.length) {
+      // nothing to do; just reset local state
+      this.notifications = this.notifications.map(n => ({ ...n, isRead: true }));
+      this.unread = 0;
+      return;
+    }
+
+    ids.forEach(id => {
+      this.api.apiNotificationIdMarkReadPut(id).subscribe({
+        next: () => {
+          const idx = this.notifications.findIndex(x => x.id === id);
+          if (idx >= 0 && !this.notifications[idx].isRead) {
+            this.notifications[idx].isRead = true;
+            this.unread = Math.max(0, this.unread - 1);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to mark notification as read:', err);
+        }
+      });
     });
   }
 
@@ -200,18 +217,18 @@ export class NavRightComponent implements OnInit, OnDestroy {
 
   getTimeAgo(createdAt?: string): string {
     if (!createdAt) return 'unknown';
-    
+
     const now = new Date();
     const created = new Date(createdAt);
     const diffMs = now.getTime() - created.getTime();
     const diffMins = Math.floor(diffMs / (1000 * 60));
-    
+
     if (diffMins < 1) return 'now';
     if (diffMins < 60) return `${diffMins} min`;
-    
+
     const diffHours = Math.floor(diffMins / 60);
     if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
-    
+
     const diffDays = Math.floor(diffHours / 24);
     return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
   }
@@ -234,7 +251,7 @@ export class NavRightComponent implements OnInit, OnDestroy {
     const headers = new HttpHeaders({
       'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
     });
-    
+
     this.http.put(`https://localhost:7107/api/Notification/${notification.id}/mark-read`, {}, { headers }).subscribe({
       next: () => {
         if (!notification.isRead) {
@@ -243,7 +260,7 @@ export class NavRightComponent implements OnInit, OnDestroy {
         }
         // Refresh unread count from server to ensure accuracy
         this.refreshUnread();
-        
+
         // Navigate to RFQ page if rfqId is available
         if (notification.rfqId) {
           this.router.navigate(['/rfq-manage/get-rfq', notification.rfqId]);
@@ -303,13 +320,13 @@ export class NavRightComponent implements OnInit, OnDestroy {
     console.log('🔍 Debug: Checking SignalR connection...');
     console.log('📊 Current notifications count:', this.notifications.length);
     console.log('📊 Current unread count:', this.unread);
-    
+
     const status = this.connectionStatus;
     console.log('🔗 SignalR connection status:', status);
-    
+
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     console.log('🔑 Token available:', !!token);
-    
+
     if (status === 'connected') {
       console.log('✅ Connection is active');
       this.realtime.testConnection();
@@ -330,7 +347,7 @@ export class NavRightComponent implements OnInit, OnDestroy {
   // ========== Helpers ==========
 
   private refreshList(): void {
-    this.api.apiNotificationGet(5).subscribe({
+    this.api.apiNotificationGet('body', false, { context: new HttpContext() }).subscribe({
       next: (response: any) => {
         console.log('Loaded notifications:', response);
         // Handle both array and object with $values array
@@ -340,10 +357,10 @@ export class NavRightComponent implements OnInit, OnDestroy {
 
         // Clear existing notifications to prevent duplicates
         this.notifications = [];
-        
+
         // Create a Set to track unique notification IDs
         const seenIds = new Set<number>();
-        
+
         this.notifications = notificationList
           .filter(n => {
             if (n.id && seenIds.has(n.id)) {
@@ -359,7 +376,8 @@ export class NavRightComponent implements OnInit, OnDestroy {
             createdAt: n.createdAt,
             isRead: !!n.isRead,
             actionUserName: n.actionUserName
-          }));
+          }))
+          .slice(0, 5);
       },
       error: (error) => {
         console.error('Failed to load notifications:', error);

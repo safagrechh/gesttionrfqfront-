@@ -112,22 +112,15 @@ export class RealtimeNotificationService {
   // Separate method to load recent notifications with proper authentication
   private loadRecentNotifications(token: string) {
     // Call the API with the correct parameter structure
-    // The API expects: take, observe, reportProgress, options
-    this.api.apiNotificationGet(
-      10,                 // take parameter
-      'body',             // observe parameter
-      false,              // reportProgress parameter
-      {                   // options parameter
-        context: new HttpContext()
-      }
-    ).subscribe({
+    // The API supports: observe, reportProgress, options
+    this.api.apiNotificationGet('body', false, { context: new HttpContext() }).subscribe({
       next: (response: any) => {
         console.log('Loaded recent notifications:', response);
         // Handle both array and object with $values array
-        const notificationList = Array.isArray(response) 
-          ? response 
+        const notificationList = Array.isArray(response)
+          ? response
           : (response?.$values || []);
-        
+
         if (notificationList.length > 0) {
           const mapped = notificationList.map(n => ({
             message: n.message ?? 'Notification',
@@ -207,7 +200,7 @@ export class RealtimeNotificationService {
     console.log('   - TestConnection method for testing');
     console.log('   - Proper notification sending when notifications are created');
     console.log('   - Example: Clients.User(userId).SendAsync("ReceiveNotification", notification)');
-    
+
     return true;
   }
 }

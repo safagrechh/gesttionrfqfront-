@@ -255,11 +255,48 @@ clearFile(): void {
       return;
     }
 
-    const draftData = {
-      ...this.rfqForm.value,
-    };
+    const formValue = { ...this.rfqForm.value };
 
-    this.rfqService.apiRFQDraftPost(draftData).subscribe({
+    const toNumberOrUndefined = (v: any) => (v === null || v === undefined || v === '' ? undefined : Number(v));
+
+    // Convert dates to ISO strings for fields expected by the API
+    const isoDateFields = [
+      'sopDate', 'koDate', 'customerDataDate', 'mdDate', 'mrDate',
+      'tdDate', 'trDate', 'ldDate', 'lrDate', 'cdDate'
+    ];
+    isoDateFields.forEach(field => {
+      if (formValue[field]) {
+        formValue[field] = new Date(formValue[field]).toISOString();
+      }
+    });
+
+    this.rfqService.apiRFQDraftPost(
+      toNumberOrUndefined(formValue.cq),
+      formValue.quoteName,
+      toNumberOrUndefined(formValue.numRefQuoted),
+      formValue.sopDate,
+      toNumberOrUndefined(formValue.maxV),
+      toNumberOrUndefined(formValue.estV),
+      formValue.koDate,
+      formValue.customerDataDate,
+      formValue.mdDate,
+      formValue.mrDate,
+      formValue.tdDate,
+      formValue.trDate,
+      formValue.ldDate,
+      formValue.lrDate,
+      formValue.cdDate,
+      toNumberOrUndefined(formValue.materialLeaderId),
+      toNumberOrUndefined(formValue.testLeaderId),
+      toNumberOrUndefined(formValue.marketSegmentId),
+      toNumberOrUndefined(formValue.clientId),
+      toNumberOrUndefined(formValue.ingenieurRFQId),
+      toNumberOrUndefined(formValue.valeaderId),
+      this.selectedFile || undefined,
+      'body',
+      false,
+      { httpHeaderAccept: 'application/json', context: new HttpContext() }
+    ).subscribe({
       next: (response) => {
         console.log('Draft saved successfully', response);
         this.router.navigate(['/rfq-manage/get-rfqs']);

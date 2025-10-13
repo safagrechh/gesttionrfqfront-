@@ -24,6 +24,7 @@ model/commentaireDto.ts
 model/createClientDto.ts
 model/createCommentaireDto.ts
 model/createHistoriqueActionDto.ts
+model/createNotificationRequest.ts
 model/createUserDto.ts
 model/createWorkerDto.ts
 model/historiqueAction.ts
@@ -32,7 +33,6 @@ model/loginDto.ts
 model/marketSegment.ts
 model/marketSegmentDto.ts
 model/models.ts
-model/notificationDto.ts
 model/rFQ.ts
 model/rFQDetailsDto.ts
 model/rFQSummaryDto.ts

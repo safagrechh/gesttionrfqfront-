@@ -310,9 +310,8 @@ clearFile(): void {
   if (this.selectedFile && this.existingFileName) {
     this.selectedFile = null;
     this.editForm.patchValue({ file: null });
-  }
-  // If we're clearing the existing file (no new selection)
-  else if (this.existingFileName) {
+  } else if (this.existingFileName) {
+    // If we're clearing the existing file (no new selection)
     this.existingFileName = '';
     this.existingFileType = '';
     this.existingFileSize = '';
@@ -322,7 +321,113 @@ clearFile(): void {
 
   // Reset the file input element
   const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-  if (fileInput) fileInput.value = '';
+  if (fileInput) {
+    fileInput.value = '';
+  }
+}
+
+saveDraft(): void {
+  // if (this.editForm.invalid) {
+  //   Object.keys(this.editForm.controls).forEach(field => {
+  //     const control = this.editForm.get(field);
+  //     if (control instanceof FormControl) {
+  //       control.markAsTouched();
+  //     }
+  //   });
+  //   return;
+  // }
+
+  this.onCQChange();
+  if (this.cqExists) {
+    alert('CQ already exists. Please change it to proceed.');
+    return;
+  }
+
+
+    this.editForm.patchValue({
+      rejete: false,
+      brouillon: true
+    });
+
+    const raw = this.editForm.value;
+    const toNumberOrUndefined = (v: any) => {
+      if (v === null || v === undefined || v === '') return undefined;
+      const n = Number(v);
+      return isNaN(n) ? undefined : n;
+    };
+
+    const toStringOrUndefined = (v: any) => {
+      if (v === null || v === undefined) return undefined;
+      const s = String(v).trim();
+      return s.length ? s : undefined;
+    };
+
+    const formValue = {
+      ...raw,
+      // ensure optional numeric fields aren't sent as null
+      numRefQuoted: toNumberOrUndefined(raw.numRefQuoted),
+      maxV: toNumberOrUndefined(raw.maxV),
+      estV: toNumberOrUndefined(raw.estV),
+      // ids and CQ
+      cq: toNumberOrUndefined(raw.cq),
+      materialLeaderId: toNumberOrUndefined(raw.materialLeaderId),
+      testLeaderId: toNumberOrUndefined(raw.testLeaderId),
+      marketSegmentId: toNumberOrUndefined(raw.marketSegmentId),
+      clientId: toNumberOrUndefined(raw.clientId),
+      ingenieurRFQId: toNumberOrUndefined(raw.ingenieurRFQId),
+      valeaderId: toNumberOrUndefined(raw.valeaderId),
+      // optional strings
+      quoteName: toStringOrUndefined(raw.quoteName),
+      // statut can be null in form; omit if null
+      statut: raw.statut === null ? undefined : raw.statut
+    };
+
+    const formatDate = (date: any) => date ? new Date(date).toISOString() : undefined;
+    const fileToSend = this.selectedFile || undefined;
+
+    this.rfqService.apiRFQIdPut(
+      this.rfqId,
+      formValue.cq,
+      formValue.quoteName,
+      formValue.numRefQuoted,
+      formatDate(formValue.sopDate),
+      formValue.maxV,
+      formValue.estV,
+      formatDate(formValue.koDate),
+      formatDate(formValue.customerDataDate),
+      formatDate(formValue.mdDate),
+      formatDate(formValue.mrDate),
+      formatDate(formValue.tdDate),
+      formatDate(formValue.trDate),
+      formatDate(formValue.ldDate),
+      formatDate(formValue.lrDate),
+      formatDate(formValue.cdDate),
+      formatDate(formValue.approvalDate),
+      formValue.statut,
+      formValue.materialLeaderId,
+      formValue.testLeaderId,
+      formValue.marketSegmentId,
+      formValue.clientId,
+      formValue.ingenieurRFQId,
+      formValue.valeaderId,
+      formValue.valide,
+      false,
+      fileToSend,
+      formValue.brouillon,
+      'body',
+      false,
+      { httpHeaderAccept: 'application/json' }
+    ).subscribe({
+      next: (response) => {
+        console.log('Draft saved successfully', response);
+        alert('Brouillon enregistré avec succès.');
+      },
+      error: (err) => {
+        console.error('Error saving draft', err);
+        alert('Erreur lors de l\'enregistrement du brouillon.');
+      }
+    });
+
 }
   FinaliserBrouillon(): void {
      if (this.editForm.invalid) {
