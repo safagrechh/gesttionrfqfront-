@@ -136,6 +136,22 @@ export const NavigationItems: NavigationItem[] = [
 
     ]
   },
+  {
+    id: 'historique-manage',
+    title: 'Historique Management',
+    type: 'group',
+    icon: 'icon-ui',
+    children: [
+      {
+        id: 'historique-actions',
+        title: 'Historique Actions',
+        type: 'item',
+        icon: 'feather icon-file-plus',
+        url: '/historique-manage/historique-actions',
+        classes: 'nav-item'
+      }
+    ]
+  },
   // {
   //   id: 'ui-element',
   //   title: 'UI ELEMENT',

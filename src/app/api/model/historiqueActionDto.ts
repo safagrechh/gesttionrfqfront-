@@ -17,5 +17,6 @@ export interface HistoriqueActionDto {
     detailsAction?: string | null;
     dateAction?: string;
     userId?: number;
+    userName?: string | null;
 }
 

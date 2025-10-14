@@ -69,6 +69,11 @@ const routes: Routes = [
         path: 'worker-manage',
         loadChildren: () => import('./demo/pages/worker-manage/worker-manage.module').then(m => m.WorkerManageModule)
       }
+      ,
+      {
+        path: 'historique-manage',
+        loadChildren: () => import('./demo/pages/historique-manage/historique-manage.module').then(m => m.HistoriqueManageModule)
+      }
 
     ]
   }
