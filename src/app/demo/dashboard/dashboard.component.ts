@@ -17,8 +17,7 @@ import '../../../assets/charts/amchart/usaLow.js';
 import '../../../assets/charts/amchart/radar.js';
 import '../../../assets/charts/amchart/worldLow.js';
 
-import dataJson from 'src/fake-data/map_data';
-import mapColor from 'src/fake-data/map-color-data.json';
+import { RFQService, RFQDetailsDto } from 'src/app/api';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,243 +26,176 @@ import mapColor from 'src/fake-data/map-color-data.json';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  rfqs: Array<RFQDetailsDto> = [];
+  wonCount = 0;
+  lostCount = 0;
+  pendingCount = 0;
+  winRate = 0;
+
+  constructor(private rfqService: RFQService) {}
+
   // life cycle event
   ngOnInit() {
-    setTimeout(() => {
-      const latlong = dataJson;
-
-      const mapData = mapColor;
-
-      const minBulletSize = 3;
-      const maxBulletSize = 70;
-      let min = Infinity;
-      let max = -Infinity;
-      let i;
-      let value;
-      for (i = 0; i < mapData.length; i++) {
-        value = mapData[i].value;
-        if (value < min) {
-          min = value;
-        }
-        if (value > max) {
-          max = value;
-        }
+    this.rfqService.apiRFQGet().subscribe({
+      next: (response: any) => {
+        this.rfqs = response?.$values ?? response ?? [];
+        this.updateMetricsAndCharts();
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des RFQ pour le tableau de bord:', error);
+        this.rfqs = [];
+        this.updateMetricsAndCharts();
       }
+    });
+  }
 
-      const maxSquare = maxBulletSize * maxBulletSize * 2 * Math.PI;
-      const minSquare = minBulletSize * minBulletSize * 2 * Math.PI;
+  private updateMetricsAndCharts() {
+    const hasStatut = (s: any): s is 0 | 1 => s === 0 || s === 1;
+    this.wonCount = this.rfqs.filter((rfq) => hasStatut(rfq.statut) && rfq.statut === 0).length;
+    this.lostCount = this.rfqs.filter((rfq) => hasStatut(rfq.statut) && rfq.statut === 1).length;
+    this.pendingCount = this.rfqs.filter((rfq) => !hasStatut(rfq.statut)).length;
 
-      const images = [];
-      for (i = 0; i < mapData.length; i++) {
-        const dataItem = mapData[i];
-        value = dataItem.value;
+    const decisions = this.wonCount + this.lostCount;
+    this.winRate = decisions ? Math.round((this.wonCount / decisions) * 100) : 0;
+    const lossRate = decisions ? Math.round((this.lostCount / decisions) * 100) : 0;
+    const pendingRate = this.rfqs.length ? Math.round((this.pendingCount / this.rfqs.length) * 100) : 0;
 
-        let square = ((value - min) / (max - min)) * (maxSquare - minSquare) + minSquare;
-        if (square < minSquare) {
-          square = minSquare;
-        }
-        const size = Math.sqrt(square / (Math.PI * 8));
-        const id = dataItem.code;
-
-        images.push({
-          type: 'circle',
-          theme: 'light',
-          width: size,
-          height: size,
-          color: dataItem.color,
-          longitude: latlong[id].longitude,
-          latitude: latlong[id].latitude,
-          title: dataItem.name + '</br> [ ' + value + ' ]',
-          value: value
-        });
+    // Update KPI cards with RFQ metrics
+    this.sales = [
+      {
+        title: 'RFQ Gagnés',
+        icon: 'icon-check text-c-green',
+        amount: String(this.wonCount),
+        percentage: `${this.winRate}%`,
+        progress: this.winRate,
+        design: 'col-md-6',
+        progress_bg: 'progress-c-theme'
+      },
+      {
+        title: 'RFQ Perdus',
+        icon: 'icon-x text-c-red',
+        amount: String(this.lostCount),
+        percentage: `${lossRate}%`,
+        progress: lossRate,
+        design: 'col-md-6',
+        progress_bg: 'progress-c-theme2'
+      },
+      {
+        title: 'RFQ En attente',
+        icon: 'icon-clock text-c-yellow',
+        amount: String(this.pendingCount),
+        percentage: `${pendingRate}%`,
+        progress: pendingRate,
+        design: 'col-md-12',
+        progress_bg: 'progress-c-theme'
       }
+    ];
 
-      // world-low chart
-      AmCharts.makeChart('world-low', {
-        type: 'map',
-        projection: 'eckert6',
+    this.renderWinLossPie();
+    this.renderMonthlyTrend();
+  }
 
-        dataProvider: {
-          map: 'worldLow',
-          images: images
-        },
-        export: {
-          enabled: true
-        }
-      });
+  private renderWinLossPie() {
+    AmCharts.makeChart('rfq-win-lose-pie', {
+      type: 'pie',
+      theme: 'light',
+      dataProvider: [
+        { status: 'Gagnés', value: this.wonCount, color: '#4caf50' },
+        { status: 'Perdus', value: this.lostCount, color: '#f44336' },
+        { status: 'En attente', value: this.pendingCount, color: '#FFB020' }
+      ],
+      titleField: 'status',
+      valueField: 'value',
+      colorField: 'color',
+      balloonText: '[[title]]: [[value]] ([[percents]]%)',
+      labelsEnabled: true,
+      innerRadius: '40%',
+      legend: { position: 'right', align: 'center' },
+      export: { enabled: true }
+    });
+  }
 
-      const chartDatac = [
-        {
-          day: 'Mon',
-          value: 60
-        },
-        {
-          day: 'Tue',
-          value: 45
-        },
-        {
-          day: 'Wed',
-          value: 70
-        },
-        {
-          day: 'Thu',
-          value: 55
-        },
-        {
-          day: 'Fri',
-          value: 70
-        },
-        {
-          day: 'Sat',
-          value: 55
-        },
-        {
-          day: 'Sun',
-          value: 70
-        }
-      ];
+  private renderMonthlyTrend() {
+    const monthMap: { [key: string]: { won: number; lost: number } } = {};
+    for (const rfq of this.rfqs) {
+      if (!rfq.dateCreation) continue;
+      const d = new Date(rfq.dateCreation);
+      if (isNaN(d.getTime())) continue;
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      if (!monthMap[key]) monthMap[key] = { won: 0, lost: 0 };
+      if (rfq.statut === 0) monthMap[key].won++;
+      else if (rfq.statut === 1) monthMap[key].lost++;
+    }
+    const chartData = Object.keys(monthMap)
+      .sort()
+      .map((k) => ({ month: k, won: monthMap[k].won, lost: monthMap[k].lost }));
 
-      // widget-line-chart
-      AmCharts.makeChart('widget-line-chart', {
-        type: 'serial',
-        addClassNames: true,
-        defs: {
-          filter: [
-            {
-              x: '-50%',
-              y: '-50%',
-              width: '200%',
-              height: '200%',
-              id: 'blur',
-              feGaussianBlur: {
-                in: 'SourceGraphic',
-                stdDeviation: '30'
-              }
-            },
-            {
-              id: 'shadow',
-              x: '-10%',
-              y: '-10%',
-              width: '120%',
-              height: '120%',
-              feOffset: {
-                result: 'offOut',
-                in: 'SourceAlpha',
-                dx: '0',
-                dy: '20'
-              },
-              feGaussianBlur: {
-                result: 'blurOut',
-                in: 'offOut',
-                stdDeviation: '10'
-              },
-              feColorMatrix: {
-                result: 'blurOut',
-                type: 'matrix',
-                values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .2 0'
-              },
-              feBlend: {
-                in: 'SourceGraphic',
-                in2: 'blurOut',
-                mode: 'normal'
-              }
-            }
-          ]
-        },
-        fontSize: 15,
-        dataProvider: chartDatac,
-        autoMarginOffset: 0,
-        marginRight: 0,
-        categoryField: 'day',
-        categoryAxis: {
-          color: '#fff',
+    AmCharts.makeChart('rfq-monthly-serial', {
+      type: 'serial',
+      theme: 'light',
+      addClassNames: true,
+      dataProvider: chartData,
+      autoMarginOffset: 0,
+      marginRight: 0,
+      categoryField: 'month',
+      categoryAxis: {
+        color: '#666',
+        gridAlpha: 0,
+        axisAlpha: 0.2,
+        lineAlpha: 0.2,
+        inside: false
+      },
+      valueAxes: [
+        {
+          fontSize: 12,
+          inside: true,
           gridAlpha: 0,
           axisAlpha: 0,
           lineAlpha: 0,
-          offset: -20,
-          inside: true
+          minimum: 0
+        }
+      ],
+      chartCursor: {
+        valueLineEnabled: true,
+        valueLineBalloonEnabled: true,
+        cursorAlpha: 0.2,
+        zoomable: false,
+        valueZoomable: false,
+        cursorColor: '#999',
+        categoryBalloonColor: '#51b4e6',
+        valueLineAlpha: 0.3
+      },
+      graphs: [
+        {
+          id: 'gWon',
+          type: 'line',
+          valueField: 'won',
+          lineColor: '#4caf50',
+          lineAlpha: 1,
+          lineThickness: 3,
+          fillAlphas: 0.1,
+          showBalloon: true,
+          balloonText: '<span style="font-size:14px;">Gagnés: [[value]]</span>'
         },
-        valueAxes: [
-          {
-            fontSize: 0,
-            inside: true,
-            gridAlpha: 0,
-            axisAlpha: 0,
-            lineAlpha: 0,
-            minimum: 0,
-            maximum: 100
-          }
-        ],
-        chartCursor: {
-          valueLineEnabled: false,
-          valueLineBalloonEnabled: false,
-          cursorAlpha: 0,
-          zoomable: false,
-          valueZoomable: false,
-          cursorColor: '#fff',
-          categoryBalloonColor: '#51b4e6',
-          valueLineAlpha: 0
-        },
-        graphs: [
-          {
-            id: 'g1',
-            type: 'line',
-            valueField: 'value',
-            lineColor: '#ffffff',
-            lineAlpha: 1,
-            lineThickness: 3,
-            fillAlphas: 0,
-            showBalloon: true,
-            balloon: {
-              drop: true,
-              adjustBorderColor: false,
-              color: '#222',
-              fillAlphas: 0.2,
-              bullet: 'round',
-              bulletBorderAlpha: 1,
-              bulletSize: 5,
-              hideBulletsCount: 50,
-              lineThickness: 2,
-              useLineColorForBulletBorder: true,
-              valueField: 'value',
-              balloonText: '<span style="font-size:18px;">[[value]]</span>'
-            }
-          }
-        ]
-      });
-    }, 500);
+        {
+          id: 'gLost',
+          type: 'line',
+          valueField: 'lost',
+          lineColor: '#f44336',
+          lineAlpha: 1,
+          lineThickness: 3,
+          fillAlphas: 0.1,
+          showBalloon: true,
+          balloonText: '<span style="font-size:14px;">Perdus: [[value]]</span>'
+        }
+      ],
+      legend: { useGraphSettings: true },
+      export: { enabled: true }
+    });
   }
 
   // public method
-  sales = [
-    {
-      title: 'Daily Sales',
-      icon: 'icon-arrow-up text-c-green',
-      amount: '$249.95',
-      percentage: '67%',
-      progress: 50,
-      design: 'col-md-6',
-      progress_bg: 'progress-c-theme'
-    },
-    {
-      title: 'Monthly Sales',
-      icon: 'icon-arrow-down text-c-red',
-      amount: '$2,942.32',
-      percentage: '36%',
-      progress: 35,
-      design: 'col-md-6',
-      progress_bg: 'progress-c-theme2'
-    },
-    {
-      title: 'Yearly Sales',
-      icon: 'icon-arrow-up text-c-green',
-      amount: '$8,638.32',
-      percentage: '80%',
-      progress: 70,
-      design: 'col-md-12',
-      progress_bg: 'progress-c-theme'
-    }
-  ];
+  sales = [] as any[];
 
   card = [
     {

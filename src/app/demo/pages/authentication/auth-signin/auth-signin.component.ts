@@ -34,7 +34,7 @@ export default class AuthSigninComponent {
           // Start SignalR realtime notifications
           this.realtime.start(token);
         }
-        this.router.navigate(['/rfq-manage/get-rfqs/']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         console.error('Login failed', err);

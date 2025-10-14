@@ -20,6 +20,7 @@ export class ClientManageComponent implements OnInit {
   filteredClient: ClientSummaryDto | null = null;
   selectedClient: ClientSummaryDto | null = null;
   clientForm!: FormGroup;
+  searchAttempted: boolean = false;
 
   constructor(private clientService: ClientService, private router: Router, private fb: FormBuilder) {}
 
@@ -45,6 +46,7 @@ export class ClientManageComponent implements OnInit {
   }
 
   searchByName(): void {
+    this.searchAttempted = true;
     if (!this.searchName.trim()) {
       this.filteredClient = null;
       return;

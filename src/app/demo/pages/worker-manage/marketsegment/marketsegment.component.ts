@@ -18,6 +18,7 @@ export class MarketsegmentComponent implements OnInit {
   filteredSegment: MarketSegmentDto | null = null;
   selectedSegment: MarketSegmentDto | null = null;
   segmentForm!: FormGroup;
+  searchAttempted: boolean = false;
 
   constructor(
     private marketSegmentService: MarketSegmentService,
@@ -45,6 +46,7 @@ export class MarketsegmentComponent implements OnInit {
   }
 
   searchByName(): void {
+    this.searchAttempted = true;
     if (!this.searchName.trim()) {
       this.filteredSegment = null;
       return;

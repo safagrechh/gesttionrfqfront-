@@ -20,6 +20,7 @@ export class MaterialLeadersComponent implements OnInit {
   filteredWorker: WorkerDto | null = null;
   selectedWorker: WorkerDto | null = null;
   workerForm!: FormGroup;
+  searchAttempted: boolean = false;
 
   // Expose RoleW to template
   RoleW = RoleW;
@@ -53,6 +54,7 @@ export class MaterialLeadersComponent implements OnInit {
   }
 
   searchByName(): void {
+    this.searchAttempted = true;
     if (!this.searchName.trim()) {
       this.filteredWorker = null;
       return;

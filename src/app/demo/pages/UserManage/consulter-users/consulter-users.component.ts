@@ -17,6 +17,7 @@ export class ConsulterUsersComponent implements OnInit {
   searchName: string = '';
   filteredUser: UserSummaryDto | null = null;
   selectedUser: UserSummaryDto | null = null;
+  searchAttempted: boolean = false; // Track whether a search has been performed
 
   roleList = [
     { id: 0, name: 'Validateurs' },
@@ -48,9 +49,11 @@ export class ConsulterUsersComponent implements OnInit {
 
   searchByName(): void {
     if (!this.searchName.trim()) {
+      this.searchAttempted = false;
       this.filteredUser = null;
       return;
     }
+    this.searchAttempted = true;
     this.filteredUser = this.users.find(user =>
       user.nomUser?.toLowerCase().includes(this.searchName.toLowerCase())
     ) || null;

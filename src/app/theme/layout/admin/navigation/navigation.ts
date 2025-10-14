@@ -16,22 +16,22 @@ export interface NavigationItem {
 }
 export const NavigationItems: NavigationItem[] = [
 
-  // {
-  //   id: 'navigation',
-  //   title: 'Navigation',
-  //   type: 'group',
-  //   icon: 'icon-navigation',
-  //   children: [
-  //     {
-  //       id: 'dashboard',
-  //       title: 'Dashboard',
-  //       type: 'item',
-  //       url: '/dashboard',
-  //       icon: 'feather icon-home',
-  //       classes: 'nav-item'
-  //     }
-  //   ]
-  // },
+  {
+    id: 'navigation',
+    title: 'Navigation',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'dashboard',
+        title: 'Dashboard',
+        type: 'item',
+        url: '/dashboard',
+        icon: 'feather icon-home',
+        classes: 'nav-item'
+      }
+    ]
+  },
   {
     id: 'rfq-manage',
     title: 'RFQ Management',
@@ -100,7 +100,7 @@ export const NavigationItems: NavigationItem[] = [
       {
 
             id: 'client-manage',
-            title: 'Manage client',
+            title: 'Gestion des Clients',
             type: 'item',
             url: '/client-manage',
             icon: 'feather icon-user-plus',
@@ -109,7 +109,7 @@ export const NavigationItems: NavigationItem[] = [
          ,
       {
         id: 'worker-form',
-        title: 'Manage workers',
+        title: 'Gestion des Workers',
         type: 'collapse',
         icon: 'feather icon-user-plus',
         children: [
@@ -123,7 +123,7 @@ export const NavigationItems: NavigationItem[] = [
           },
           {
             id: 'create-market-segment',
-            title: 'Makrket Segment',
+            title: 'Gestion des Market Segments',
             type: 'item',
             url: '/worker-manage/market-segment',
 

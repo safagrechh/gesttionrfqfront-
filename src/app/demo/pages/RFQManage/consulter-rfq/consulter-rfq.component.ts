@@ -21,6 +21,7 @@ export class ConsulterRFQComponent implements OnInit {
   searchCQ: number | null = null; // Stores the CQ entered in the search bar
   filteredRFQ: RFQDetailsDto | null = null; // Stores the searched RFQ
   isAdmin: boolean = false;
+  searchAttempted: boolean = false; // Track whether a search has been performed
 
 
 
@@ -78,11 +79,13 @@ export class ConsulterRFQComponent implements OnInit {
   /** Search RFQ by CQ (Quote Code) */
   searchByCQ(): void {
     if (!this.searchCQ) {
+      this.searchAttempted = false;
       this.filteredRFQ = null;
       return;
     }
     console.log("search :", this.searchCQ)
 
+    this.searchAttempted = true;
     this.filteredRFQ = this.rfqs.find(rfq => rfq.cq === this.searchCQ && rfq.brouillon !==true ) || null;
     console.log("filtred", this.filteredRFQ)
   }
