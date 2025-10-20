@@ -29,7 +29,19 @@
                         <td>RFQ N°{{ rfq.id }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
                         <td>{{rfq.cq}}</td>
-                        <td>{{rfq.versionsCount}}</td>
+                        <td>
+                          <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
+                            <div class="version-dots">
+                              <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDotsPending">
+                                <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
+                              </ng-container>
+                              <ng-template #fallbackDotsPending>
+                                <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
+                              </ng-template>
+                            </div>
+                          </ng-container>
+                          <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
+                        </td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
                         <td>
@@ -82,7 +94,19 @@
                         <td>RFQ N°{{ rfq.id }}</td>
                         <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
                         <td>{{rfq.cq}}</td>
-                        <td>{{rfq.versionsCount}}</td>
+                        <td>
+                          <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
+                            <div class="version-dots">
+                              <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDotsValidated">
+                                <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
+                              </ng-container>
+                              <ng-template #fallbackDotsValidated>
+                                <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
+                              </ng-template>
+                            </div>
+                          </ng-container>
+                          <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
+                        </td>
                         <td>{{ rfq.client || 'Unknown Client' }}</td>
                         <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
                         <td>
@@ -194,7 +218,19 @@
                 <td>RFQ N°{{ filteredRFQ.id }}</td>
                 <td>{{ filteredRFQ.quoteName || 'No quote name provided' }}</td>
                 <td>{{filteredRFQ.cq}}</td>
-                <td>{{filteredRFQ.versionsCount}}</td>
+                <td>
+                  <ng-container *ngIf="filteredRFQ?.versionsCount && filteredRFQ.versionsCount > 0; else noVersions">
+                    <div class="version-dots">
+                      <ng-container *ngIf="filteredRFQ?.id && versionsByRFQ[filteredRFQ.id]?.length; else fallbackDotsFiltered">
+                        <span *ngFor="let v of versionsByRFQ[filteredRFQ.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
+                      </ng-container>
+                      <ng-template #fallbackDotsFiltered>
+                        <span *ngFor="let _ of getVersionDots(filteredRFQ?.versionsCount)" class="version-dot dot-yellow"></span>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                  <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
+                </td>
                 <td>{{ filteredRFQ.client || 'Unknown Client' }}</td>
                 <td>{{ getFormattedDate(filteredRFQ.dateCreation) }}</td>
                 <td>

@@ -115,3 +115,25 @@ i.icon-edit {
 .card-body {
   padding: 1.25rem; /* increase inner spacing */
 }
+
+/* Version status dots */
+.version-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+.dot-green { background-color: #28a745; }
+.dot-yellow { background-color: #ffc107; }
+.dot-red { background-color: #dc3545; }
+.dot-grey { background-color: #9e9e9e; }
+
+/* Center dots within cell */
+.version-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
