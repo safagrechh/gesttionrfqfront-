@@ -48,6 +48,7 @@
           </button>
 
           <a
+             *ngIf="rfqinitial?.statut === null"
              [routerLink]="'/rfq-manage/ajouter-version/' + idrfq"
              class="btn btn-outline-success add-version-btn">
             <i class="feather icon-plus"></i> une nouvelle version

@@ -1,0 +1,143 @@
+<div class="container">
+  <div class="col-sm-12">
+    <app-card cardTitle="Générer Rapport" [options]="false">
+      <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <h6>Filtres du rapport</h6>
+          <hr />
+
+          <!-- Bascule Date -->
+          <div class="col-12 mb-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="toggleDate" formControlName="useDate" />
+              <label class="form-check-label" for="toggleDate">Filtrer par date</label>
+            </div>
+          </div>
+
+          <!-- Date de début -->
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="startDate">Date de début</label>
+              <input id="startDate" type="date" class="form-control" formControlName="startDate" [disabled]="!reportForm.value.useDate" />
+            </div>
+          </div>
+
+          <!-- Date de fin -->
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="endDate">Date de fin</label>
+              <input id="endDate" type="date" class="form-control" formControlName="endDate" [disabled]="!reportForm.value.useDate" />
+            </div>
+          </div>
+
+          <!-- Format -->
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label for="format">Format</label>
+              <select id="format" class="form-control" formControlName="format">
+                <option *ngFor="let opt of formatOptions" [value]="opt.value">{{ opt.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statut Win/Loss -->
+        <div class="row">
+          <h6>Statut</h6>
+          <hr />
+
+          <!-- Bascule Statuts -->
+          <div class="col-12 mb-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="toggleStatuts" formControlName="useStatuts" />
+              <label class="form-check-label" for="toggleStatuts">Filtrer par statut</label>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" [disabled]="!reportForm.value.useStatuts" [checked]="reportForm.value.statuts?.includes('win')" (change)="onWinLossChange($event, 'win')" id="statusWin" />
+                <label class="form-check-label" for="statusWin">Gagné</label>
+              </div>
+              <div class="form-check mt-2">
+                <input type="checkbox" class="form-check-input" [disabled]="!reportForm.value.useStatuts" [checked]="reportForm.value.statuts?.includes('loss')" (change)="onWinLossChange($event, 'loss')" id="statusLoss" />
+                <label class="form-check-label" for="statusLose">Perdu</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <h6>Segments & Clients</h6>
+          <hr />
+
+          <!-- Bascules Segments & Clients -->
+          <div class="col-12 mb-2">
+            <div class="d-flex flex-wrap gap-4 align-items-center">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="toggleSegments" formControlName="useSegments" />
+                <label class="form-check-label" for="toggleSegments">Filtrer par segments</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="toggleClients" formControlName="useClients" />
+                <label class="form-check-label" for="toggleClients">Filtrer par clients</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Market segments multi-select -->
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="marketSegmentIds">Segments de marché</label>
+              <select id="marketSegmentIds" class="form-control" formControlName="marketSegmentIds" multiple [disabled]="!reportForm.value.useSegments">
+                <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom || ('Segment #' + segment.id) }}</option>
+              </select>
+              <div class="mt-2">
+                <button type="button" class="btn btn-link btn-sm me-2" (click)="selectAllSegments(true)" [disabled]="!reportForm.value.useSegments">Tout sélectionner</button>
+                <button type="button" class="btn btn-link btn-sm" (click)="selectAllSegments(false)" [disabled]="!reportForm.value.useSegments">Tout désélectionner</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clients multi-select -->
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="clientIds">Clients</label>
+              <select id="clientIds" class="form-control" formControlName="clientIds" multiple [disabled]="!reportForm.value.useClients">
+                <option *ngFor="let client of clients" [value]="client.id">{{ client.nom || ('Client #' + client.id) }}</option>
+              </select>
+              <div class="mt-2">
+                <button type="button" class="btn btn-link btn-sm me-2" (click)="selectAllClients(true)" [disabled]="!reportForm.value.useClients">Tout sélectionner</button>
+                <button type="button" class="btn btn-link btn-sm" (click)="selectAllClients(false)" [disabled]="!reportForm.value.useClients">Tout désélectionner</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+          <button type="submit" class="btn btn-outline-primary" [disabled]="isSubmitting">
+            <i class="feather icon-file-plus"></i>
+            {{ isSubmitting ? 'Génération...' : 'Générer' }}
+          </button>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>
+
+<!-- Centered Alert Modal -->
+<div *ngIf="showAlert" class="center-alert-overlay" (click)="closeAlert()">
+  <div class="center-alert-modal" tabindex="-1" (click)="$event.stopPropagation()">
+    <div class="center-alert-header">
+      <i class="icon" data-feather="info"></i>
+      <span>Information</span>
+    </div>
+
+    <div class="center-alert-content">{{ alertMessage }}</div>
+
+    <div class="center-alert-actions">
+      <button class="btn btn-sm btn-primary" (click)="closeAlert()">OK</button>
+    </div>
+  </div>
+</div>

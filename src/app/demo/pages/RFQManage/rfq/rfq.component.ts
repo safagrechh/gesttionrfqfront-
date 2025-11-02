@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { CreateCommentaireDto } from 'src/app/api';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class RFQComponent implements OnInit, OnDestroy {
     private commentService: CommentaireService ,
     private VersionRFQService: VersionRFQService ,
         private router: Router,
+        private toastService: ToastNotificationService,
 
 
   ) {}
@@ -227,12 +229,20 @@ export class RFQComponent implements OnInit, OnDestroy {
 
     this.rfqService.apiRFQIdUpdateStatutPut(this.idrfq, updateDto).subscribe({
       next: () => {
-        alert(`RFQ status updated to ${status} successfully`);
+        this.toastService.showToast({
+          message: `RFQ status updated to ${status} successfully`,
+          type: 'success',
+          duration: 6000
+        });
         this.loadRFQDetails(this.idrfq);
       },
       error: (error) => {
         console.error('Error updating RFQ status:', error);
-        alert('Failed to update RFQ status');
+        this.toastService.showToast({
+          message: 'Failed to update RFQ status',
+          type: 'error',
+          duration: 7000
+        });
       }
     });
   }
@@ -322,12 +332,20 @@ export class RFQComponent implements OnInit, OnDestroy {
         // Clear the form after successful submission
         this.rejectForm.reset();
         // Optional: Show success message
-        alert('Commentaire ajouté avec succès');
+        this.toastService.showToast({
+          message: 'Commentaire ajouté avec succès',
+          type: 'success',
+          duration: 6000
+        });
       },
       error: (error) => {
         console.error("Erreur lors de l'ajout du commentaire:", error);
         // Show error message to user
-        alert("Erreur lors de l'ajout du commentaire. Veuillez réessayer.");
+        this.toastService.showToast({
+          message: "Erreur lors de l'ajout du commentaire. Veuillez réessayer.",
+          type: 'error',
+          duration: 7000
+        });
       }
     });
   }
@@ -336,7 +354,11 @@ export class RFQComponent implements OnInit, OnDestroy {
   onSubmitValider() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {
       this.rfqService.apiRFQIdValiderPut(this.idrfq).subscribe(() => {
-        alert('RFQ validée avec succès');
+        this.toastService.showToast({
+          message: 'RFQ validée avec succès',
+          type: 'success',
+          duration: 6000
+        });
         this.loadRFQDetails(this.idrfq);
         window.location.reload();
         this.router.navigate(['/rfq-manage/get-rfq/'+this.rfq.id]);
@@ -349,7 +371,11 @@ export class RFQComponent implements OnInit, OnDestroy {
     if (this.isValidateur && this.selectedVersion?.valide === false && this.selectedVersion?.rejete === false) {
       this.VersionRFQService.apiVersionRFQIdValiderPost(this.selectedVersion.id).subscribe({
         next: () => {
-          alert('Version RFQ validée avec succès');
+          this.toastService.showToast({
+            message: 'Version RFQ validée avec succès',
+            type: 'success',
+            duration: 6000
+          });
           this.loadVersionDetails(this.selectedVersion.id);
           // Reload the page after a short delay to ensure data is updated
           setTimeout(() => {
@@ -358,7 +384,11 @@ export class RFQComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Erreur lors de la validation:', error);
-          alert('Erreur lors de la validation de la version RFQ');
+          this.toastService.showToast({
+            message: 'Erreur lors de la validation de la version RFQ',
+            type: 'error',
+            duration: 7000
+          });
         }
       });
     }
@@ -370,7 +400,11 @@ export class RFQComponent implements OnInit, OnDestroy {
     if (confirm('Are you sure you want to delete this RFQ?')) {
       this.rfqService.apiRFQIdDelete(id).subscribe(
         () => {
-          alert("RFQ deleted successfully");
+          this.toastService.showToast({
+            message: 'RFQ deleted successfully',
+            type: 'success',
+            duration: 6000
+          });
           this.router.navigate(['/rfq-manage/get-rfqs/']);
         },
         (error) => {
@@ -387,7 +421,11 @@ export class RFQComponent implements OnInit, OnDestroy {
   rejectRFQ() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {
       this.rfqService.apiRFQIdRejeterPut(this.idrfq).subscribe(() => {
-        alert('RFQ rejetée avec succès');
+        this.toastService.showToast({
+          message: 'RFQ rejetée avec succès',
+          type: 'success',
+          duration: 6000
+        });
         this.loadRFQDetails(this.idrfq);
       });
     }
@@ -397,7 +435,11 @@ export class RFQComponent implements OnInit, OnDestroy {
     if (this.isValidateur && this.selectedVersion?.valide === false && this.selectedVersion?.rejete === false) {
       this.VersionRFQService.apiVersionRFQIdRejeterPost(this.selectedVersion.id).subscribe({
         next: () => {
-          alert('Version RFQ rejetée avec succès');
+          this.toastService.showToast({
+            message: 'Version RFQ rejetée avec succès',
+            type: 'success',
+            duration: 6000
+          });
           this.loadVersionDetails(this.selectedVersion.id);
         },
         error: (err) => {

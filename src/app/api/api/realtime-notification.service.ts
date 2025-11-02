@@ -50,16 +50,20 @@ export class RealtimeNotificationService {
     // Set up notification handler
     this.hub.on('ReceiveNotification', (payload: any) => {
       console.log('🔔 LIVE SignalR notification received:', payload);
+      const msg = (payload?.message ?? '').toString().trim();
+      if (!msg) {
+        console.log('🔕 Ignoring empty notification payload (no message).');
+        return;
+      }
       const next = [{
-        message: payload?.message ?? 'New notification',
+        message: msg,
         rfqId: payload?.rfqId,
         createdAt: payload?.createdAt ?? new Date().toISOString(),
         actionUserName: payload?.actionUserName
       }, ...this._messages.value].slice(0, 50); // keep a rolling buffer
       this._messages.next(next);
-
-      // Quick popup (replace with your toast/snackbar if you like)
-      console.log(`📢 LIVE: ${next[0].message}`);
+  
+      console.log(`📢 LIVE: ${msg}`);
     });
 
     // Add more event handlers for debugging
@@ -120,16 +124,22 @@ export class RealtimeNotificationService {
         const notificationList = Array.isArray(response)
           ? response
           : (response?.$values || []);
-
-        if (notificationList.length > 0) {
-          const mapped = notificationList.map(n => ({
-            message: n.message ?? 'Notification',
+  
+        const mapped = notificationList
+          .map(n => ({
+            message: (n.message ?? '').toString().trim(),
             rfqId: n.rfqId,
             createdAt: n.createdAt,
             actionUserName: n.actionUserName
-          }));
+          }))
+          .filter(n => n.message.length > 0);
+  
+        if (mapped.length > 0) {
           // Replace the messages instead of accumulating to prevent duplicates
           this._messages.next(mapped);
+        } else {
+          // ensure empty list so subscribers don’t show toasts
+          this._messages.next([]);
         }
       },
       error: (error) => {

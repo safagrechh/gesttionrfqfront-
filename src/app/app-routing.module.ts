@@ -74,6 +74,11 @@ const routes: Routes = [
         path: 'historique-manage',
         loadChildren: () => import('./demo/pages/historique-manage/historique-manage.module').then(m => m.HistoriqueManageModule)
       }
+      ,
+      {
+        path: 'report-manage',
+        loadChildren: () => import('./demo/pages/report-manage/report-manage.module').then(m => m.ReportManageModule)
+      }
 
     ]
   }

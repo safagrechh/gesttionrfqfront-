@@ -14,6 +14,7 @@
             <label for="clientId">Client</label>
             <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
               <option *ngIf="clients.length === 0" disabled>Loading...</option>
+              <option [ngValue]="null">-- Select a client --</option>
               <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
             </select>
             <div *ngIf="rfqForm.get('clientId')?.touched && rfqForm.get('clientId')?.invalid" class="text-danger">
@@ -166,9 +167,6 @@
             <div class="form-group">
               <label for="mrDate">Material Release </label>
               <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
-              <div *ngIf="rfqForm.get('mrDate')?.touched && rfqForm.get('mrDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('mrDate')?.hasError('required')">Material Release Date is required.</small>
-              </div>
             </div></div>
             </div>
 
@@ -203,9 +201,6 @@
             <div class="form-group">
               <label for="trDate">Test Release</label>
               <input id="trDate" class="form-control" formControlName="trDate" type="date" />
-              <div *ngIf="rfqForm.get('trDate')?.touched && rfqForm.get('trDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('trDate')?.hasError('required')">Test Release Date is required.</small>
-              </div>
             </div>
           </div>
              </div>
@@ -242,9 +237,6 @@
             <div class="form-group">
               <label for="lrDate">Labour Release Date</label>
               <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
-              <div *ngIf="rfqForm.get('lrDate')?.touched && rfqForm.get('lrDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('lrDate')?.hasError('required')">Labour Release Date is required.</small>
-              </div>
             </div></div>
 
             <!-- CD Date -->

@@ -6,6 +6,7 @@ import { WorkerService, UserService, MarketSegmentService, RFQService } from 'sr
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Router } from '@angular/router';
 import { HttpContext } from '@angular/common/http';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 
 @Component({
@@ -48,6 +49,7 @@ export class CreateRFQComponent implements OnInit {
     private marketSegmentService: MarketSegmentService,
     private rfqService: RFQService ,
     private router: Router,
+    private toastService: ToastNotificationService
 
 
   ) {}
@@ -65,28 +67,39 @@ export class CreateRFQComponent implements OnInit {
 
   initializeForm(): void {
     this.rfqForm = this.fb.group({
-      quoteName: [''],
-      numRefQuoted: [''],
-      clientId: ['', Validators.required],
-      valeaderId: [''],
-      ingenieurRFQId: [''],
-      marketSegmentId: [''],
-      materialLeaderId: [''],
-      testLeaderId: [''],
-      estV: [''],
-      maxV: [''],
-      sopDate: [''],
-      koDate: [''],
-      customerDataDate: [''],
-      mdDate: [''],
+      // Champs RFQ principaux (alignés avec EditRFQ)
+      quoteName: ['', Validators.required],
+      numRefQuoted: ['', Validators.required],
+
+      // Sélections obligatoires
+      clientId: [null, Validators.required],
+      valeaderId: ['', Validators.required],
+      ingenieurRFQId: ['', Validators.required],
+      marketSegmentId: ['', Validators.required],
+      materialLeaderId: ['', Validators.required],
+      testLeaderId: ['', Validators.required],
+
+      // Valeurs numériques avec contrainte min(0)
+      estV: ['', [Validators.required, Validators.min(0)]],
+      maxV: ['', [Validators.required, Validators.min(0)]],
+
+      // Dates obligatoires (comme EditRFQ)
+      sopDate: ['', Validators.required],
+      koDate: ['', Validators.required],
+      customerDataDate: ['', Validators.required],
+      mdDate: ['', Validators.required],
+      tdDate: ['', Validators.required],
+      ldDate: ['', Validators.required],
+      cdDate: ['', Validators.required],
+
+      // Dates optionnelles (non requises dans EditRFQ)
       mrDate: [''],
-      tdDate: [''],
       trDate: [''],
-      ldDate: [''],
       lrDate: [''],
-      cdDate: [''],
+
+      // Identifiants/contrôles additionnels
       cq: ['', Validators.required],
-      file: [null] // Add file control
+      file: [null] // Contrôle de fichier
     });
   }
 
@@ -99,7 +112,11 @@ export class CreateRFQComponent implements OnInit {
 
 
     if (file.size > this.maxFileSizeMB * 1024 * 1024) {
-        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        this.toastService.showToast({
+          message: `File size exceeds ${this.maxFileSizeMB}MB limit`,
+          type: 'warning',
+          duration: 7000
+        });
         return;
     }
 
@@ -173,12 +190,21 @@ clearFile(): void {
           control.markAsTouched();
         }
       });
+      this.toastService.showToast({
+        message: 'Veuillez corriger les champs requis avant de soumettre.',
+        type: 'warning',
+        duration: 6000
+      });
       return;
     }
 
     this.onCQChange();
     if (this.cqExists) {
-      alert('CQ already exists. Please change it to proceed.');
+      this.toastService.showToast({
+        message: 'CQ already exists. Please change it to proceed.',
+        type: 'warning',
+        duration: 8000
+      });
       return;
     }
 
@@ -233,16 +259,29 @@ clearFile(): void {
     ).subscribe({
       next: (response) => {
         console.log('RFQ created successfully', response);
-        alert('RFQ added successfully!');
+        this.toastService.showToast({
+          message: 'RFQ added successfully!',
+          type: 'success',
+          duration: 6000,
+          rfqId: (response?.id ?? undefined)?.toString()
+        });
         this.router.navigate(['/rfq-manage/get-rfqs']);
       },
       error: (error) => {
         console.error('Error creating RFQ', error);
         // More detailed error handling
         if (error.error) {
-          alert(`Error: ${error.error.title || error.error.message || 'Unknown error'}`);
+          this.toastService.showToast({
+            message: `Error: ${error.error.title || error.error.message || 'Unknown error'}`,
+            type: 'error',
+            duration: 9000
+          });
         } else {
-          alert('There was an error adding the RFQ.');
+          this.toastService.showToast({
+            message: 'There was an error adding the RFQ.',
+            type: 'error',
+            duration: 7000
+          });
         }
       }
     });
@@ -299,11 +338,21 @@ clearFile(): void {
     ).subscribe({
       next: (response) => {
         console.log('Draft saved successfully', response);
+        this.toastService.showToast({
+          message: 'Draft saved successfully',
+          type: 'success',
+          duration: 6000,
+          rfqId: (response?.id ?? undefined)?.toString()
+        });
         this.router.navigate(['/rfq-manage/get-rfqs']);
       },
       error: (error) => {
         console.error('Error saving draft:', error);
-        alert('Error saving draft. Please try again.');
+        this.toastService.showToast({
+          message: 'Error saving draft. Please try again.',
+          type: 'error',
+          duration: 7000
+        });
       }
     });
   }
@@ -360,12 +409,21 @@ clearFile(): void {
     ).subscribe({
       next: (response) => {
         console.log('RFQ created and validated successfully', response);
-        alert('RFQ added and validated  successfully!');
+        this.toastService.showToast({
+          message: 'RFQ added and validated successfully!',
+          type: 'success',
+          duration: 6000,
+          rfqId: (response?.id ?? undefined)?.toString()
+        });
         this.router.navigate(['/rfq-manage/get-rfqs']);
       },
       error: (error) => {
         console.error('Error creating RFQ', error);
-        alert('There was an error adding the RFQ.');
+        this.toastService.showToast({
+          message: 'There was an error adding the RFQ.',
+          type: 'error',
+          duration: 7000
+        });
       }
     });
   }

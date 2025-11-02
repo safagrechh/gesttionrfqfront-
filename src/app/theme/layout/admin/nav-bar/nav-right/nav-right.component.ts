@@ -134,15 +134,20 @@ export class NavRightComponent implements OnInit, OnDestroy {
           this.unread++;
 
           // Show a toast notification popup
-          console.log('Attempting to show toast notification:', vm.message);
-          this.toastService.showToast({
-            message: vm.message,
-            type: 'info',
-            actionUserName: vm.actionUserName,
-            rfqId: vm.rfqId?.toString(),
-            duration: 10000
-          });
-          console.log('Toast service called successfully');
+          const trimmed = (vm.message ?? '').trim();
+          if (!trimmed) {
+            console.log('Skipping toast: empty message');
+          } else {
+            console.log('Attempting to show toast notification:', trimmed);
+            this.toastService.showToast({
+              message: trimmed,
+              type: 'info',
+              actionUserName: vm.actionUserName,
+              rfqId: vm.rfqId?.toString(),
+              duration: 10000
+            });
+            console.log('Toast service called successfully');
+          }
 
           console.log(`📢 New notification: ${vm.message}`);
         }

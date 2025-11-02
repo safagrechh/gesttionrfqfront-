@@ -9,6 +9,7 @@ api/historiqueAction.service.ts
 api/marketSegment.service.ts
 api/notification.service.ts
 api/rFQ.service.ts
+api/rapport.service.ts
 api/user.service.ts
 api/versionRFQ.service.ts
 api/worker.service.ts
@@ -27,6 +28,7 @@ model/createHistoriqueActionDto.ts
 model/createNotificationRequest.ts
 model/createUserDto.ts
 model/createWorkerDto.ts
+model/generateReportRequest.ts
 model/historiqueAction.ts
 model/historiqueActionDto.ts
 model/loginDto.ts

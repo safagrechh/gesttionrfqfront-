@@ -2,8 +2,9 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService} from 'src/app/api';
+import { RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment , VersionRFQService, Statut} from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 @Component({
   selector: 'app-create-version',
@@ -51,6 +52,7 @@ export class CreateVersionComponent implements OnInit {
     private marketSegmentService: MarketSegmentService,
     private datePipe: DatePipe ,
     private versionService: VersionRFQService ,
+    private toastService: ToastNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -145,8 +147,14 @@ export class CreateVersionComponent implements OnInit {
         }
 
 
-        // Patch Form after loading the data
+      // Patch Form after loading the data
         this.createForm.patchValue(data);
+        // Ensure new version starts unvalidated/unrejected regardless of RFQ state
+        this.createForm.patchValue({
+          valide: false,
+          rejete: false,
+          status: ''
+        });
         console.log("Form after patchValue", this.createForm.value);
         console.log('RFQ Data applied:', data);
       },
@@ -201,84 +209,117 @@ export class CreateVersionComponent implements OnInit {
           control.markAsTouched();
         }
       });
+      this.toastService.showToast({
+        message: 'Please fix the required fields before submitting.',
+        type: 'warning',
+        duration: 6000
+      });
       return;
     }
 
     if (this.createForm.valid) {
-      this.createForm.patchValue({
-        rejete: false,
-        rfqId: this.rfqId,
-        valide: false,
-        // Set default values for fields that can't be null
-        numRefQuoted: this.createForm.get('numRefQuoted')?.value || '',
-        sopDate: this.createForm.get('sopDate')?.value || '0001-01-01',
-        koDate: this.createForm.get('koDate')?.value || '0001-01-01',
-        customerDataDate: this.createForm.get('customerDataDate')?.value || '0001-01-01',
-        mdDate: this.createForm.get('mdDate')?.value || '0001-01-01',
-        mrDate: this.createForm.get('mrDate')?.value || '0001-01-01',
-        tdDate: this.createForm.get('tdDate')?.value || '0001-01-01',
-        trDate: this.createForm.get('trDate')?.value || '0001-01-01',
-        ldDate: this.createForm.get('ldDate')?.value || '0001-01-01',
-        lrDate: this.createForm.get('lrDate')?.value || '0001-01-01',
-        cdDate: this.createForm.get('cdDate')?.value || '0001-01-01'
-      });
+      // Align empty-field handling with Create RFQ: omit empties
+      const toNumberOrUndefined = (val: any): number | undefined => {
+        if (val === null || val === undefined || val === '') return undefined;
+        const n = Number(val);
+        return isNaN(n) ? undefined : n;
+      };
+      const toStringOrUndefined = (val: any): string | undefined => {
+        if (val === null || val === undefined) return undefined;
+        const s = String(val).trim();
+        return s.length ? s : undefined;
+      };
+      const formatDateOrUndefined = (val: any): string | undefined => {
+        if (!val) return undefined;
+        try { return new Date(val).toISOString(); } catch { return undefined; }
+      };
 
-      const formValue = this.createForm.value;
+      const raw = this.createForm.value;
 
-      // Convert dates to ISO strings
-      const isoDateFields = ['sopDate', 'koDate', 'customerDataDate', 'mdDate',
-                            'mrDate', 'tdDate', 'trDate', 'ldDate', 'lrDate',
-                            'cdDate', 'approvalDate'];
-
-      isoDateFields.forEach(field => {
-        if (formValue[field]) {
-          formValue[field] = new Date(formValue[field]).toISOString();
-        } else {
-          formValue[field] = new Date('0001-01-01').toISOString();
+      const rfqId = Number(this.rfqId);
+      const cq = toNumberOrUndefined(raw.cq);
+      const quoteName = toStringOrUndefined(raw.quoteName);
+      const numRefQuoted = toNumberOrUndefined(raw.numRefQuoted);
+      const sopDate = formatDateOrUndefined(raw.sopDate);
+      const maxV = toNumberOrUndefined(raw.maxV);
+      const estV = toNumberOrUndefined(raw.estV);
+      const statutRaw = raw.status ?? raw.statut;
+      let statut: Statut | undefined = undefined;
+      if (statutRaw !== null && statutRaw !== undefined && statutRaw !== '') {
+        const n = Number(statutRaw);
+        if (n === 0 || n === 1) {
+          statut = n as Statut;
         }
-      });
+      }
+      const koDate = formatDateOrUndefined(raw.koDate);
+      const customerDataDate = formatDateOrUndefined(raw.customerDataDate);
+      const mdDate = formatDateOrUndefined(raw.mdDate);
+      const mrDate = formatDateOrUndefined(raw.mrDate);
+      const tdDate = formatDateOrUndefined(raw.tdDate);
+      const trDate = formatDateOrUndefined(raw.trDate);
+      const ldDate = formatDateOrUndefined(raw.ldDate);
+      const lrDate = formatDateOrUndefined(raw.lrDate);
+      const cdDate = formatDateOrUndefined(raw.cdDate);
+      const approvalDate = formatDateOrUndefined(raw.approvalDate);
+      const materialLeaderId = toNumberOrUndefined(raw.materialLeaderId);
+      const testLeaderId = toNumberOrUndefined(raw.testLeaderId);
+      const marketSegmentId = toNumberOrUndefined(raw.marketSegmentId);
+      const ingenieurRFQId = toNumberOrUndefined(raw.ingenieurRFQId);
+      const vaLeaderId = toNumberOrUndefined(raw.vaLeaderId);
+      const clientId = toNumberOrUndefined(raw.clientId);
+      const valide = !!raw.valide;
+      const rejete = !!raw.rejete;
 
-      // Now submit the updated form data
+      // Submit minimal payload without placeholder dates/zeros
       this.versionService.apiVersionRFQPost(
-        formValue.rfqId,
-        formValue.cq,
-        formValue.quoteName,
-        formValue.numRefQuoted,
-        formValue.sopDate,
-        formValue.maxV || 0,
-        formValue.estV || 0,
-        formValue.statut,
-        formValue.koDate,
-        formValue.customerDataDate,
-        formValue.mdDate,
-        formValue.mrDate,
-        formValue.tdDate,
-        formValue.trDate,
-        formValue.ldDate,
-        formValue.lrDate,
-        formValue.cdDate,
-        formValue.approvalDate,
-        formValue.materialLeaderId,
-        formValue.testLeaderId,
-        formValue.marketSegmentId,
-        formValue.ingenieurRFQId,
-        formValue.valeaderId,
-        formValue.clientId,
-        formValue.valide, // file
-        formValue.rejete,
-        this.selectedFile,
-        'body', // observe
-        false, // reportProgress
-        {} // options
+        rfqId,
+        cq,
+        quoteName,
+        numRefQuoted,
+        sopDate,
+        maxV,
+        estV,
+        statut,
+        koDate,
+        customerDataDate,
+        mdDate,
+        mrDate,
+        tdDate,
+        trDate,
+        ldDate,
+        lrDate,
+        cdDate,
+        approvalDate,
+        materialLeaderId,
+        testLeaderId,
+        marketSegmentId,
+        ingenieurRFQId,
+        vaLeaderId,
+        clientId,
+        valide,
+        rejete,
+        this.selectedFile || undefined,
+        'body',
+        false,
+        { httpHeaderAccept: 'application/json' }
       ).subscribe({
         next: (response) => {
           console.log('version created successfully', response);
-          alert('version added successfully!');
+          this.toastService.showToast({
+            message: 'Version added successfully!',
+            type: 'success',
+            duration: 6000
+          });
           this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
 
         },
         error: (error) => {
           console.error('Error creating version', error);
+          this.toastService.showToast({
+            message: 'Error creating version. Please try again.',
+            type: 'error',
+            duration: 7000
+          });
           this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
         }
       });
@@ -296,7 +337,11 @@ export class CreateVersionComponent implements OnInit {
 
 
     if (file.size > this.maxFileSizeMB * 1024 * 1024) {
-        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        this.toastService.showToast({
+          message: `File size exceeds ${this.maxFileSizeMB}MB limit`,
+          type: 'warning',
+          duration: 7000
+        });
         return;
     }
 

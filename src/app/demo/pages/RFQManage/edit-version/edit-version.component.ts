@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientSummaryDto, UserSummaryDto, WorkerDto, MarketSegment, RFQDetailsDto, RFQService, ClientService, UserService, WorkerService, MarketSegmentService, VersionRFQService } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 @Component({
   selector: 'app-edit-version',
@@ -55,6 +56,7 @@ export class EditVersionComponent implements OnInit {
     private marketSegmentService: MarketSegmentService,
     private datePipe: DatePipe ,
     private versionService : VersionRFQService,
+    private toastService: ToastNotificationService,
 
   ) {}
 
@@ -209,11 +211,20 @@ data[field] = this.datePipe.transform(data[field], 'yyyy-MM-dd');
           control.markAsTouched();
         }
       });
+      this.toastService.showToast({
+        message: 'Please fix the required fields before submitting.',
+        type: 'warning',
+        duration: 6000
+      });
       return;
     }
 this.onCQChange();
     if (this.cqExists ) {
-      alert('CQ already exists. Please change it to proceed.');
+      this.toastService.showToast({
+        message: 'CQ already exists. Please change it to proceed.',
+        type: 'warning',
+        duration: 8000
+      });
       return;
     }
 
@@ -265,12 +276,20 @@ this.onCQChange();
     ).subscribe({
       next: (response) => {
         console.log('Version updated successfully', response);
-        alert('Version updated successfully!');
+        this.toastService.showToast({
+          message: 'Version updated successfully!',
+          type: 'success',
+          duration: 6000
+        });
         this.router.navigate(['/rfq-manage/get-rfq/'+this.rfqId]);
       },
       error: (error) => {
         console.error('Error Editing Version', error);
-        alert('There was an error Editing the version.');
+        this.toastService.showToast({
+          message: 'There was an error editing the version.',
+          type: 'error',
+          duration: 7000
+        });
       }
     });
   }
@@ -284,7 +303,11 @@ this.onCQChange();
 
 
     if (file.size > this.maxFileSizeMB * 1024 * 1024) {
-        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        this.toastService.showToast({
+          message: `File size exceeds ${this.maxFileSizeMB}MB limit`,
+          type: 'warning',
+          duration: 7000
+        });
         return;
     }
 

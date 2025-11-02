@@ -7,6 +7,7 @@ import { UpdateRFQDto } from 'src/app/api';
 import { Statut } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { DatePipe } from '@angular/common';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 
 @Component({
@@ -56,7 +57,8 @@ export class EditRFQComponent implements OnInit {
     private userService: UserService,
     private workerService: WorkerService,
     private marketSegmentService: MarketSegmentService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private toastService: ToastNotificationService
   ) {}
 
   // In ngOnInit, modify the RFQ data loading part:
@@ -212,7 +214,11 @@ export class EditRFQComponent implements OnInit {
 
     this.onCQChange();
     if (this.cqExists) {
-        alert('CQ already exists. Please change it to proceed.');
+        this.toastService.showToast({
+          message: 'CQ already exists. Please change it to proceed.',
+          type: 'warning',
+          duration: 8000
+        });
         return;
     }
 
@@ -266,7 +272,12 @@ export class EditRFQComponent implements OnInit {
         ).subscribe({
             next: (response) => {
                 console.log('RFQ updated successfully', response);
-                alert('RFQ updated successfully!');
+                this.toastService.showToast({
+                  message: 'RFQ updated successfully!',
+                  type: 'success',
+                  duration: 6000,
+                  rfqId: this.rfqId?.toString()
+                });
                 this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
             },
             error: (error) => {
@@ -276,11 +287,19 @@ export class EditRFQComponent implements OnInit {
                     this.rfqService.apiRFQIdGet(this.rfqId).subscribe(latestData => {
                         // Compare latestData with what we tried to send
                         // If they match, the update probably succeeded despite the error
-                        alert('RFQ may have been updated successfully. Please verify.');
+                        this.toastService.showToast({
+                          message: 'RFQ may have been updated successfully. Please verify.',
+                          type: 'info',
+                          duration: 7000
+                        });
                         this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
                     });
                 } else {
-                    alert('There was an error updating the RFQ.');
+                    this.toastService.showToast({
+                      message: 'There was an error updating the RFQ.',
+                      type: 'error',
+                      duration: 7000
+                    });
                 }
             }
         });
@@ -297,7 +316,11 @@ export class EditRFQComponent implements OnInit {
 
 
     if (file.size > this.maxFileSizeMB * 1024 * 1024) {
-        alert(`File size exceeds ${this.maxFileSizeMB}MB limit`);
+        this.toastService.showToast({
+          message: `File size exceeds ${this.maxFileSizeMB}MB limit`,
+          type: 'warning',
+          duration: 7000
+        });
         return;
     }
 
@@ -339,7 +362,11 @@ saveDraft(): void {
 
   this.onCQChange();
   if (this.cqExists) {
-    alert('CQ already exists. Please change it to proceed.');
+    this.toastService.showToast({
+      message: 'CQ already exists. Please change it to proceed.',
+      type: 'warning',
+      duration: 8000
+    });
     return;
   }
 
@@ -420,11 +447,19 @@ saveDraft(): void {
     ).subscribe({
       next: (response) => {
         console.log('Draft saved successfully', response);
-        alert('Brouillon enregistré avec succès.');
+        this.toastService.showToast({
+          message: 'Brouillon enregistré avec succès.',
+          type: 'success',
+          duration: 6000
+        });
       },
       error: (err) => {
         console.error('Error saving draft', err);
-        alert('Erreur lors de l\'enregistrement du brouillon.');
+        this.toastService.showToast({
+          message: 'Erreur lors de l\'enregistrement du brouillon.',
+          type: 'error',
+          duration: 7000
+        });
       }
     });
 

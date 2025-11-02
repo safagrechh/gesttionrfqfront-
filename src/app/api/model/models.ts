@@ -9,6 +9,7 @@ export * from './createHistoriqueActionDto';
 export * from './createNotificationRequest';
 export * from './createUserDto';
 export * from './createWorkerDto';
+export * from './generateReportRequest';
 export * from './historiqueAction';
 export * from './historiqueActionDto';
 export * from './loginDto';

@@ -137,6 +137,22 @@ export const NavigationItems: NavigationItem[] = [
     ]
   },
   {
+    id: 'rapport-manage',
+    title: 'Rapport',
+    type: 'group',
+    icon: 'icon-ui',
+    children: [
+      {
+        id: 'generate-report',
+        title: 'Générer Rapport',
+        type: 'item',
+        icon: 'feather icon-file-plus',
+        url: '/report-manage/generer-rapport',
+        classes: 'nav-item'
+      }
+    ]
+  },
+  {
     id: 'historique-manage',
     title: 'Historique Management',
     type: 'group',
