@@ -410,7 +410,7 @@ clearFile(): void {
       next: (response) => {
         console.log('RFQ created and validated successfully', response);
         this.toastService.showToast({
-          message: 'RFQ added and validated successfully!',
+          message: 'RFQ added successfully!',
           type: 'success',
           duration: 6000,
           rfqId: (response?.id ?? undefined)?.toString()

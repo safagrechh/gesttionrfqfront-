@@ -283,15 +283,38 @@ export class EditRFQComponent implements OnInit {
             error: (error) => {
                 console.error('Error updating RFQ', error);
                 if (error.status === 0) {
-                    // This might be the chunked encoding error - check if the update actually succeeded
+                    // Network/chunked error: fetch latest and compare to avoid misleading toast
+                    const attempted = formValue;
+                    const normalize = (d: any) => d ? new Date(d).toISOString().slice(0, 10) : '';
                     this.rfqService.apiRFQIdGet(this.rfqId).subscribe(latestData => {
-                        // Compare latestData with what we tried to send
-                        // If they match, the update probably succeeded despite the error
-                        this.toastService.showToast({
-                          message: 'RFQ may have been updated successfully. Please verify.',
-                          type: 'info',
-                          duration: 7000
-                        });
+                        const matches = (
+                          attempted.quoteName === latestData.quoteName &&
+                          Number(attempted.numRefQuoted) === Number(latestData.numRefQuoted) &&
+                          Number(attempted.estV) === Number(latestData.estV) &&
+                          Number(attempted.maxV) === Number(latestData.maxV) &&
+                          normalize(attempted.sopDate) === normalize(latestData.sopDate) &&
+                          normalize(attempted.koDate) === normalize(latestData.koDate) &&
+                          normalize(attempted.customerDataDate) === normalize(latestData.customerDataDate) &&
+                          normalize(attempted.mdDate) === normalize(latestData.mdDate) &&
+                          normalize(attempted.tdDate) === normalize(latestData.tdDate) &&
+                          normalize(attempted.ldDate) === normalize(latestData.ldDate) &&
+                          normalize(attempted.cdDate) === normalize(latestData.cdDate)
+                        );
+
+                        if (matches) {
+                          this.toastService.showToast({
+                            message: 'RFQ updated successfully!',
+                            type: 'success',
+                            duration: 6000,
+                            rfqId: this.rfqId?.toString()
+                          });
+                        } else {
+                          this.toastService.showToast({
+                            message: 'Update failed. Changes may not have been saved.',
+                            type: 'error',
+                            duration: 7000
+                          });
+                        }
                         this.router.navigate(['/rfq-manage/get-rfq/' + this.rfqId]);
                     });
                 } else {

@@ -39,6 +39,9 @@ export class NavRightComponent implements OnInit, OnDestroy {
   connectionStatus: string = 'disconnected';
 
   private subscriptions: Subscription[] = [];
+  // Suppress toast popups for the next messages$ emission (used for initial and reconnection seeds)
+  private suppressNextToastEmission = true;
+  private previousConnectionStatus: string = 'disconnected';
 
   private roleMap: Record<number, string> = {
     0: 'Validateur',
@@ -97,6 +100,11 @@ export class NavRightComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.realtime.connectionStatus$.subscribe(status => {
         console.log('SignalR connection status:', status);
+        // If we just transitioned to connected (initial or after reconnect), suppress next messages$ emission toast
+        if (this.previousConnectionStatus !== 'connected' && status === 'connected') {
+          this.suppressNextToastEmission = true;
+        }
+        this.previousConnectionStatus = status;
         this.connectionStatus = status;
       })
     );
@@ -106,6 +114,22 @@ export class NavRightComponent implements OnInit, OnDestroy {
       this.realtime.messages$.subscribe((msgs) => {
         console.log('Received realtime messages:', msgs);
         if (!msgs || !msgs.length) return;
+
+        // Skip toast for the first emission after connection (seeded recent notifications)
+        if (this.suppressNextToastEmission) {
+          console.log('Skipping toast for seeded notifications emission.');
+          this.suppressNextToastEmission = false;
+          // Also refresh local list view without triggering toast/unread changes
+          const seeded = msgs.slice(0, 5).map(m => ({
+            message: m.message,
+            rfqId: m.rfqId,
+            createdAt: m.createdAt ?? new Date().toISOString(),
+            isRead: false,
+            actionUserName: m.actionUserName
+          }));
+          this.notifications = seeded;
+          return;
+        }
 
         // Get the latest message (first in array since it's prepended)
         const latestMsg = msgs[0];
