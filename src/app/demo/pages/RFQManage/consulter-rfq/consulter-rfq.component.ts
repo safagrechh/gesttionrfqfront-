@@ -9,29 +9,48 @@ import { interval } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { VersionRFQService } from 'src/app/api/api/versionRFQ.service';
 import { VersionRFQDetailsDto } from 'src/app/api/model/versionRFQDetailsDto';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 @Component({
   selector: 'app-consulter-rfq',
   templateUrl: './consulter-rfq.component.html',
   styleUrls: ['./consulter-rfq.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [CommonModule, SharedModule, RouterModule, NgbPaginationModule],
 })
 export class ConsulterRFQComponent implements OnInit {
   rfqs: Array<RFQDetailsDto> = [];
-  currentFilter: string = 'pending';
-  searchCQ: number | null = null; // Stores the CQ entered in the search bar
-  filteredRFQ: RFQDetailsDto | null = null; // Stores the searched RFQ
+  currentFilter: 'pending' | 'validated' | 'brouillon' = 'pending';
   isAdmin: boolean = false;
-  searchAttempted: boolean = false; // Track whether a search has been performed
+  isEngineer: boolean = false;
+  isValidator: boolean = false;
   versionsByRFQ: { [rfqId: number]: VersionRFQDetailsDto[] } = {};
+  // Modern browse helpers
+  searchText: string = '';
+  sortKey: 'date' | 'quoteName' | 'rfqId' = 'date';
+  sortDir: 'asc' | 'desc' = 'desc';
+  // Optional day filter when sorting by creation date
+  filterDate: string | null = null; // yyyy-MM-dd
+  // Pagination state
+  pageSize: number = 10;
+  pagePending: number = 1;
+  pageValidated: number = 1;
+  pageDraft: number = 1;
 
-  constructor(private rfqService: RFQService , private userService : UserService, private versionService: VersionRFQService) {}
+  constructor(
+    private rfqService: RFQService,
+    private userService: UserService,
+    private versionService: VersionRFQService,
+    private toastService: ToastNotificationService
+  ) {}
 
   checkUserRole() {
     this.userService.apiUserMeGet().subscribe(user => {
       console.log('Authenticated User:', user);
       this.isAdmin = user.role === 2;
+      this.isEngineer = user.role === 1;
+      this.isValidator = user.role === 0;
     });
   }
 
@@ -99,8 +118,103 @@ export class ConsulterRFQComponent implements OnInit {
     } else if (status === 'pending') {
       return this.rfqs.filter(rfq => this.isPending(rfq));
     } else {
+      // Drafts only visible on this page to validators; engineers see drafts on Assigned page.
+      if (!this.isValidator) return [];
       return this.rfqs.filter(rfq => rfq.brouillon === true);
     }
+  }
+
+  // Paginated view of RFQs by status (10 per page)
+  getRFQsByStatusPaginated(status: 'pending' | 'validated' | 'brouillon'): RFQDetailsDto[] {
+    const list = this.getRFQsByStatus(status);
+    const page = status === 'pending' ? this.pagePending : status === 'validated' ? this.pageValidated : this.pageDraft;
+    const start = (page - 1) * this.pageSize;
+    return list.slice(start, start + this.pageSize);
+  }
+
+  onPageChange(status: 'pending' | 'validated' | 'brouillon', page: number): void {
+    if (status === 'pending') this.pagePending = page;
+    else if (status === 'validated') this.pageValidated = page;
+    else this.pageDraft = page;
+  }
+
+  // Modern browse: unified filter switch
+  setFilter(status: 'pending' | 'validated' | 'brouillon'): void {
+    // Prevent engineers from switching to drafts here
+    if (status === 'brouillon' && !this.isValidator) return;
+    this.currentFilter = status;
+  }
+
+  // Modern browse: text search across common fields
+  private rfqMatchesSearch(rfq: RFQDetailsDto): boolean {
+    const t = (this.searchText || '').trim().toLowerCase();
+    if (!t) return true;
+    const idMatch = rfq.id?.toString().includes(t);
+    const cqMatch = rfq.cq?.toString().includes(t);
+    const quoteMatch = (rfq.quoteName || '').toLowerCase().includes(t);
+    const clientMatch = (rfq.client || '').toLowerCase().includes(t);
+    return !!(idMatch || cqMatch || quoteMatch || clientMatch);
+  }
+
+  // Optional: matches selected day (yyyy-MM-dd) against rfq.dateCreation
+  private rfqMatchesDay(rfq: RFQDetailsDto): boolean {
+    if (!this.filterDate) return true;
+    if (!rfq.dateCreation) return false;
+    try {
+      const day = new Date(rfq.dateCreation).toISOString().slice(0, 10);
+      return day === this.filterDate;
+    } catch {
+      return false;
+    }
+  }
+
+  // Modern browse: sorting helper
+  private sortRFQs(list: RFQDetailsDto[]): RFQDetailsDto[] {
+    const key = this.sortKey;
+    const dir = this.sortDir === 'asc' ? 1 : -1;
+    const sorted = [...list].sort((a, b) => {
+      let va: any = 0;
+      let vb: any = 0;
+      if (key === 'date') {
+        va = a.dateCreation ? new Date(a.dateCreation).getTime() : 0;
+        vb = b.dateCreation ? new Date(b.dateCreation).getTime() : 0;
+      } else if (key === 'quoteName') {
+        va = (a.quoteName || '').toLowerCase();
+        vb = (b.quoteName || '').toLowerCase();
+      } else {
+        va = a.id || 0;
+        vb = b.id || 0;
+      }
+      if (va < vb) return -1 * dir;
+      if (va > vb) return 1 * dir;
+      return 0;
+    });
+    return sorted;
+  }
+
+  // Modern browse: filtered + sorted list by status
+  getFilteredRFQsByStatus(status: 'pending' | 'validated' | 'brouillon'): RFQDetailsDto[] {
+    const base = this.getRFQsByStatus(status)
+      .filter(r => this.rfqMatchesSearch(r))
+      .filter(r => this.rfqMatchesDay(r));
+    return this.sortRFQs(base);
+  }
+
+  // Modern browse: paginated filtered list by status
+  getFilteredRFQsByStatusPaginated(status: 'pending' | 'validated' | 'brouillon'): RFQDetailsDto[] {
+    const list = this.getFilteredRFQsByStatus(status);
+    const page = status === 'pending' ? this.pagePending : status === 'validated' ? this.pageValidated : this.pageDraft;
+    const start = (page - 1) * this.pageSize;
+    return list.slice(start, start + this.pageSize);
+  }
+
+  // Modern browse: helper to bind pagination to current filter
+  getCurrentPage(): number {
+    return this.currentFilter === 'pending' ? this.pagePending : this.currentFilter === 'validated' ? this.pageValidated : this.pageDraft;
+  }
+
+  setCurrentPage(page: number): void {
+    this.onPageChange(this.currentFilter, page);
   }
 
   trackTable(index: number, rfq: RFQDetailsDto): number {
@@ -149,35 +263,27 @@ export class ConsulterRFQComponent implements OnInit {
     return 'dot-yellow'; // en attente
   }
 
-  /** Search RFQ by CQ (Quote Code) */
-  searchByCQ(): void {
-    if (!this.searchCQ) {
-      this.searchAttempted = false;
-      this.filteredRFQ = null;
-      return;
-    }
-    console.log("search :", this.searchCQ);
-
-    this.searchAttempted = true;
-    this.filteredRFQ = this.rfqs.find(rfq => rfq.cq === this.searchCQ && rfq.brouillon !== true) || null;
-    if (this.filteredRFQ?.id && this.filteredRFQ.versionsCount && this.filteredRFQ.versionsCount > 0 && !this.versionsByRFQ[this.filteredRFQ.id]) {
-      // Ensure versions for filtered RFQ are loaded
-      this.versionService.apiVersionRFQByRfqRfqIdGet(this.filteredRFQ.id).subscribe((response: any) => {
-        this.versionsByRFQ[this.filteredRFQ!.id!] = response.$values || [];
-      });
-    }
-    console.log("filtred", this.filteredRFQ);
-  }
+  // Legacy CQ-only search removed; unified search via searchText in rfqMatchesSearch
 
   delete(id: number) {
     if (confirm('Are you sure you want to delete this RFQ?')) {
       this.rfqService.apiRFQIdDelete(id).subscribe(
         () => {
-          alert("RFQ deleted successfully");
+          this.toastService.showToast({
+            message: 'RFQ deleted successfully',
+            type: 'success',
+            duration: 6000,
+            rfqId: id?.toString()
+          });
           this.fetchRFQDetails(); // Refresh the list
         },
         (error) => {
           console.error('Erreur lors de la suppression de RFQ:', error);
+          this.toastService.showToast({
+            message: 'There was an error deleting the RFQ.',
+            type: 'error',
+            duration: 7000
+          });
         }
       );
     }
@@ -187,11 +293,21 @@ export class ConsulterRFQComponent implements OnInit {
     if (confirm('Are you sure you want to delete this draftRFQ?')) {
       this.rfqService.apiRFQIdDelete(id).subscribe(
         () => {
-          alert("Draft deleted successfully");
+          this.toastService.showToast({
+            message: 'Draft RFQ deleted successfully',
+            type: 'success',
+            duration: 6000,
+            rfqId: id?.toString()
+          });
           this.fetchRFQDetails();
         },
         (error) => {
           console.error('Erreur lors de la suppression de draftRFQ:', error);
+          this.toastService.showToast({
+            message: 'There was an error deleting the draft RFQ.',
+            type: 'error',
+            duration: 7000
+          });
         }
       );
     }

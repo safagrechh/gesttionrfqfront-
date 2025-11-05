@@ -54,6 +54,10 @@ export class CreateRFQComponent implements OnInit {
 
   ) {}
 
+  navigateToManage(): void {
+    this.router.navigate(['/rfq-manage']);
+  }
+
   ngOnInit(): void {
     this.initializeForm();
     this.getClients();

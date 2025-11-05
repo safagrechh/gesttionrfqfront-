@@ -8,6 +8,7 @@ import { RFQComponent } from './rfq/rfq.component';
 import { EditRFQComponent } from './edit-rfq/edit-rfq.component';
 import { CreateVersionComponent } from './create-version/create-version.component';
 import { EditVersionComponent } from './edit-version/edit-version.component';
+import { AssignedRFQComponent } from './assigned-rfq/assigned-rfq.component';
 
 
 
@@ -37,6 +38,11 @@ const routes: Routes = [
     path: 'edit-version/:id/:idv',
     component:EditVersionComponent
   }
+  ,
+  {
+    path: 'assigned-rfqs',
+    component: AssignedRFQComponent
+  }
 
 
 ];
@@ -52,6 +58,8 @@ const routes: Routes = [
     RFQComponent ,
     EditRFQComponent ,
     EditVersionComponent
+    ,
+    AssignedRFQComponent
   ]
 })
 export class RFQModule { }

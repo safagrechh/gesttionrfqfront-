@@ -1,327 +1,321 @@
-<div class="container">
+<div class="container modern-page">
   <div class="col-sm-12">
-    <app-card cardTitle="Basic Component" [options]="false">
+    <app-card cardTitle="Ajouter RFQ" [options]="false">
+
+      <div class="page-header">
+        <div>
+          <h4>Créer un nouveau RFQ</h4>
+          <p class="text-muted">Renseignez les informations nécessaires et ajoutez les responsables pour chaque domaine.</p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-outline-secondary" (click)="navigateToManage()">
+            <i class="feather icon-arrow-left"></i> Retour
+          </button>
+        </div>
+      </div>
 
       <form [formGroup]="rfqForm" (ngSubmit)="onSubmit()">
-        <div class="row">
+        <div class="row g-3">
 
-          <!-- Client -->
-          <div class="row" >
-            <h6> Client </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-           <div class="form-group">
-            <label for="clientId">Client</label>
-            <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
-              <option *ngIf="clients.length === 0" disabled>Loading...</option>
-              <option [ngValue]="null">-- Select a client --</option>
-              <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
-            </select>
-            <div *ngIf="rfqForm.get('clientId')?.touched && rfqForm.get('clientId')?.invalid" class="text-danger">
-              <small *ngIf="rfqForm.get('clientId')?.hasError('required')">Client selection is required.</small>
+          <!-- Client & RFQ Basics -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-user"></i>
+              <span>Client & RFQ</span>
             </div>
-           </div>
-            </div>
-          <div class="col-md-4 mb-3" *ngIf="selectedClient">
-            <div class="form-group">
-              <label for="clientSales">Sales</label>
-              <input type="text" id="clientSales" class="form-control" [value]="selectedClient.sales" disabled />
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="cq">CQ</label>
-              <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
-              <div *ngIf="rfqForm.get('cq')?.touched && rfqForm.get('cq')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('cq')?.hasError('required')">CQ is required.</small>
-              </div>
-            </div>
-            </div>
-        </div>
-
-            <!-- RFQ -->
-            <div class="row" >
-            <h6> RFQ</h6>
-            <hr />
-            <!-- Quote Name -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="quoteName">Quote Name</label>
-              <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
-              <div *ngIf="rfqForm.get('quoteName')?.touched && rfqForm.get('quoteName')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('quoteName')?.hasError('required')">Quote Name is required.</small>
-              </div>
-            </div>
-            </div>
-
-            <!-- Market Segment -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="marketSegmentId">Market Segment</label>
-              <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
-                <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('marketSegmentId')?.touched && rfqForm.get('marketSegmentId')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('marketSegmentId')?.hasError('required')">Market Segment is required.</small>
-              </div>
-            </div>
-            </div>
-
-            <!-- Reference Number -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="numRefQuoted">Number of ref to be quoted</label>
-              <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
-              <div *ngIf="rfqForm.get('numRefQuoted')?.touched && rfqForm.get('numRefQuoted')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('numRefQuoted')?.hasError('required')">Reference Number is required.</small>
-              </div>
-            </div>
-            </div>
-
-            <!-- SOP Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="sopDate">SOP Date</label>
-              <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
-              <div *ngIf="rfqForm.get('sopDate')?.touched && rfqForm.get('sopDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('sopDate')?.hasError('required')">SOP Date is required.</small>
-              </div>
-            </div>
-
-            </div>
-
-            <!-- Maximum Value -->
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="maxV">Maximum Volume</label>
-                <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
-                <div *ngIf="rfqForm.get('maxV')?.touched && rfqForm.get('maxV')?.invalid" class="text-danger">
-                  <small *ngIf="rfqForm.get('maxV')?.hasError('required')">Maximum Volume is required.</small>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="clientId">Client</label>
+                  <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
+                    <option *ngIf="clients.length === 0" disabled>Loading...</option>
+                    <option [ngValue]="null">-- Select a client --</option>
+                    <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('clientId')?.touched && rfqForm.get('clientId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('clientId')?.hasError('required')">Client selection is required.</small>
+                  </div>
                 </div>
               </div>
+              <div class="col-md-4 mb-3" *ngIf="selectedClient">
+                <div class="form-group">
+                  <label for="clientSales">Sales</label>
+                  <input type="text" id="clientSales" class="form-control" [value]="selectedClient.sales" disabled />
+                </div>
               </div>
-
-            <!-- Estimated Value -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="estV">Estimated Volume</label>
-              <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
-              <div *ngIf="rfqForm.get('estV')?.touched && rfqForm.get('estV')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('estV')?.hasError('required')">Estimated Volume is required.</small>
-              </div>
-            </div>
-            </div>
-            </div>
-
-            <!-- Matériels -->
-            <div class="row" >
-              <h6> Materials</h6>
-              <hr />
-
-             <!-- KO Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="koDate">KO Date</label>
-              <input id="koDate" class="form-control" formControlName="koDate" type="date" />
-              <div *ngIf="rfqForm.get('koDate')?.touched && rfqForm.get('koDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('koDate')?.hasError('required')">KO Date is required.</small>
-              </div>
-            </div></div>
-
-            <!-- Customer Data Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="customerDataDate">Customer Due Date</label>
-              <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
-              <div *ngIf="rfqForm.get('customerDataDate')?.touched && rfqForm.get('customerDataDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('customerDataDate')?.hasError('required')">Customer Due Date is required.</small>
-              </div>
-            </div></div>
-
-            <!-- Material Leader -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="materialLeaderId">Material Leader</label>
-              <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
-                <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('materialLeaderId')?.touched && rfqForm.get('materialLeaderId')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('materialLeaderId')?.hasError('required')">Material Leader is required.</small>
-              </div>
-            </div>
-             </div>
-
-             <!-- MD Date -->
-             <div class="col-md-4 mb-3">
-             <div class="form-group">
-              <label for="mdDate">Material Due Date</label>
-              <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
-              <div *ngIf="rfqForm.get('mdDate')?.touched && rfqForm.get('mdDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('mdDate')?.hasError('required')">Material Due Date is required.</small>
-              </div>
-            </div>
-            </div>
-
-            <!-- MR Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="mrDate">Material Release </label>
-              <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
-            </div></div>
-            </div>
-
-             <!-- Test -->
-             <div class="row" >
-              <h6> Test</h6>
-              <hr />
-              <!-- Test Leader -->
               <div class="col-md-4 mb-3">
-              <div class="form-group">
-              <label for="testLeaderId">Test Leader</label>
-              <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
-                <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('testLeaderId')?.touched && rfqForm.get('testLeaderId')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('testLeaderId')?.hasError('required')">Test Leader is required.</small>
+                <div class="form-group">
+                  <label for="cq">CQ</label>
+                  <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
+                  <div *ngIf="rfqForm.get('cq')?.touched && rfqForm.get('cq')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('cq')?.hasError('required')">CQ is required.</small>
+                  </div>
+                </div>
               </div>
-            </div></div>
 
-            <!-- TD Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="tdDate">Test Due Date</label>
-              <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
-              <div *ngIf="rfqForm.get('tdDate')?.touched && rfqForm.get('tdDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('tdDate')?.hasError('required')">Test Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="quoteName">Quote Name</label>
+                  <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
+                  <div *ngIf="rfqForm.get('quoteName')?.touched && rfqForm.get('quoteName')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('quoteName')?.hasError('required')">Quote Name is required.</small>
+                  </div>
+                </div>
               </div>
-            </div></div>
 
-            <!-- TR Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="trDate">Test Release</label>
-              <input id="trDate" class="form-control" formControlName="trDate" type="date" />
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="marketSegmentId">Market Segment</label>
+                  <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
+                    <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('marketSegmentId')?.touched && rfqForm.get('marketSegmentId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('marketSegmentId')?.hasError('required')">Market Segment is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="numRefQuoted">Number of ref to be quoted</label>
+                  <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
+                  <div *ngIf="rfqForm.get('numRefQuoted')?.touched && rfqForm.get('numRefQuoted')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('numRefQuoted')?.hasError('required')">Reference Number is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="sopDate">SOP Date</label>
+                  <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
+                  <div *ngIf="rfqForm.get('sopDate')?.touched && rfqForm.get('sopDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('sopDate')?.hasError('required')">SOP Date is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="maxV">Maximum Volume</label>
+                  <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
+                  <div *ngIf="rfqForm.get('maxV')?.touched && rfqForm.get('maxV')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('maxV')?.hasError('required')">Maximum Volume is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="estV">Estimated Volume</label>
+                  <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
+                  <div *ngIf="rfqForm.get('estV')?.touched && rfqForm.get('estV')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('estV')?.hasError('required')">Estimated Volume is required.</small>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-             </div>
 
-             <!-- VA -->
-             <div class="row" >
-              <h6> VA</h6>
-              <hr />
-              <!-- VA Leader -->
+          <!-- Materials -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-package"></i>
+              <span>Materials</span>
+            </div>
+            <div class="row g-3">
               <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="valeaderId">VA Leader</label>
-              <select id="valeaderId" class="form-control" formControlName="valeaderId">
-                <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('valeaderId')?.touched && rfqForm.get('valeaderId')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('valeaderId')?.hasError('required')">VA Leader is required.</small>
+                <div class="form-group">
+                  <label for="koDate">KO Date</label>
+                  <input id="koDate" class="form-control" formControlName="koDate" type="date" />
+                  <div *ngIf="rfqForm.get('koDate')?.touched && rfqForm.get('koDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('koDate')?.hasError('required')">KO Date is required.</small>
+                  </div>
+                </div>
               </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="customerDataDate">Customer Due Date</label>
+                  <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
+                  <div *ngIf="rfqForm.get('customerDataDate')?.touched && rfqForm.get('customerDataDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('customerDataDate')?.hasError('required')">Customer Due Date is required.</small>
+                  </div>
+                </div>
               </div>
-             </div>
 
-             <!-- LD Date -->
-             <div class="col-md-4 mb-3">
-             <div class="form-group">
-              <label for="ldDate">Labour Due Date</label>
-              <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
-              <div *ngIf="rfqForm.get('ldDate')?.touched && rfqForm.get('ldDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('ldDate')?.hasError('required')">Labour Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="materialLeaderId">Material Leader</label>
+                  <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
+                    <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('materialLeaderId')?.touched && rfqForm.get('materialLeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('materialLeaderId')?.hasError('required')">Material Leader is required.</small>
+                  </div>
+                </div>
               </div>
-            </div></div>
 
-            <!-- LR Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="lrDate">Labour Release Date</label>
-              <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
-            </div></div>
-
-            <!-- CD Date -->
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="cdDate">Customer Due date</label>
-              <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
-              <div *ngIf="rfqForm.get('cdDate')?.touched && rfqForm.get('cdDate')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('cdDate')?.hasError('required')">Customer Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="mdDate">Material Due Date</label>
+                  <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
+                  <div *ngIf="rfqForm.get('mdDate')?.touched && rfqForm.get('mdDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('mdDate')?.hasError('required')">Material Due Date is required.</small>
+                  </div>
+                </div>
               </div>
-            </div></div>
 
-            <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="file">File max {{maxFileSizeMB}}MB</label>
-              <input type="file"
-       (change)="onFileSelected($event)"
-       accept=".pdf,.xml,application/pdf,text/xml,application/xml"
-       class="form-control">
-       <div *ngIf="selectedFile">
- <small  class="form-text text-success">
-                Selected: {{selectedFile.name}} ({{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB)
-              </small>
-        <button (click)="clearFile()">Remove</button>
-    </div>
-
-            </div>
-             </div>
-
-
-
-            </div>
-
-
-
-
-
-            <!-- RFQ Engineer -->
-            <div class="form-group">
-              <label for="ingenieurRFQId">RFQ Engineer</label>
-              <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
-                <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
-              </select>
-              <div *ngIf="rfqForm.get('ingenieurRFQId')?.touched && rfqForm.get('ingenieurRFQId')?.invalid" class="text-danger">
-                <small *ngIf="rfqForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="mrDate">Material Release </label>
+                  <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
+                </div>
               </div>
             </div>
+          </div>
 
+          <!-- Test -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-cpu"></i>
+              <span>Test</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="testLeaderId">Test Leader</label>
+                  <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
+                    <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('testLeaderId')?.touched && rfqForm.get('testLeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('testLeaderId')?.hasError('required')">Test Leader is required.</small>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="tdDate">Test Due Date</label>
+                  <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
+                  <div *ngIf="rfqForm.get('tdDate')?.touched && rfqForm.get('tdDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('tdDate')?.hasError('required')">Test Due Date is required.</small>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="trDate">Test Release</label>
+                  <input id="trDate" class="form-control" formControlName="trDate" type="date" />
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- VA -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-users"></i>
+              <span>VA</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="valeaderId">VA Leader</label>
+                  <select id="valeaderId" class="form-control" formControlName="valeaderId">
+                    <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('valeaderId')?.touched && rfqForm.get('valeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('valeaderId')?.hasError('required')">VA Leader is required.</small>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="ldDate">Labour Due Date</label>
+                  <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
+                  <div *ngIf="rfqForm.get('ldDate')?.touched && rfqForm.get('ldDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('ldDate')?.hasError('required')">Labour Due Date is required.</small>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="lrDate">Labour Release Date</label>
+                  <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- File upload & Engineer -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-file"></i>
+              <span>Fichier & Responsable</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="cdDate">Customer Due date</label>
+                  <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
+                  <div *ngIf="rfqForm.get('cdDate')?.touched && rfqForm.get('cdDate')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('cdDate')?.hasError('required')">Customer Due Date is required.</small>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group file-input-group">
+                  <label for="file">Pièce jointe (max {{maxFileSizeMB}}MB)</label>
+                  <input type="file"
+                    (change)="onFileSelected($event)"
+                    accept=".pdf,.xml,application/pdf,text/xml,application/xml"
+                    class="form-control">
+                  <div *ngIf="selectedFile" class="selected-file">
+                    <i class="feather icon-paperclip"></i>
+                    <div class="file-meta">
+                      <small class="form-text">{{selectedFile.name}}</small>
+                      <small class="form-text text-muted">{{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB</small>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearFile()">
+                      <i class="feather icon-x"></i> Retirer
+                    </button>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="ingenieurRFQId">RFQ Engineer</label>
+                  <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
+                    <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
+                  </select>
+                  <div *ngIf="rfqForm.get('ingenieurRFQId')?.touched && rfqForm.get('ingenieurRFQId')?.invalid" class="text-danger">
+                    <small *ngIf="rfqForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-
-
-
-
-
-
-
-
-
-
-
-            <!-- Submit button -->
-        <div class="d-flex justify-content-center mt-4">
-          <button type="submit" class="btn btn-outline-primary" >
-            <i class="feather icon-save"></i> Ajouter
-          </button>
-          <button type="button" class="btn btn-outline-success" (click)="onSubmitBrouillon()" >
-            <i class="feather icon-file-plus"></i> Sauvegarder en tant que Brouillon
-          </button>
-           <!-- Show only if user is Validateur -->
-           <button *ngIf="isValidateur" type="button" class="btn btn-outline-danger" (click)="onSubmitValider()">
-            <i class="feather icon-check-circle"></i> Valider
-          </button>
-
-  <!-- <button *ngIf="isValidateur" type="submit" class="btn btn-outline-dark">
-    <i class="feather icon-x-circle"></i> Rejeter
-  </button> -->
-        </div>
+          <!-- Submit actions -->
+          <div class="actions-bar">
+            <div class="actions-inner">
+              <button type="submit" class="btn btn-primary">
+                <i class="feather icon-save"></i> Ajouter
+              </button>
+              <button type="button" class="btn btn-success" (click)="onSubmitBrouillon()">
+                <i class="feather icon-file-plus"></i> Brouillon
+              </button>
+              <button *ngIf="isValidateur" type="button" class="btn btn-danger" (click)="onSubmitValider()">
+                <i class="feather icon-check-circle"></i> Valider
+              </button>
+            </div>
+          </div>
 
         </div>
       </form>

@@ -1,0 +1,73 @@
+/* Modern page layout */
+.modern-page {
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    h4 {
+      margin: 0 0 0.25rem 0;
+    }
+    .text-muted {
+      margin: 0;
+    }
+  }
+
+  .section-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #1f2937;
+    }
+  }
+
+  .form-group label {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .file-input-group .selected-file {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border: 1px dashed rgba(0,0,0,0.2);
+    border-radius: 8px;
+    background-color: #f9fafb;
+  }
+
+  .file-input-group .file-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .actions-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 20%);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .actions-inner {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 0.75rem;
+  }
+}

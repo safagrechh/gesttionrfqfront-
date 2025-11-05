@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/auth.service.ts
+api/chat.service.ts
 api/client.service.ts
 api/commentaire.service.ts
 api/historiqueAction.service.ts
@@ -17,6 +18,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/chatRequest.ts
 model/client.ts
 model/clientDetailsDto.ts
 model/clientSummaryDto.ts

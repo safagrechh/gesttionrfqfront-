@@ -1,327 +1,109 @@
 <div class="col-sm-12">
-  <div class="card">
+  <div class="card modern-card">
     <div class="card-body">
-      <h5 class="mb-3">Consulter les RFQS</h5>
-      <div class="row">
-        <!-- Navigation verticale -->
-        <div class="col-md-3 col-sm-12">
-          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
-            <!-- RFQs en attente de validation -->
-            <li [ngbNavItem]="1" class="nav-item">
-              <a class="nav-link" ngbNavLink>En attente de Validation</a>
-              <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>RFQ N°</th>
-                        <th>Nom de Devis</th>
-                        <th>CQ</th>
-                        <th>Versions</th>
-                        <th>Client</th>
-                        <th>Date de Création</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let rfq of getRFQsByStatus('pending'); trackBy: trackTable">
-                        <td>RFQ N°{{ rfq.id }}</td>
-                        <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
-                        <td>{{rfq.cq}}</td>
-                        <td>
-                          <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
-                            <div class="version-dots">
-                              <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDotsPending">
-                                <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
-                              </ng-container>
-                              <ng-template #fallbackDotsPending>
-                                <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
-                              </ng-template>
-                            </div>
-                          </ng-container>
-                          <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
-                        </td>
-                        <td>{{ rfq.client || 'Unknown Client' }}</td>
-                        <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td>
-                          <span class="badge bg-warning">En attente</span>
-                        </td>
-                        <td>
-                          <!-- Change the link for viewing the RFQ -->
-                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
-                            <i class="feather icon-eye"></i>
-                          </a>
-                          <a *ngIf="!isAdmin" [routerLink]="'/rfq-manage/edit-rfq/' +  rfq.id" title="Edit RFQ" class="ms-2">
-                            <i class="feather icon-edit"></i>
-                          </a>
-                          <a *ngIf="isAdmin"
-                          href="javascript:void(0)"
-                          (click)="delete(rfq.id)"
-                          title="Delete RFQ"
-                          class="ms-2 text-danger">
-                         <i class="feather icon-trash-2"></i>
-                       </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </ng-template>
-              <hr />
-            </li>
-
-            <!-- RFQs validées -->
-            <li [ngbNavItem]="2" class="nav-item">
-              <a class="nav-link" ngbNavLink>Validés</a>
-              <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>RFQ N°</th>
-                        <th>Nom de Devis</th>
-                        <th>CQ</th>
-                        <th>Versions</th>
-                        <th>Client</th>
-                        <th>Date de Création</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let rfq of getRFQsByStatus('validated'); trackBy: trackTable">
-                        <td>RFQ N°{{ rfq.id }}</td>
-                        <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
-                        <td>{{rfq.cq}}</td>
-                        <td>
-                          <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
-                            <div class="version-dots">
-                              <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDotsValidated">
-                                <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
-                              </ng-container>
-                              <ng-template #fallbackDotsValidated>
-                                <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
-                              </ng-template>
-                            </div>
-                          </ng-container>
-                          <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
-                        </td>
-                        <td>{{ rfq.client || 'Unknown Client' }}</td>
-                        <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td>
-                          <span class="badge bg-success">Validée</span>
-                        </td>
-                        <td>
-                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
-                            <i class="feather icon-eye"></i>
-                          </a>
-                          <a *ngIf="isAdmin"
-                          href="javascript:void(0)"
-                          (click)="delete(rfq.id)"
-                          title="Delete RFQ"
-                          class="ms-2 text-danger">
-                         <i class="feather icon-trash-2"></i>
-                       </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </ng-template>
-              <hr />
-            </li>
-
-            <!-- RFQs rejetées -->
-            <!-- <li [ngbNavItem]="3" class="nav-item">
-              <a class="nav-link" ngbNavLink>Rejetés</a>
-              <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>RFQ N°</th>
-                        <th>Nom de Devis</th>
-                        <th>CQ</th>
-                        <th>Versions</th>
-                        <th>Client</th>
-                        <th>Date de Création</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let rfq of getRFQsByStatus('rejected'); trackBy: trackTable">
-                        <td>RFQ N°{{ rfq.id }}</td>
-                        <td>{{ rfq.quoteName || 'No quote name provided' }}</td>
-                        <td>{{rfq.cq}}</td>
-                        <td>{{rfq.versionsCount}}</td>
-                        <td>{{ rfq.client || 'Unknown Client' }}</td>
-                        <td>{{ getFormattedDate(rfq.dateCreation) }}</td>
-                        <td>
-                          <span class="badge bg-danger">Rejeté</span>
-                        </td>
-                        <td>
-                          <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
-                            <i class="feather icon-eye"></i>
-                          </a>
-                          <a *ngIf="!isAdmin" [routerLink]="'/rfq-manage/edit-rfq/' +  rfq.id" title="Edit RFQ" class="ms-2">
-                            <i class="feather icon-edit"></i>
-                          </a>
-                          <a *ngIf="isAdmin"
-                          href="javascript:void(0)"
-                          (click)="delete(rfq.id)"
-                          title="Delete RFQ"
-                          class="ms-2 text-danger">
-                         <i class="feather icon-trash-2"></i>
-                       </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </ng-template>
-              <hr />
-            </li> -->
-
-
-
-<!-- Consulter par code RFQ -->
-<li [ngbNavItem]="4" class="nav-item">
-  <a class="nav-link" ngbNavLink>Consulter par code RFQ</a>
-  <ng-template ngbNavContent>
-    <div class="p-3">
-      <div class="input-group search-bar">
-        <input type="number" class="form-control search-input" placeholder="Rechercher par CQ..." [(ngModel)]="searchCQ">
-        <button class="btn search-button" (click)="searchByCQ()">
-          <i class="feather icon-search"></i>
-        </button>
-      </div>
-
-      <div *ngIf="filteredRFQ">
-        <div class="table-responsive">
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th>RFQ N°</th>
-                <th>Nom de Devis</th>
-                <th>CQ</th>
-                <th>Versions</th>
-                <th>Client</th>
-                <th>Date de Création</th>
-                <th>Statut</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>RFQ N°{{ filteredRFQ.id }}</td>
-                <td>{{ filteredRFQ.quoteName || 'No quote name provided' }}</td>
-                <td>{{filteredRFQ.cq}}</td>
-                <td>
-                  <ng-container *ngIf="filteredRFQ?.versionsCount && filteredRFQ.versionsCount > 0; else noVersions">
-                    <div class="version-dots">
-                      <ng-container *ngIf="filteredRFQ?.id && versionsByRFQ[filteredRFQ.id]?.length; else fallbackDotsFiltered">
-                        <span *ngFor="let v of versionsByRFQ[filteredRFQ.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
-                      </ng-container>
-                      <ng-template #fallbackDotsFiltered>
-                        <span *ngFor="let _ of getVersionDots(filteredRFQ?.versionsCount)" class="version-dot dot-yellow"></span>
-                      </ng-template>
-                    </div>
-                  </ng-container>
-                  <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
-                </td>
-                <td>{{ filteredRFQ.client || 'Unknown Client' }}</td>
-                <td>{{ getFormattedDate(filteredRFQ.dateCreation) }}</td>
-                <td>
-                  <span
-                   class="badge rounded-pill px-3 py-2"
-                   [ngClass]="{
-                    'badge bg-warning': !filteredRFQ.valide && !filteredRFQ.rejete,
-                    'badge bg-success': filteredRFQ.valide,
-                    'badge bg-danger': filteredRFQ.rejete
-                  }">
-                    {{ filteredRFQ.valide ? 'Validée' : (filteredRFQ.rejete ? 'Rejetée' : 'En attente') }}
-                  </span>
-                </td>
-                <td>
-                  <a [routerLink]="'/rfq-manage/get-rfq/' + filteredRFQ.id" title="View RFQ">
-                    <i class="feather icon-eye text-primary"></i>
-                  </a>
-                  <a  *ngIf="!isAdmin" [routerLink]="'/rfq-manage/edit-rfq/' +  filteredRFQ.id" title="Edit RFQ" class="ms-2">
-                    <i class="feather icon-edit"></i>
-                  </a>
-                  <a *ngIf="isAdmin"
-                          href="javascript:void(0)"
-                          (click)="delete(filteredRFQ.id)"
-                          title="Delete RFQ"
-                          class="ms-2 text-danger">
-                         <i class="feather icon-trash-2"></i>
-                       </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="page-header">
+          <div>
+            <h5 class="mb-1">Browse RFQs</h5>
+            <p class="text-muted mb-0">Browse, filter and manage RFQs pending or validated.</p>
+          </div>
+          <div class="header-actions">
+            <a routerLink="/rfq-manage/create-rfq" class="btn btn-primary add-rfq-btn" title="Add RFQ">
+              <i class="feather icon-plus"></i>
+              <span class="label">Add RFQ</span>
+            </a>
+          </div>
+        </div>
+      <div class="row align-items-center mb-3">
+        <div class="col-md-6 status-toggle d-flex gap-2">
+          <button class="btn btn-pending" [class.active]="currentFilter==='pending'" (click)="setFilter('pending')">Pending</button>
+          <button class="btn btn-validated" [class.active]="currentFilter==='validated'" (click)="setFilter('validated')">Validated</button>
+          <button class="btn" [class.active]="currentFilter==='brouillon'" (click)="setFilter('brouillon')" *ngIf="isValidator">Draft</button>
+        </div>
+        <div class="col-md-6">
+          <div class="modern-search unified">
+            <i class="feather icon-search"></i>
+            <input type="text" class="form-control" placeholder="Search RFQs by id, CQ, quote, client" [(ngModel)]="searchText">
+          </div>
         </div>
       </div>
 
-      <p *ngIf="searchAttempted && !filteredRFQ" class="text-danger mt-2">Aucun RFQ trouvé avec ce CQ.</p>
-    </div>
-  </ng-template>
-  <hr />
-</li>
-
-<!-- Brouillon -->
-<li *ngIf="!isAdmin" [ngbNavItem]="5" class="nav-item">
-  <a class="nav-link" ngbNavLink>
-    <i class="feather icon-file-text"></i>
-    Brouillon
-  </a>
-
-  <ng-template ngbNavContent>
-    <div class="row g-3 drafts-grid">
-      <div class="col-12" *ngIf="getRFQsByStatus('brouillon').length === 0">
-        <div class="alert alert-info">Aucun brouillon pour le moment.</div>
+      <div class="row align-items-center mb-2">
+        <div class="col-md-6 sort-controls">
+          <span class="sort-label"><i class="feather icon-sliders"></i> Sort</span>
+          <select class="form-select sort-select" [(ngModel)]="sortKey">
+            <option value="date">Creation Date</option>
+            <option value="quoteName">Quote Name</option>
+            <option value="rfqId">RFQ No.</option>
+          </select>
+          <input *ngIf="sortKey==='date'" type="date" class="form-control sort-date" [(ngModel)]="filterDate" placeholder="Filter by day" />
+          <button class="btn sort-toggle" (click)="sortDir = sortDir==='asc' ? 'desc' : 'asc'">
+            <i class="feather" [ngClass]="{'icon-arrow-up': sortDir==='asc', 'icon-arrow-down': sortDir==='desc'}"></i>
+          </button>
+        </div>
+        <div class="col-md-6"></div>
       </div>
 
-      <div class="col-md-6 col-lg-4" *ngFor="let rfq of getRFQsByStatus('brouillon'); trackBy: trackTable">
-        <div class="card h-100 shadow-sm draft-card">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title mb-0">
-                <i class="feather icon-file-text me-1"></i>
-                RFQ N°{{ rfq.id }}
-              </h5>
-              <span class="badge badge-brouillon">Brouillon</span>
-            </div>
-            <p class="card-text mb-1"><strong>Nom de Devis:</strong> {{ rfq.quoteName || 'No quote name provided' }}</p>
-            <p class="card-text mb-1"><strong>CQ:</strong> {{ rfq.cq }}</p>
-            <p class="card-text mb-1"><strong>Client:</strong> {{ rfq.client || 'Unknown Client' }}</p>
-            <p class="card-text mb-3"><strong>Date de Création:</strong> {{ getFormattedDate(rfq.dateCreation) }}</p>
+      <!-- Empty-state when no RFQs match -->
+      <div *ngIf="getFilteredRFQsByStatus(currentFilter).length === 0" class="text-center py-5 text-muted">
+        <i class="feather icon-inbox" style="font-size: 2rem;"></i>
+        <div class="mt-2">No RFQs match your filters. Try adjusting status, search, or date.</div>
+      </div>
 
-            <div class="mt-auto d-flex justify-content-end gap-2">
-              <a class="icon-btn" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Editer Brouillon">
+      <!-- Card grid list -->
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4" *ngFor="let rfq of getFilteredRFQsByStatusPaginated(currentFilter); trackBy: trackTable">
+          <div class="rfq-card h-100">
+            <div class="rfq-card-header">
+              <span class="rfq-title">RFQ No. {{ rfq.id }}</span>
+              <span class="badge" [ngClass]="{
+                'bg-warning text-dark': currentFilter==='pending',
+                'bg-success': currentFilter==='validated',
+                'badge-brouillon': currentFilter==='brouillon'
+              }">{{ currentFilter==='pending' ? 'Pending' : (currentFilter==='validated' ? 'Validated' : 'Draft') }}</span>
+            </div>
+            <div class="rfq-meta">
+              <span><strong>Quote:</strong> {{ rfq.quoteName || 'No quote name provided' }}</span>
+              <span><strong>Client:</strong> {{ rfq.client || 'Unknown Client' }}</span>
+              <span><strong>Created:</strong> {{ getFormattedDate(rfq.dateCreation) }}</span>
+              <span><strong>CQ:</strong> {{ rfq.cq }}</span>
+            </div>
+            <div class="mt-2">
+              <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
+                <div class="version-dots">
+                  <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDots">
+                    <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
+                  </ng-container>
+                  <ng-template #fallbackDots>
+                    <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
+                  </ng-template>
+                </div>
+              </ng-container>
+              <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
+            </div>
+            <div class="rfq-card-actions d-flex justify-content-end gap-2">
+              <a class="icon-btn" [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                <i class="feather icon-eye"></i>
+              </a>
+              <a class="icon-btn" *ngIf="isEngineer && currentFilter!=='validated'" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Edit RFQ">
                 <i class="feather icon-edit"></i>
               </a>
-              <a class="icon-btn text-danger" href="javascript:void(0)" (click)="deletedraft(rfq.id)" title="Supprimer Brouillon">
+              <a class="icon-btn text-danger" *ngIf="isAdmin" href="javascript:void(0)" (click)="delete(rfq.id)" title="Delete RFQ">
                 <i class="feather icon-trash-2"></i>
               </a>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </ng-template>
-  <hr />
-</li>
 
-
-          </ul>
-        </div>
-        <!-- Contenu des onglets -->
-        <div class="col-md-9 col-sm-12">
-          <div [ngbNavOutlet]="nav3" class="ms-4"></div>
-        </div>
+      <div class="d-flex justify-content-center mt-3">
+        <ngb-pagination
+          class="pagination-dark"
+          [collectionSize]="getFilteredRFQsByStatus(currentFilter).length"
+          [page]="getCurrentPage()"
+          [pageSize]="pageSize"
+          (pageChange)="setCurrentPage($event)"
+          size="sm">
+        </ngb-pagination>
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { NavigationItem, NavigationItems } from '../navigation';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NavGroupComponent } from './nav-group/nav-group.component';
+import { UserService } from 'src/app/api';
 
 @Component({
   selector: 'app-nav-content',
@@ -16,6 +17,7 @@ import { NavGroupComponent } from './nav-group/nav-group.component';
 })
 export class NavContentComponent {
   private location = inject(Location);
+  private userService = inject(UserService);
 
   // public method
   // version
@@ -30,7 +32,44 @@ export class NavContentComponent {
 
   // constructor
   constructor() {
-    this.navigations = NavigationItems;
+    // Start with a deep copy of the static navigation
+    this.navigations = this.cloneItems(NavigationItems);
+
+    // Apply role-based visibility once the current user is known
+    this.userService.apiUserMeGet().subscribe(user => {
+      const isAdmin = user.role === 2;
+      const isEngineer = user.role === 1;
+      this.navigations = this.applyRoleVisibility(this.navigations, { isAdmin, isEngineer });
+    });
+  }
+
+  private cloneItems(items: NavigationItem[]): NavigationItem[] {
+    return items.map(item => ({
+      ...item,
+      children: item.children ? this.cloneItems(item.children) : undefined
+    }));
+  }
+
+  private applyRoleVisibility(items: NavigationItem[], roles: { isAdmin: boolean; isEngineer: boolean }): NavigationItem[] {
+    return items.map(item => {
+      const copy: NavigationItem = { ...item };
+
+      // Hide User Management and Historique Management for non-admins
+      if (!roles.isAdmin && (copy.id === 'user-manage' || copy.id === 'historique-manage')) {
+        copy.hidden = true;
+      }
+
+      // Show Assigned RFQ only to engineers
+      if (copy.id === 'assigned-rfqs' && !roles.isEngineer) {
+        copy.hidden = true;
+      }
+
+      if (copy.children && copy.children.length) {
+        copy.children = this.applyRoleVisibility(copy.children, roles);
+      }
+
+      return copy;
+    });
   }
 
   fireOutClick() {

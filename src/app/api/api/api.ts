@@ -1,5 +1,7 @@
 export * from './auth.service';
 import { AuthService } from './auth.service';
+export * from './chat.service';
+import { ChatService } from './chat.service';
 export * from './client.service';
 import { ClientService } from './client.service';
 export * from './commentaire.service';
@@ -20,4 +22,4 @@ export * from './versionRFQ.service';
 import { VersionRFQService } from './versionRFQ.service';
 export * from './worker.service';
 import { WorkerService } from './worker.service';
-export const APIS = [AuthService, ClientService, CommentaireService, HistoriqueActionService, MarketSegmentService, NotificationService, RFQService, RapportService, UserService, VersionRFQService, WorkerService];
+export const APIS = [AuthService, ChatService, ClientService, CommentaireService, HistoriqueActionService, MarketSegmentService, NotificationService, RFQService, RapportService, UserService, VersionRFQService, WorkerService];

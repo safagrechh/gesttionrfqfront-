@@ -1,3 +1,4 @@
+export * from './chatRequest';
 export * from './client';
 export * from './clientDetailsDto';
 export * from './clientSummaryDto';

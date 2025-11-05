@@ -1,0 +1,174 @@
+.modern-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.modern-search .input-group-text {
+  background: #f6f7fb;
+  border: 1px solid #e5e7eb;
+  color: #475569;
+}
+.modern-search .form-control {
+  border: 1px solid #e5e7eb;
+}
+
+/* Unified search bar styling to match Consulter */
+.modern-search.unified {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.modern-search.unified i {
+  color: #6b7280;
+}
+.modern-search.unified .form-control {
+  border: none;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.rfq-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: #fff;
+  position: relative;
+}
+.rfq-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+.rfq-card-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.rfq-title {
+  font-weight: 600;
+}
+.rfq-meta {
+  color: #6b7280;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+.rfq-card-actions {
+  margin-top: 12px;
+}
+
+/* Draft styling */
+.rfq-card.is-draft {
+  border-style: dashed;
+  background: #f3f4f6; /* gray-100 */
+  border-color: #d1d5db; /* gray-300 */
+}
+.rfq-card.is-draft .rfq-title {
+  color: #374151; /* gray-700 */
+}
+.rfq-card.is-draft .rfq-meta {
+  color: #6b7280; /* gray-500 */
+}
+.draft-ribbon {
+  position: absolute;
+  top: 8px;
+  left: -6px;
+  background: #6b7280; /* gray-600 */
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  transform: rotate(-6deg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.draft-watermark {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-weight: 700;
+  color: rgba(107, 114, 128, 0.18); /* gray-600 */
+  font-size: 28px;
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+
+/* Harmonize button look */
+.btn-outline-primary {
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+.btn-outline-primary:hover {
+  background: #eff6ff;
+}
+.btn-primary {
+  background: #1d4ed8;
+}
+
+/* Status toggle styles: revert to default buttons */
+.status-toggle .btn {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.status-toggle .btn.btn-pending {
+  background: #ffe8a3;
+  color: #5a4707;
+}
+.status-toggle .btn.btn-pending.active {
+  background: #ffc107;
+  color: #3f3106;
+}
+.status-toggle .btn.btn-validated {
+  background: #c9f0dd;
+  color: #0c3c24;
+}
+.status-toggle .btn.btn-validated.active {
+  background: #198754;
+  color: #ffffff;
+}
+
+/* Only apply search-bar style to the RIGHT side of Draft */
+.status-toggle button:nth-of-type(4) {
+  border-right: 1px solid #e5e7eb;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
+/* Match All's LEFT edge to Draft's RIGHT edge (search-bar style) */
+.status-toggle button:first-of-type {
+  border-left: 1px solid #e5e7eb;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+/* Inline pipe-separated variant for status filters */
+.status-toggle.status-inline {
+  gap: 0; /* handled by padding */
+}
+.status-toggle.status-inline .status-pipe {
+  color: #94a3b8; /* slate-400 */
+  margin: 0 8px;
+}
+
+/* Pagination colors to match Consulter */
+:host ::ng-deep .pagination-dark {
+  .page-link {
+    color: #003366 !important; /* darker navy blue text */
+  }
+  .page-link:hover {
+    color: #00264d !important; /* even darker on hover */
+  }
+  .page-item.active .page-link {
+    background-color: #00264d !important; /* deep navy active bg */
+    border-color: #00264d !important;
+    color: #fff !important;
+  }
+  .page-item.disabled .page-link {
+    color: #6c757d !important; /* keep disabled subtle */
+  }
+}

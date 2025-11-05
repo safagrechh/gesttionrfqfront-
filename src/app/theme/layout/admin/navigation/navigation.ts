@@ -59,6 +59,13 @@ export const NavigationItems: NavigationItem[] = [
             url: '/rfq-manage/get-rfqs',
 
             classes: 'nav-item'
+          },
+          {
+            id: 'assigned-rfqs',
+            title: 'Assigned RFQ',
+            type: 'item',
+            url: '/rfq-manage/assigned-rfqs',
+            classes: 'nav-item'
           }
 
         ]
