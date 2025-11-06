@@ -4,7 +4,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    > div:first-child {
+      margin-top: 2rem; 
+      ;/* add space only above the text block */
+    }
 
     h4 {
       margin: 0 0 0.25rem 0;
@@ -32,6 +36,44 @@
     }
   }
 
+  /* Hero banner */
+  .page-hero {
+    background: rgb(33, 90, 170);
+    color: #fff;
+    padding: 18px 20px;
+    box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+    border: none;
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+    }
+    .hero-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .hero-subtitle {
+      opacity: 0.92;
+      font-size: 13px;
+    }
+    i {
+      font-size: 22px;
+      opacity: 0.9;
+    }
+  }
+
   .form-group label {
     font-weight: 500;
     color: #374151;
@@ -54,20 +96,154 @@
     min-width: 0;
   }
 
-  .actions-bar {
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 20%);
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
+  /* Floating icon-only actions: match Edit page */
+  .floating-actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    z-index: 1100;
+    pointer-events: none;
   }
 
-  .actions-inner {
+  .floating-actions-inner {
     display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-    border-top: 1px solid rgba(0,0,0,0.08);
-    padding-top: 0.75rem;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+    pointer-events: none;
+    transform: translateX(120px); /* subtle nudge to the right to avoid clipping */
   }
+  .floating-actions-inner .action-expand-btn { pointer-events: auto; }
+
+  @media (min-width: 576px) { .floating-actions-inner { max-width: 540px; } }
+  @media (min-width: 768px) { .floating-actions-inner { max-width: 720px; } }
+  @media (min-width: 992px) { .floating-actions-inner { max-width: 960px; } }
+  @media (min-width: 1200px) { .floating-actions-inner { max-width: 1140px; } }
+  @media (min-width: 1400px) { .floating-actions-inner { max-width: 1320px; } }
+
+  .action-expand-btn {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    overflow: hidden;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transition: border-radius 160ms ease, width 160ms ease, padding 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+  }
+  .action-expand-btn i {
+    font-size: 18px;
+    transition: transform 160ms ease;
+    transform: translateX(12px);
+    line-height: 1;
+  }
+  .action-expand-btn .label {
+    display: inline-block;
+    max-width: 0;
+    width: 0;
+    opacity: 0;
+    transition: max-width 200ms ease, opacity 160ms ease, transform 160ms ease;
+    white-space: nowrap;
+  }
+  .action-expand-btn:hover i,
+  .action-expand-btn:focus i {
+    /* push icon slightly to the right inside the expanded pill */
+    transform: translateX(16px);
+  }
+  .action-expand-btn:hover .label,
+  .action-expand-btn:focus .label {
+    max-width: 140px;
+    width: auto;
+    opacity: 1;
+    transform: translateX(0);
+    margin-left: 8px; /* ensure visible space between icon and text */
+  }
+.action-expand-btn:hover,
+.action-expand-btn:focus {
+  border-radius: 999px;
+  width: auto;
+  gap: 8px; /* clearer space between icon and label */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.16);
+}
+
+  .action-expand-btn.primary { background: #2563eb; }
+  .action-expand-btn.success { background: #16a34a; }
+  .action-expand-btn.danger { background: #dc2626; }
+
+  @media (max-width: 576px) {
+    .floating-actions { bottom: 10px; gap: 6px; }
+    .floating-actions-inner { max-width: 100%; padding: 0 12px; transform: translateX(6px); }
+    .action-expand-btn { width: 40px; height: 40px; }
+  }
+}
+
+/* Modern card container to match Consulter */
+.modern-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background-color: rgba(86, 149, 220, 0.103); /* low-opacity white for big card */
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Back button: icon-only with hover reveal like Consulter Add */
+.back-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  transition: border-radius 160ms ease, width 160ms ease, padding 160ms ease;
+}
+.back-expand-btn i {
+  font-size: 18px;
+  transition: transform 160ms ease;
+  transform: translateX(18px);
+  line-height: 1;
+}
+.back-expand-btn .label {
+  display: inline-block;
+  max-width: 0;
+  width: 0;
+  opacity: 0;
+  transition: max-width 200ms ease, opacity 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+}
+.back-expand-btn:hover i {
+  transform: translateX(-4px);
+}
+.back-expand-btn:hover .label {
+  max-width: 120px;
+  width: auto;
+  opacity: 1;
+  transform: translateX(0);
+}
+.back-expand-btn:hover {
+  border-radius: 999px;
+  padding: 0 12px;
+  width: auto;
+  gap: 8px;
 }

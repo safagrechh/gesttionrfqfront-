@@ -2,9 +2,192 @@
   padding-top: 1rem;
 }
 
+/* Modernized layout for section blocks */
+.modern-page {
+  .section-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #2d3a4a;
+      margin-bottom: 16px;
+
+      i {
+        font-size: 18px;
+        color: #6c757d;
+      }
+
+      .actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .header-select-all {
+        display: inline-flex;
+        align-items: center;
+      }
+      .header-select-all input[type='checkbox'] {
+        cursor: pointer;
+      }
+      .header-select-all .cr {
+        margin-left: 6px;
+      }
+
+      .list-select-all input[type='checkbox'] {
+        cursor: pointer;
+      }
+      .list-select-all .cr {
+        margin-left: 6px;
+      }
+
+      /* Removed action-icon in favor of themed checkbox */
+
+      .header-counter {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: 6px;
+        font-size: 13px;
+        color: #6c757d;
+
+        i {
+          font-size: 15px;
+          color: #6c757d;
+        }
+      }
+    }
+
+    &.compact {
+      padding: 12px 14px;
+
+      .section-header {
+        margin-bottom: 6px;
+      }
+
+      .form-check {
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  /* Hero banner */
+  .page-hero {
+    background: rgb(33, 90, 170);
+    color: #fff;
+    padding: 18px 20px;
+    box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+    border: none;
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .hero-subtitle {
+      opacity: 0.92;
+      font-size: 13px;
+    }
+    i {
+      font-size: 22px;
+      opacity: 0.9;
+    }
+  }
+
+  /* Summary card */
+  .summary-card {
+    .summary-content {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: rgba(33, 90, 170, 0.06);
+      border: 1px solid rgba(33, 90, 170, 0.14);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.4;
+      color: #2d3a4a;
+    }
+  }
+
+  /* Dim inactive sections when toggles are off (optional hook via class) */
+  .section-card.inactive {
+    opacity: 0.6;
+  }
+
+  /* Chips for selection counts */
+  .chips {
+    display: flex;
+    gap: 8px;
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      font-size: 12px;
+      color: #2d3a4a;
+    }
+    .chip i { font-size: 14px; color: #6c757d; }
+  }
+
+  /* Inputs polish */
+  .form-control:focus {
+    box-shadow: 0 0 0 0.12rem rgba(33, 90, 170, 0.25);
+    border-color: rgba(33, 90, 170, 0.45);
+  }
+  .form-check-input:checked {
+    background-color: #215aaa;
+    border-color: #215aaa;
+  }
+
+  /* Compact icon-only buttons */
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+  }
+  .icon-btn i {
+    font-size: 16px;
+  }
+}
+
 button[disabled] {
   opacity: 0.7;
   pointer-events: none;
+}
+
+/* Modern card container to match Create RFQ */
+.modern-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.57);
+}
+
+.card-body {
+  padding: 1.25rem;
 }
 
 /* Centered alert modal overlay */

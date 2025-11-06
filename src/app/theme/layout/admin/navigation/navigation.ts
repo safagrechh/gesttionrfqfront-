@@ -39,36 +39,28 @@ export const NavigationItems: NavigationItem[] = [
     icon: 'icon-ui',
     children: [
       {
-        id: 'RFQ',
-        title: ' Gestion RFQ',
-        type: 'collapse',
-        icon: 'feather icon-book',
-        children: [
-          {
-            id: 'create-rfq',
-            title: 'Ajouter RFQ',
-            type: 'item',
-            url: '/rfq-manage/create-rfq',
-
-            classes: 'nav-item'
-          },
-          {
-            id: 'get-rfqs',
-            title: 'Consulter les RFQs ',
-            type: 'item',
-            url: '/rfq-manage/get-rfqs',
-
-            classes: 'nav-item'
-          },
-          {
-            id: 'assigned-rfqs',
-            title: 'Assigned RFQ',
-            type: 'item',
-            url: '/rfq-manage/assigned-rfqs',
-            classes: 'nav-item'
-          }
-
-        ]
+        id: 'create-rfq',
+        title: 'Create RFQ',
+        type: 'item',
+        url: '/rfq-manage/create-rfq',
+        icon: 'feather icon-file-plus',
+        classes: 'nav-item'
+      },
+      {
+        id: 'get-rfqs',
+        title: 'View RFQs',
+        type: 'item',
+        url: '/rfq-manage/get-rfqs',
+        icon: 'feather icon-list',
+        classes: 'nav-item'
+      },
+      {
+        id: 'assigned-rfqs',
+        title: 'Assigned RFQs',
+        type: 'item',
+        url: '/rfq-manage/assigned-rfqs',
+        icon: 'feather icon-clipboard',
+        classes: 'nav-item'
       }
     ]
   },

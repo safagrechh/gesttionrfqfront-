@@ -162,16 +162,16 @@ export class GenerateReportComponent implements OnInit {
 
         const bodyBlob = resp.body as Blob | null;
         if (!bodyBlob || bodyBlob.size === 0) {
-          this.showCenteredAlert('Pas de rapport généré : aucune donnée pour les filtres sélectionnés.');
+          this.showCenteredAlert('No report generated: no data for selected filters.');
           return;
         }
 
         if (contentType && (contentType.includes('application/json') || contentType.startsWith('text'))) {
           bodyBlob.text().then((txt) => {
             const msg = (txt || '').trim();
-            this.showCenteredAlert(msg || 'Pas de rapport généré : aucune donnée pour les filtres sélectionnés.');
+            this.showCenteredAlert(msg || 'No report generated: no data for selected filters.');
           }).catch(() => {
-            this.showCenteredAlert('Pas de rapport généré : aucune donnée pour les filtres sélectionnés.');
+            this.showCenteredAlert('No report generated: no data for selected filters.');
           });
           return;
         }
@@ -197,7 +197,7 @@ export class GenerateReportComponent implements OnInit {
         this.isSubmitting = false;
 
         if (err && err.status === 400) {
-          const defaultMsg = 'Pas de rapport généré : aucune donnée pour les filtres sélectionnés.';
+          const defaultMsg = 'No report generated: no data for selected filters.';
           const maybeBlob = err.error as Blob | undefined;
           if (maybeBlob && typeof maybeBlob.text === 'function') {
             maybeBlob.text().then((txt) => {
@@ -213,9 +213,9 @@ export class GenerateReportComponent implements OnInit {
           return;
         }
 
-        console.error('Erreur lors de la génération du rapport', err);
+        console.error('Error generating report', err);
         this.toastService.showToast({
-          message: 'Erreur lors de la génération du rapport.',
+          message: 'Error generating report.',
           type: 'error',
           duration: 7000
         });
@@ -231,7 +231,7 @@ export class GenerateReportComponent implements OnInit {
       this.closeAlert();
     }
   }
-  
+
   showCenteredAlert(message: string) {
     this.alertMessage = message;
     this.showAlert = true;
@@ -241,12 +241,12 @@ export class GenerateReportComponent implements OnInit {
       el?.focus();
     }, 0);
   }
-  
+
   closeAlert() {
     this.showAlert = false;
     this.showDetails = false;
   }
-  
+
   getAlertDetails(): string {
     const v = this.reportForm?.value || {};
     const lines: string[] = [];
@@ -254,13 +254,13 @@ export class GenerateReportComponent implements OnInit {
     if (v.useDate) {
       const sd = v.startDate ? new Date(v.startDate) : null;
       const ed = v.endDate ? new Date(v.endDate) : null;
-      lines.push(`Période: ${sd ? sd.toLocaleDateString() : '—'} → ${ed ? ed.toLocaleDateString() : '—'}`);
+      lines.push(`Date Range: ${sd ? sd.toLocaleDateString() : '—'} → ${ed ? ed.toLocaleDateString() : '—'}`);
     }
-    // Statuts
+    // Status
     if (v.useStatuts) {
       const arr: string[] = Array.isArray(v.statuts) ? v.statuts : [];
-      const labels = arr.map(s => s === 'win' ? 'Gagné' : s === 'loss' ? 'Perdu' : s);
-      lines.push(`Statuts: ${labels.length ? labels.join(', ') : '—'}`);
+      const labels = arr.map(s => s === 'win' ? 'Won' : s === 'loss' ? 'Lost' : s);
+      lines.push(`Status: ${labels.length ? labels.join(', ') : '—'}`);
     }
     // Segments
     if (v.useSegments) {
@@ -284,10 +284,36 @@ export class GenerateReportComponent implements OnInit {
   private getAcceptAndFilename(format: string): { accept: string; defaultFilename: string } {
     switch ((format || '').toLowerCase()) {
       case 'csv':
-        return { accept: 'text/csv', defaultFilename: 'rapport.csv' };
+        return { accept: 'text/csv', defaultFilename: 'report.csv' };
       case 'pdf':
       default:
-        return { accept: 'application/pdf', defaultFilename: 'rapport.pdf' };
+        return { accept: 'application/pdf', defaultFilename: 'report.pdf' };
     }
+  }
+  // Toggle helpers for single-button select/deselect
+  isAllSegmentsSelected(): boolean {
+    const enabled = !!this.reportForm?.value?.useSegments;
+    if (!enabled) return false;
+    const selected: any[] = this.reportForm?.value?.marketSegmentIds || [];
+    const total = this.marketSegments.length;
+    return total > 0 && selected.length === total;
+  }
+
+  toggleAllSegments(): void {
+    const all = this.isAllSegmentsSelected();
+    this.selectAllSegments(!all);
+  }
+
+  isAllClientsSelected(): boolean {
+    const enabled = !!this.reportForm?.value?.useClients;
+    if (!enabled) return false;
+    const selected: any[] = this.reportForm?.value?.clientIds || [];
+    const total = this.clients.length;
+    return total > 0 && selected.length === total;
+  }
+
+  toggleAllClients(): void {
+    const all = this.isAllClientsSelected();
+    this.selectAllClients(!all);
   }
 }

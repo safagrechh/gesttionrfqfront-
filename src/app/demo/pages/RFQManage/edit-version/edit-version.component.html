@@ -1,283 +1,332 @@
-<div class="container">
+<div class="container modern-page">
   <div class="col-sm-12">
-    <app-card cardTitle="Edit RFQ" [options]="false">
+    <div class="card modern-card">
+      <div class="card-body">
 
-      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-        <div class="row">
-
-          <!-- Client -->
-          <!-- Client -->
-          <div class="row" >
-            <h6> Client </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-           <div class="form-group">
-            <label for="clientId">Client</label>
-            <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
-              <option *ngIf="clients.length === 0" disabled>Loading...</option>
-              <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
-            </select>
-            <div *ngIf="editForm.get('clientId')?.touched && editForm.get('clientId')?.invalid" class="text-danger">
-              <small *ngIf="editForm.get('clientId')?.hasError('required')">Client selection is required.</small>
-            </div>
-           </div>
-            </div>
-          <div class="col-md-4 mb-3" *ngIf="selectedClient">
-            <div class="form-group">
-              <label for="clientSales">Sales</label>
-              <input type="text" id="clientSales" class="form-control" [value]="selectedClient.sales" disabled />
+      <!-- Page Hero -->
+      <div class="section-card page-hero">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-edit"></i>
+            <div>
+              <div class="hero-title">{{ isBrouillon ? 'Version Draft' : 'Edit Version' }}</div>
+              <div class="hero-subtitle">
+                {{ isBrouillon
+                  ? 'Manage draft version details, materials, tests, and ownership.'
+                  : 'Edit version details, materials, tests, and ownership.' }}
+              </div>
             </div>
           </div>
-          <div class="col-md-4 mb-3">
-            <div class="form-group">
-              <label for="cq">CQ</label>
-              <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
-              <div *ngIf="editForm.get('cq')?.touched && editForm.get('cq')?.invalid" class="text-danger">
-                <small *ngIf="editForm.get('cq')?.hasError('required')">CQ is required.</small>
-              </div>
-            </div>
-            </div>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-outline-light back-expand-btn" (click)="cancel()" aria-label="Back">
+              <i class="feather icon-arrow-left"></i>
+              <span class="label">Back</span>
+            </button>
+          </div>
         </div>
+      </div>
 
+      <div [formGroup]="editForm">
+        <div class="row g-3">
 
-          <!-- RFQ -->
-          <div class="row">
-            <h6> RFQ </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="quoteName">Quote Name</label>
-                <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
-                <div *ngIf="editForm.get('quoteName')?.touched && editForm.get('quoteName')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('quoteName')?.hasError('required')">Quote Name is required.</small>
+          <!-- Client & RFQ Basics -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-user"></i>
+              <span>Client & RFQ</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="clientId">Client</label>
+                  <select id="clientId" class="form-control" formControlName="clientId" (change)="onClientChange($event)">
+                    <option *ngIf="clients.length === 0" disabled>Loading...</option>
+                    <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('clientId')?.touched && editForm.get('clientId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('clientId')?.hasError('required')">Client selection is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="marketSegmentId">Market Segment</label>
-                <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
-                  <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
-                </select>
-                <div *ngIf="editForm.get('marketSegmentId')?.touched && editForm.get('marketSegmentId')?.invalid" class="text-danger">
-                <small *ngIf="editForm.get('marketSegmentId')?.hasError('required')">Market Segment is required.</small>
+              <div class="col-md-4 mb-3" *ngIf="selectedClient">
+                <div class="form-group">
+                  <label for="clientSales">Sales</label>
+                  <input type="text" id="clientSales" class="form-control" [value]="selectedClient.sales" disabled />
+                </div>
               </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="cq">CQ</label>
+                  <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
+                  <div *ngIf="editForm.get('cq')?.touched && editForm.get('cq')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('cq')?.hasError('required')">CQ is required.</small>
+                  </div>
+                </div>
               </div>
 
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="numRefQuoted">Number of ref to be quoted</label>
-                <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
-                <div *ngIf="editForm.get('numRefQuoted')?.touched && editForm.get('numRefQuoted')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('numRefQuoted')?.hasError('required')">Reference Number is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="quoteName">Quote Name</label>
+                  <input id="quoteName" class="form-control" formControlName="quoteName" placeholder="Enter quote name" />
+                  <div *ngIf="editForm.get('quoteName')?.touched && editForm.get('quoteName')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('quoteName')?.hasError('required')">Quote Name is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="sopDate">SOP Date</label>
-                <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
-                <div *ngIf="editForm.get('sopDate')?.touched && editForm.get('sopDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('sopDate')?.hasError('required')">SOP Date is required.</small>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="marketSegmentId">Market Segment</label>
+                  <select id="marketSegmentId" class="form-control" formControlName="marketSegmentId">
+                    <option *ngFor="let segment of marketSegments" [value]="segment.id">{{ segment.nom }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('marketSegmentId')?.touched && editForm.get('marketSegmentId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('marketSegmentId')?.hasError('required')">Market Segment is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="maxV">Maximum Volume</label>
-                <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
-                <div *ngIf="editForm.get('maxV')?.touched && editForm.get('maxV')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('maxV')?.hasError('required')">Maximum Volume is required.</small>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="numRefQuoted">Number of ref to be quoted</label>
+                  <input id="numRefQuoted" class="form-control" formControlName="numRefQuoted" placeholder="Enter reference number" />
+                  <div *ngIf="editForm.get('numRefQuoted')?.touched && editForm.get('numRefQuoted')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('numRefQuoted')?.hasError('required')">Reference Number is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="estV">Estimated Volume</label>
-                <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
-                <div *ngIf="editForm.get('estV')?.touched && editForm.get('estV')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('estV')?.hasError('required')">Estimated Volume is required.</small>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="sopDate">SOP Date</label>
+                  <input id="sopDate" class="form-control" formControlName="sopDate" type="date" />
+                  <div *ngIf="editForm.get('sopDate')?.touched && editForm.get('sopDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('sopDate')?.hasError('required')">SOP Date is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="maxV">Maximum Volume</label>
+                  <input id="maxV" class="form-control" formControlName="maxV" placeholder="Enter maximum value" type="number" />
+                  <div *ngIf="editForm.get('maxV')?.touched && editForm.get('maxV')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('maxV')?.hasError('required')">Maximum Volume is required.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="estV">Estimated Volume</label>
+                  <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
+                  <div *ngIf="editForm.get('estV')?.touched && editForm.get('estV')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('estV')?.hasError('required')">Estimated Volume is required.</small>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Materials -->
-          <div class="row">
-            <h6> Materials </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="koDate">KO Date</label>
-                <input id="koDate" class="form-control" formControlName="koDate" type="date" />
-                <div *ngIf="editForm.get('koDate')?.touched && editForm.get('koDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('koDate')?.hasError('required')">KO Date is required.</small>
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-package"></i>
+              <span>Materials</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="koDate">KO Date</label>
+                  <input id="koDate" class="form-control" formControlName="koDate" type="date" />
+                  <div *ngIf="editForm.get('koDate')?.touched && editForm.get('koDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('koDate')?.hasError('required')">KO Date is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="customerDataDate">Customer Due Date</label>
-                <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
-                <div *ngIf="editForm.get('customerDataDate')?.touched && editForm.get('customerDataDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('customerDataDate')?.hasError('required')">Customer Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="customerDataDate">Customer Due Date</label>
+                  <input id="customerDataDate" class="form-control" formControlName="customerDataDate" type="date" />
+                  <div *ngIf="editForm.get('customerDataDate')?.touched && editForm.get('customerDataDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('customerDataDate')?.hasError('required')">Customer Due Date is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="materialLeaderId">Material Leader</label>
-                <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
-                  <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
-                </select>
-                <div *ngIf="editForm.get('materialLeaderId')?.touched && editForm.get('materialLeaderId')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('materialLeaderId')?.hasError('required')">Material Leader is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="materialLeaderId">Material Leader</label>
+                  <select id="materialLeaderId" class="form-control" formControlName="materialLeaderId">
+                    <option *ngFor="let leader of materialLeaders" [value]="leader.id">{{ leader.nom }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('materialLeaderId')?.touched && editForm.get('materialLeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('materialLeaderId')?.hasError('required')">Material Leader is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="mdDate">Material Due Date</label>
-                <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
-                <div *ngIf="editForm.get('mdDate')?.touched && editForm.get('mdDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('mdDate')?.hasError('required')">Material Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="mdDate">Material Due Date</label>
+                  <input id="mdDate" class="form-control" formControlName="mdDate" type="date" />
+                  <div *ngIf="editForm.get('mdDate')?.touched && editForm.get('mdDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('mdDate')?.hasError('required')">Material Due Date is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="mrDate">Material Release</label>
-                <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="mrDate">Material Release</label>
+                  <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Test -->
-          <div class="row">
-            <h6> Test </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="testLeaderId">Test Leader</label>
-                <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
-                  <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
-                </select>
-                <div *ngIf="editForm.get('testLeaderId')?.touched && editForm.get('testLeaderId')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('testLeaderId')?.hasError('required')">Test Leader is required.</small>
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-cpu"></i>
+              <span>Test</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="testLeaderId">Test Leader</label>
+                  <select id="testLeaderId" class="form-control" formControlName="testLeaderId">
+                    <option *ngFor="let tester of testers" [value]="tester.id">{{ tester.nom }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('testLeaderId')?.touched && editForm.get('testLeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('testLeaderId')?.hasError('required')">Test Leader is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="tdDate">Test Due Date</label>
-                <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
-                <div *ngIf="editForm.get('tdDate')?.touched && editForm.get('tdDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('tdDate')?.hasError('required')">Test Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="tdDate">Test Due Date</label>
+                  <input id="tdDate" class="form-control" formControlName="tdDate" type="date" />
+                  <div *ngIf="editForm.get('tdDate')?.touched && editForm.get('tdDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('tdDate')?.hasError('required')">Test Due Date is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="trDate">Test Release</label>
-                <input id="trDate" class="form-control" formControlName="trDate" type="date" />
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="trDate">Test Release</label>
+                  <input id="trDate" class="form-control" formControlName="trDate" type="date" />
+                </div>
               </div>
             </div>
           </div>
 
           <!-- VA -->
-          <div class="row">
-            <h6> VA </h6>
-            <hr />
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="valeaderId">VA Leader</label>
-                <select id="valeaderId" class="form-control" formControlName="valeaderId">
-                  <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
-                </select>
-                <div *ngIf="editForm.get('valeaderId')?.touched && editForm.get('valeaderId')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('valeaderId')?.hasError('required')">VA Leader is required.</small>
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-users"></i>
+              <span>VA</span>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="valeaderId">VA Leader</label>
+                  <select id="valeaderId" class="form-control" formControlName="valeaderId">
+                    <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('valeaderId')?.touched && editForm.get('valeaderId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('valeaderId')?.hasError('required')">VA Leader is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="ldDate">Labour Due Date</label>
-                <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
-                <div *ngIf="editForm.get('ldDate')?.touched && editForm.get('ldDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('ldDate')?.hasError('required')">Labour Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="ldDate">Labour Due Date</label>
+                  <input id="ldDate" class="form-control" formControlName="ldDate" type="date" />
+                  <div *ngIf="editForm.get('ldDate')?.touched && editForm.get('ldDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('ldDate')?.hasError('required')">Labour Due Date is required.</small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="lrDate">Labour Release Date</label>
-                <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
-              </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="cdDate">Customer Due date</label>
-                <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
-                <div *ngIf="editForm.get('cdDate')?.touched && editForm.get('cdDate')?.invalid" class="text-danger">
-                  <small *ngIf="editForm.get('cdDate')?.hasError('required')">Customer Due Date is required.</small>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="lrDate">Labour Release Date</label>
+                  <input id="lrDate" class="form-control" formControlName="lrDate" type="date" />
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <div class="form-group">
-                <label for="file">File max {{maxFileSizeMB}}MB</label>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="cdDate">Customer Due date</label>
+                  <input id="cdDate" class="form-control" formControlName="cdDate" type="date" />
+                  <div *ngIf="editForm.get('cdDate')?.touched && editForm.get('cdDate')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('cdDate')?.hasError('required')">Customer Due Date is required.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <label for="file">File max {{maxFileSizeMB}}MB</label>
 
-                <!-- Display existing file if it exists -->
-                <div *ngIf="existingFileName && !selectedFile" class="mb-2">
-                  <small class="form-text text-muted">
-                    Current file: {{existingFileName}} ({{existingFileSize}})
-                  </small>
-                </div>
+                  <!-- Display existing file if it exists -->
+                  <div *ngIf="existingFileName && !selectedFile" class="mb-2">
+                    <small class="form-text text-muted">
+                      Current file: {{existingFileName}} ({{existingFileSize}})
+                    </small>
+                  </div>
 
-                <!-- File input for new file -->
-                <input type="file"
-                       (change)="onFileSelected($event)"
-                       accept=".pdf,.xml,application/pdf,text/xml,application/xml"
-                       class="form-control">
+                  <!-- File input for new file -->
+                  <input type="file"
+                         (change)="onFileSelected($event)"
+                         accept=".pdf,.xml,application/pdf,text/xml,application/xml"
+                         class="form-control">
 
-                <!-- Display newly selected file -->
-                <div *ngIf="selectedFile" class="mt-2">
-                  <small class="form-text text-success">
-                    Selected: {{selectedFile.name}} ({{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB)
-                  </small>
-                  <button class="btn btn-sm btn-link" (click)="clearFile()">Remove</button>
+                  <!-- Display newly selected file -->
+                  <div *ngIf="selectedFile" class="mt-2">
+                    <small class="form-text text-success">
+                      Selected: {{selectedFile.name}} ({{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB)
+                    </small>
+                    <button class="btn btn-sm btn-link" (click)="clearFile()">Remove</button>
+                  </div>
                 </div>
               </div>
             </div>
-
           </div>
 
           <!-- RFQ Engineer -->
-          <div class="form-group">
-            <label for="ingenieurRFQId">RFQ Engineer</label>
-            <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
-              <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
-            </select>
-            <div *ngIf="editForm.get('ingenieurRFQId')?.touched && editForm.get('ingenieurRFQId')?.invalid" class="text-danger">
-              <small *ngIf="editForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+          <div class="section-card">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="ingenieurRFQId">RFQ Engineer</label>
+                  <select id="ingenieurRFQId" class="form-control" formControlName="ingenieurRFQId">
+                    <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
+                  </select>
+                  <div *ngIf="editForm.get('ingenieurRFQId')?.touched && editForm.get('ingenieurRFQId')?.invalid" class="text-danger">
+                    <small *ngIf="editForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Submit button -->
-          <div class="d-flex justify-content-center mt-4">
-            <button *ngIf="!isBrouillon" type="submit" class="btn btn-outline-primary">
-              <i class="feather icon-save"></i> Update
-            </button>
-
-            <button *ngIf="isBrouillon" type="button" class="btn btn-outline-primary" (click)="FinaliserBrouillon()">
-              <i class="feather icon-save"></i> Finaliser Brouillon
-            </button>
-          </div>
-
-
         </div>
-      </form>
-    </app-card>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating icon-only actions (outside card to ensure visibility) -->
+<div class="floating-actions">
+  <div class="floating-actions-inner container">
+    <button *ngIf="!isBrouillon" type="button" class="action-expand-btn primary" (click)="onSubmit()">
+      <i class="feather icon-save"></i>
+      <span class="label">Update</span>
+    </button>
+
+    <ng-container *ngIf="isBrouillon">
+      <button type="button" class="action-expand-btn danger" (click)="FinaliserBrouillon()">
+        <i class="feather icon-check-circle"></i>
+        <span class="label">Finalize</span>
+      </button>
+    </ng-container>
   </div>
 </div>

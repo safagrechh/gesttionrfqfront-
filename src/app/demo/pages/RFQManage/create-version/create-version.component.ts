@@ -362,6 +362,10 @@ clearFile(): void {
     return item.id;
   }
 
+  navigateBack(): void {
+    this.router.navigate([`/rfq-manage/get-rfq/${this.rfqId}`]);
+  }
+
 
 
 

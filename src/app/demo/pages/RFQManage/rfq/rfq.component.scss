@@ -127,3 +127,74 @@ h2 {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
 }
+
+/* Section card wrapper to match Create/Edit pages */
+.section-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+}
+
+/* Hero banner styling to match Create/Edit pages */
+.page-hero {
+  background: rgb(33, 90, 170);
+  color: #fff;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+  border: none;
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+  }
+  .hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .hero-subtitle {
+    opacity: 0.92;
+    font-size: 13px;
+  }
+  i {
+    font-size: 22px;
+    opacity: 0.9;
+  }
+}
+
+/* Section card styling: give bordered, softly shadowed containers like other pages */
+form .row > .row {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+}
+
+/* Tidy headers and separators inside section cards */
+form .row > .row h6 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  color: #1f2937; /* gray-800 */
+}
+
+form .row > .row hr {
+  border-top: 1px solid #e5e7eb;
+  opacity: 1;
+  margin: 0.25rem 0 0.75rem 0;
+}

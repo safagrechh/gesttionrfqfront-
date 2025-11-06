@@ -55,7 +55,7 @@ export class CreateRFQComponent implements OnInit {
   ) {}
 
   navigateToManage(): void {
-    this.router.navigate(['/rfq-manage']);
+    this.router.navigate(['/rfq-manage/get-rfqs']);
   }
 
   ngOnInit(): void {
@@ -195,7 +195,7 @@ clearFile(): void {
         }
       });
       this.toastService.showToast({
-        message: 'Veuillez corriger les champs requis avant de soumettre.',
+        message: 'Please fix required fields before submitting.',
         type: 'warning',
         duration: 6000
       });
@@ -292,49 +292,66 @@ clearFile(): void {
   }
 
   onSubmitBrouillon(): void {
-    this.onCQChange();
-    if (this.cqExists) {
-      alert('CQ already exists. Please change it to proceed.');
-      return;
-    }
-
     const formValue = { ...this.rfqForm.value };
-
     const toNumberOrUndefined = (v: any) => (v === null || v === undefined || v === '' ? undefined : Number(v));
 
-    // Convert dates to ISO strings for fields expected by the API
-    const isoDateFields = [
-      'sopDate', 'koDate', 'customerDataDate', 'mdDate', 'mrDate',
-      'tdDate', 'trDate', 'ldDate', 'lrDate', 'cdDate'
-    ];
-    isoDateFields.forEach(field => {
-      if (formValue[field]) {
-        formValue[field] = new Date(formValue[field]).toISOString();
+    // Mark required draft fields as touched to show inline messages
+    ['clientId', 'cq'].forEach(field => {
+      const control = this.rfqForm.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched();
       }
     });
 
+    // Only validate Client and CQ for drafts
+    const cqVal = toNumberOrUndefined(formValue.cq);
+    const clientIdVal = toNumberOrUndefined(formValue.clientId);
+    if (cqVal === undefined || clientIdVal === undefined) {
+      this.toastService.showToast({
+        message: 'Please provide Client and CQ to save a draft.',
+        type: 'warning',
+        duration: 6000
+      });
+      return;
+    }
+
+    // Check CQ uniqueness
+    this.onCQChange();
+    // Reflect uniqueness inline via touched state
+    const cqControl = this.rfqForm.get('cq');
+    if (cqControl instanceof FormControl) cqControl.markAsTouched();
+    if (this.cqExists) {
+      this.toastService.showToast({
+        message: 'CQ already exists. Please change it to proceed.',
+        type: 'warning',
+        duration: 8000
+      });
+      return;
+    }
+
+    // Call draft API with only Client and CQ; others left undefined
     this.rfqService.apiRFQDraftPost(
-      toNumberOrUndefined(formValue.cq),
-      formValue.quoteName,
-      toNumberOrUndefined(formValue.numRefQuoted),
-      formValue.sopDate,
-      toNumberOrUndefined(formValue.maxV),
-      toNumberOrUndefined(formValue.estV),
-      formValue.koDate,
-      formValue.customerDataDate,
-      formValue.mdDate,
-      formValue.mrDate,
-      formValue.tdDate,
-      formValue.trDate,
-      formValue.ldDate,
-      formValue.lrDate,
-      formValue.cdDate,
-      toNumberOrUndefined(formValue.materialLeaderId),
-      toNumberOrUndefined(formValue.testLeaderId),
-      toNumberOrUndefined(formValue.marketSegmentId),
-      toNumberOrUndefined(formValue.clientId),
-      toNumberOrUndefined(formValue.ingenieurRFQId),
-      toNumberOrUndefined(formValue.valeaderId),
+      cqVal,
+      undefined, // quoteName
+      undefined, // numRefQuoted
+      undefined, // sopDate
+      undefined, // maxV
+      undefined, // estV
+      undefined, // koDate
+      undefined, // customerDataDate
+      undefined, // mdDate
+      undefined, // mrDate
+      undefined, // tdDate
+      undefined, // trDate
+      undefined, // ldDate
+      undefined, // lrDate
+      undefined, // cdDate
+      undefined, // materialLeaderId
+      undefined, // testLeaderId
+      undefined, // marketSegmentId
+      clientIdVal,
+      undefined, // ingenieurRFQId
+      undefined, // valeaderId
       this.selectedFile || undefined,
       'body',
       false,
@@ -343,7 +360,7 @@ clearFile(): void {
       next: (response) => {
         console.log('Draft saved successfully', response);
         this.toastService.showToast({
-          message: 'Draft saved successfully',
+          message: 'Draft saved successfully.',
           type: 'success',
           duration: 6000,
           rfqId: (response?.id ?? undefined)?.toString()
@@ -374,7 +391,11 @@ clearFile(): void {
 
     this.onCQChange();
     if (this.cqExists) {
-      alert('CQ already exists. Please change it to proceed.');
+      this.toastService.showToast({
+        message: 'CQ already exists. Please change it to proceed.',
+        type: 'warning',
+        duration: 8000
+      });
       return;
     }
 

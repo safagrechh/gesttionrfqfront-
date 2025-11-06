@@ -1,18 +1,28 @@
-<div class="container modern-page">
-  <div class="col-sm-12">
-    <app-card cardTitle="Ajouter RFQ" [options]="false">
+<div class="row modern-page">
+  <div class="col-12">
+    <div class="card modern-card">
+      <div class="card-body">
 
-      <div class="page-header">
-        <div>
-          <h4>Créer un nouveau RFQ</h4>
-          <p class="text-muted">Renseignez les informations nécessaires et ajoutez les responsables pour chaque domaine.</p>
-        </div>
-        <div class="header-actions">
-          <button type="button" class="btn btn-outline-secondary" (click)="navigateToManage()">
-            <i class="feather icon-arrow-left"></i> Retour
-          </button>
+      <!-- Page Hero -->
+      <div class="section-card page-hero">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-file-plus"></i>
+            <div>
+              <div class="hero-title">Create a new RFQ</div>
+              <div class="hero-subtitle">Provide the required information and assign responsible owners for each area.</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-outline-light back-expand-btn" (click)="navigateToManage()" aria-label="Back">
+              <i class="feather icon-arrow-left"></i>
+              <span class="label">Back</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- Removed separate page-header for actions; back button lives in hero -->
 
       <form [formGroup]="rfqForm" (ngSubmit)="onSubmit()">
         <div class="row g-3">
@@ -44,13 +54,16 @@
                 </div>
               </div>
               <div class="col-md-4 mb-3">
-                <div class="form-group">
-                  <label for="cq">CQ</label>
-                  <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
-                  <div *ngIf="rfqForm.get('cq')?.touched && rfqForm.get('cq')?.invalid" class="text-danger">
-                    <small *ngIf="rfqForm.get('cq')?.hasError('required')">CQ is required.</small>
-                  </div>
+              <div class="form-group">
+                <label for="cq">CQ</label>
+                <input id="cq" class="form-control" formControlName="cq" placeholder="Enter CQ" />
+                <div *ngIf="rfqForm.get('cq')?.touched && rfqForm.get('cq')?.invalid" class="text-danger">
+                  <small *ngIf="rfqForm.get('cq')?.hasError('required')">CQ is required.</small>
                 </div>
+                <div *ngIf="rfqForm.get('cq')?.touched && cqExists" class="text-warning">
+                  <small>CQ already exists. Please choose a different CQ.</small>
+                </div>
+              </div>
               </div>
 
               <div class="col-md-4 mb-3">
@@ -255,7 +268,7 @@
           <div class="section-card">
             <div class="section-header">
               <i class="feather icon-file"></i>
-              <span>Fichier & Responsable</span>
+              <span>File & Owner</span>
             </div>
             <div class="row g-3">
               <div class="col-md-4 mb-3">
@@ -270,7 +283,7 @@
 
               <div class="col-md-4 mb-3">
                 <div class="form-group file-input-group">
-                  <label for="file">Pièce jointe (max {{maxFileSizeMB}}MB)</label>
+                  <label for="file">Attachment (max {{maxFileSizeMB}}MB)</label>
                   <input type="file"
                     (change)="onFileSelected($event)"
                     accept=".pdf,.xml,application/pdf,text/xml,application/xml"
@@ -282,7 +295,7 @@
                       <small class="form-text text-muted">{{(selectedFile.size / 1024 / 1024).toFixed(2)}}MB</small>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearFile()">
-                      <i class="feather icon-x"></i> Retirer
+                      <i class="feather icon-x"></i> Remove
                     </button>
                   </div>
                 </div>
@@ -295,30 +308,38 @@
                     <option *ngFor="let ingenieur of ingenieurs" [value]="ingenieur.id">{{ ingenieur.nomUser }}</option>
                   </select>
                   <div *ngIf="rfqForm.get('ingenieurRFQId')?.touched && rfqForm.get('ingenieurRFQId')?.invalid" class="text-danger">
-                    <small *ngIf="rfqForm.get('ingenieurRFQId')?.hasError('required')">Ingenieur is required.</small>
+                    <small *ngIf="rfqForm.get('ingenieurRFQId')?.hasError('required')">Engineer is required.</small>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Submit actions -->
-          <div class="actions-bar">
-            <div class="actions-inner">
-              <button type="submit" class="btn btn-primary">
-                <i class="feather icon-save"></i> Ajouter
-              </button>
-              <button type="button" class="btn btn-success" (click)="onSubmitBrouillon()">
-                <i class="feather icon-file-plus"></i> Brouillon
-              </button>
-              <button *ngIf="isValidateur" type="button" class="btn btn-danger" (click)="onSubmitValider()">
-                <i class="feather icon-check-circle"></i> Valider
-              </button>
-            </div>
-          </div>
+          <!-- Submit actions replaced by floating icon-only actions -->
+
 
         </div>
-      </form>
-    </app-card>
+  </form>
+      </div>
+    </div>
+  </div>
+  <!-- Floating icon-only actions (outside card to ensure visibility) -->
+  <div class="floating-actions">
+    <div class="floating-actions-inner container">
+      <button type="submit" class="action-expand-btn primary" (click)="onSubmit()">
+        <i class="feather icon-save"></i>
+        <span class="label">Add</span>
+      </button>
+
+      <button type="button" class="action-expand-btn success" (click)="onSubmitBrouillon()">
+        <i class="feather icon-file-plus"></i>
+        <span class="label">Save Draft</span>
+      </button>
+
+      <button *ngIf="isValidateur" type="button" class="action-expand-btn danger" (click)="onSubmitValider()">
+        <i class="feather icon-check-circle"></i>
+        <span class="label">Validate</span>
+      </button>
+    </div>
   </div>
 </div>

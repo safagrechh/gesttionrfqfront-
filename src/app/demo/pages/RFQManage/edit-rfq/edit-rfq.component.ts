@@ -519,7 +519,7 @@ saveDraft(): void {
 
 
   cancel(): void {
-    this.router.navigate(['/rfq-manage/get-rfqs']);
+    this.router.navigate(['/rfq-manage/assigned-rfqs']);
   }
 
 

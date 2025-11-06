@@ -76,7 +76,58 @@ i.icon-edit {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2rem;
+  > div:first-child {
+    margin-top: 2rem; /* add space only above the text block */
+  }
+}
+
+/* Section card wrapper to match Create/Edit pages */
+.section-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1rem;
   margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+}
+
+/* Hero banner to match Create/Edit pages */
+.page-hero {
+  background: rgb(33, 90, 170);
+  color: #fff;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+  border: none;
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+  }
+  .hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .hero-subtitle {
+    opacity: 0.92;
+    font-size: 13px;
+  }
+  i {
+    font-size: 22px;
+    opacity: 0.9;
+  }
 }
 
 /* Modern card container to match Assigned page */
@@ -129,31 +180,68 @@ i.icon-edit {
 }
 
 /* Status toggle styles */
-.status-toggle .btn {
-  border: 1px solid #e5e7eb;
-  background: #f8fafc;
+/* Segmented status toggle to match Assigned RFQs */
+.status-toggle.segmented {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(8, 69, 129, 0.156);
+  border: 1px solid rgba(25, 75, 126, 0.15);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.status-toggle.segmented .toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #334155; /* slate-700 */
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+.status-toggle.segmented .toggle-btn i {
+  color: #6b7280;
+}
+.status-toggle.segmented .toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+.status-toggle.segmented .toggle-btn.active {
+  background: #ffffff;
+  color: #1f2937; /* slate-800 */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.status-toggle.segmented .toggle-btn .count {
+  background: #e7eaf3;
   color: #334155;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
 }
-.status-toggle .btn.btn-pending {
-  background: #ffe8a3;
-  border-color: #ffd35a;
-  color: #5a4707;
+
+/* Unified search bar styling to match Assigned page */
+.modern-search.unified {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
-.status-toggle .btn.btn-pending.active {
-  background: #ffc107;
-  border-color: #ffca2c;
-  color: #3f3106;
+.modern-search.unified i {
+  color: #6b7280;
 }
-.status-toggle .btn.btn-validated {
-  background: #c9f0dd;
-  border-color: #7fd1a7;
-  color: #0c3c24;
-}
-.status-toggle .btn.btn-validated.active {
-  background: #198754;
-  border-color: #198754;
-  color: #ffffff;
+.modern-search.unified .form-control {
+  border: none;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 /* Modern sort controls */
@@ -197,8 +285,10 @@ i.icon-edit {
 .add-rfq-btn i {
   font-size: 18px;
   transition: transform 160ms ease;
-  transform: translateX(18px);
-  line-height: 1;
+  transform: none; /* keep icon centered in the circular button */
+  line-height: 0; /* remove font baseline offset for perfect centering */
+  display: inline-block;
+  margin: 0;
 }
 .add-rfq-btn .label {
   display: inline-block;
@@ -210,7 +300,7 @@ i.icon-edit {
   white-space: nowrap;
 }
 .add-rfq-btn:hover i {
-  transform: translateX(-4px);
+  transform: none; /* avoid shifting icon when label expands */
 }
 .add-rfq-btn:hover .label {
   max-width: 120px;
@@ -351,4 +441,9 @@ i.icon-edit {
   .page-item.disabled .page-link {
     color: #6c757d !important; /* keep disabled subtle */
   }
+}
+
+/* Extra spacing above pagination on Browse RFQ */
+.browse-pagination {
+  margin-top: 2.5rem;
 }

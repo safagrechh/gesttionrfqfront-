@@ -25,6 +25,9 @@ export class ConsulterRFQComponent implements OnInit {
   isAdmin: boolean = false;
   isEngineer: boolean = false;
   isValidator: boolean = false;
+  // Current authenticated user info (used to restrict engineer actions)
+  currentUserName: string | null = null;
+  currentUserId: number | null = null;
   versionsByRFQ: { [rfqId: number]: VersionRFQDetailsDto[] } = {};
   // Modern browse helpers
   searchText: string = '';
@@ -51,6 +54,9 @@ export class ConsulterRFQComponent implements OnInit {
       this.isAdmin = user.role === 2;
       this.isEngineer = user.role === 1;
       this.isValidator = user.role === 0;
+      // Capture user identifiers for assignment checks
+      this.currentUserName = (user as any).nomUser ?? null;
+      this.currentUserId = (user as any).id ?? null;
     });
   }
 
@@ -219,6 +225,36 @@ export class ConsulterRFQComponent implements OnInit {
 
   trackTable(index: number, rfq: RFQDetailsDto): number {
     return rfq.id!;
+  }
+
+  // Segmented toggle counts to mirror Assigned RFQs
+  get countPending(): number {
+    return this.getFilteredRFQsByStatus('pending').length;
+  }
+
+  get countValidated(): number {
+    return this.getFilteredRFQsByStatus('validated').length;
+  }
+
+  get countDraft(): number {
+    return this.isValidator ? this.getFilteredRFQsByStatus('brouillon').length : 0;
+  }
+
+  // Restrict edit visibility for engineers to RFQs assigned to them
+  isAssignedToMe(rfq: RFQDetailsDto): boolean {
+    if (!this.isEngineer) return false;
+    // Prefer name comparison since RFQDetailsDto exposes ingenieurRFQ as string
+    const assignedName = (rfq.ingenieurRFQ || '').trim().toLowerCase();
+    const myName = (this.currentUserName || '').trim().toLowerCase();
+    if (assignedName && myName) {
+      return assignedName === myName;
+    }
+    // Fallback: if future DTO exposes id, compare ids
+    const assignedId = (rfq as any).ingenieurRFQId as number | undefined;
+    if (assignedId && this.currentUserId) {
+      return assignedId === this.currentUserId;
+    }
+    return false;
   }
 
   getFormattedDate(date: string | null): string {

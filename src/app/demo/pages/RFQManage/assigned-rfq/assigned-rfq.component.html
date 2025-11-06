@@ -2,21 +2,43 @@
   <div class="col-12">
     <div class="card modern-card">
       <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-          <h5 class="mb-0">Assigned RFQs</h5>
+        <!-- Page Hero -->
+        <div class="section-card page-hero">
+          <div class="hero-content">
+            <div class="hero-left">
+              <i class="feather icon-user-check"></i>
+              <div>
+                <div class="hero-title">Assigned RFQs</div>
+                <div class="hero-subtitle">Review RFQs assigned to you and manage their status.</div>
+              </div>
+            </div>
+            <div class="hero-actions">
+              <!-- No primary action button here; filters are below -->
+            </div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end mb-3 flex-wrap gap-2">
           <div class="d-flex align-items-center gap-3">
-            <div class="btn-group status-toggle" role="group" aria-label="Filter by status">
-              <button type="button" class="btn btn-sm" [class.active]="filterStatus==='all'" (click)="filterStatus='all'; applyFilter()">
-                All <span class="badge bg-light text-dark ms-1">{{ countAll }}</span>
+            <div class="status-toggle segmented" role="group" aria-label="Filter by status">
+              <button type="button" class="toggle-btn all" [class.active]="filterStatus==='all'" (click)="filterStatus='all'; applyFilter()">
+                <i class="feather icon-grid"></i>
+                <span>All</span>
+                <span class="count">{{ countAll }}</span>
               </button>
-              <button type="button" class="btn btn-sm btn-pending" [class.active]="filterStatus==='pending'" (click)="filterStatus='pending'; applyFilter()">
-                Pending <span class="badge bg-light text-dark ms-1">{{ countPending }}</span>
+              <button type="button" class="toggle-btn pending" [class.active]="filterStatus==='pending'" (click)="filterStatus='pending'; applyFilter()">
+                <i class="feather icon-clock"></i>
+                <span>Pending</span>
+                <span class="count">{{ countPending }}</span>
               </button>
-              <button type="button" class="btn btn-sm btn-validated" [class.active]="filterStatus==='validated'" (click)="filterStatus='validated'; applyFilter()">
-                Validated <span class="badge bg-light text-dark ms-1">{{ countValidated }}</span>
+              <button type="button" class="toggle-btn validated" [class.active]="filterStatus==='validated'" (click)="filterStatus='validated'; applyFilter()">
+                <i class="feather icon-check-circle"></i>
+                <span>Validated</span>
+                <span class="count">{{ countValidated }}</span>
               </button>
-              <button *ngIf="isEngineer" type="button" class="btn btn-sm" [class.active]="filterStatus==='draft'" (click)="filterStatus='draft'; applyFilter()">
-                Draft <span class="badge bg-light text-dark ms-1">{{ countDraft }}</span>
+              <button *ngIf="isEngineer" type="button" class="toggle-btn draft" [class.active]="filterStatus==='draft'" (click)="filterStatus='draft'; applyFilter()">
+                <i class="feather icon-file-text"></i>
+                <span>Draft</span>
+                <span class="count">{{ countDraft }}</span>
               </button>
             </div>
             <div class="modern-search unified" style="max-width: 360px;">
@@ -36,7 +58,7 @@
             <div class="rfq-card h-100" [class.is-draft]="rfq.brouillon">
               <span *ngIf="rfq.brouillon" class="draft-ribbon">Draft</span>
               <div class="rfq-card-header d-flex align-items-center justify-content-between">
-                <span class="badge bg-primary">RFQ N°{{ rfq.id }}</span>
+                <span class="badge bg-primary" *ngIf="!rfq.brouillon">RFQ N°{{ rfq.id }}</span>
                 <span *ngIf="!rfq.brouillon" class="badge" [ngClass]="{
                   'bg-success': rfq.valide === true && rfq.rejete !== true,
                   'bg-danger': rfq.rejete === true,
@@ -53,20 +75,20 @@
                   <div><i class="feather icon-layers me-1"></i> Versions: {{ rfq.versionsCount ?? 0 }}</div>
                 </div>
               </div>
-              <div class="rfq-card-actions d-flex justify-content-between align-items-center">
-                <a [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" class="btn btn-sm btn-outline-primary">
-                  <i class="feather icon-eye me-1"></i> View
+              <div class="rfq-card-actions d-flex justify-content-end align-items-center gap-2">
+                <a class="icon-btn view" [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
+                  <i class="feather icon-eye"></i>
                 </a>
-                <a *ngIf="isEngineer" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" class="btn btn-sm btn-primary">
-                  <i class="feather icon-edit me-1"></i> Edit
+                <a class="icon-btn edit" *ngIf="isEngineer" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Edit RFQ">
+                  <i class="feather icon-edit"></i>
                 </a>
-              <span *ngIf="rfq.brouillon" class="draft-watermark">DRAFT</span>
-            </div>
+                <span *ngIf="rfq.brouillon" class="draft-watermark">DRAFT</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="d-flex justify-content-center mt-3" *ngIf="filtered.length > pageSize">
+        <div class="d-flex justify-content-center assigned-pagination" *ngIf="filtered.length > pageSize">
           <ngb-pagination
             class="pagination-dark"
             [collectionSize]="filtered.length"

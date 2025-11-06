@@ -4,6 +4,54 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
+/* Section card wrapper to match other pages */
+.section-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+}
+
+/* Hero banner styling to match Create/Edit/Browse/View */
+.page-hero {
+  background: rgb(33, 90, 170);
+  color: #fff;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+  border: none;
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+  }
+  .hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .hero-subtitle {
+    opacity: 0.92;
+    font-size: 13px;
+  }
+  i {
+    font-size: 22px;
+    opacity: 0.9;
+  }
+}
+
 .modern-search .input-group-text {
   background: #f6f7fb;
   border: 1px solid #e5e7eb;
@@ -111,6 +159,11 @@
   background: #1d4ed8;
 }
 
+/* Add more breathing room above pagination */
+.assigned-pagination {
+  margin-top: 2.5rem; /* increase spacing between RFQ grid and pagination */
+}
+
 /* Status toggle styles: revert to default buttons */
 .status-toggle .btn {
   transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
@@ -171,4 +224,102 @@
   .page-item.disabled .page-link {
     color: #6c757d !important; /* keep disabled subtle */
   }
+}
+.status-toggle.segmented {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(8, 69, 129, 0.156); /* match pagination navy (#00264d) with light opacity */
+  border: 1px solid rgba(25, 75, 126, 0.15);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.status-toggle.segmented .toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #334155; /* slate-700 */
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+.status-toggle.segmented .toggle-btn i {
+  color: #6b7280; /* slate-500 */
+}
+.status-toggle.segmented .toggle-btn .count {
+  display: inline-block;
+  padding: 0 8px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(0, 38, 77, 0.35); /* stronger tint for pill, pagination navy */
+  color: #ffffff; /* white numbers */
+}
+.status-toggle.segmented .toggle-btn.active {
+  background: #ffffff;
+  color: #111827; /* gray-900 */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.status-toggle.segmented .toggle-btn.active i {
+  color: #111827;
+}
+
+/* Icon-only action buttons to match Consulter RFQ */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.125);
+  color: inherit;
+  background-color: #ffffff;
+  text-decoration: none;
+}
+.icon-btn:hover {
+  background-color: #fff;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+}
+
+/* Switched colors: filled background + white icon */
+.icon-btn.view {
+  background-color: rgba(33, 90, 170, 0.12); /* very light view tint */
+  border-color: rgba(33, 90, 170, 0.28);
+  color: #fff;
+}
+.icon-btn.view i.icon-eye { color: #070707 !important; }
+.icon-btn.view:hover {
+  background-color: rgba(33, 90, 170, 0.18);
+  box-shadow: 0 0.5rem 1rem rgba(33, 90, 170, 0.35);
+}
+
+.icon-btn.edit {
+  background-color: rgba(167, 112, 40, 0.12); /* very light edit tint */
+  border-color: rgba(167, 112, 40, 0.28);
+  color: #fff;
+}
+.icon-btn.edit i.icon-edit { color: #060606 !important; }
+.icon-btn.edit:hover {
+  background-color: rgba(167, 112, 40, 0.18);
+  box-shadow: 0 0.5rem 1rem rgba(167, 112, 40, 0.35);
+}
+
+/* State-specific active colors */
+.status-toggle.segmented .toggle-btn.pending.active {
+  background: #ffe8a3; /* soft yellow */
+  color: #3f3106;
+}
+.status-toggle.segmented .toggle-btn.validated.active {
+  background: #c9f0dd; /* soft green */
+  color: #0c3c24;
+}
+.status-toggle.segmented .toggle-btn.draft.active {
+  background: #e5e7eb; /* gray */
+  color: #111827;
 }

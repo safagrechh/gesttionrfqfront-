@@ -1,29 +1,40 @@
 <div class="col-sm-12">
   <div class="card modern-card">
     <div class="card-body">
-        <div class="page-header">
-          <div>
-            <h5 class="mb-1">Browse RFQs</h5>
-            <p class="text-muted mb-0">Browse, filter and manage RFQs pending or validated.</p>
-          </div>
-          <div class="header-actions">
-            <a routerLink="/rfq-manage/create-rfq" class="btn btn-primary add-rfq-btn" title="Add RFQ">
-              <i class="feather icon-plus"></i>
-              <span class="label">Add RFQ</span>
-            </a>
+        <!-- Page Hero -->
+        <div class="section-card page-hero">
+          <div class="hero-content">
+            <div class="hero-left">
+              <i class="feather icon-search"></i>
+              <div>
+                <div class="hero-title">Browse RFQs</div>
+                <div class="hero-subtitle">Browse, filter and manage RFQs pending or validated.</div>
+              </div>
+            </div>
+            <div class="hero-actions">
+              <a routerLink="/rfq-manage/create-rfq" class="btn btn-outline-light add-rfq-btn" title="Add RFQ">
+                <i class="feather icon-plus"></i>
+                <span class="label">Add RFQ</span>
+              </a>
+            </div>
           </div>
         </div>
-      <div class="row align-items-center mb-3">
-        <div class="col-md-6 status-toggle d-flex gap-2">
-          <button class="btn btn-pending" [class.active]="currentFilter==='pending'" (click)="setFilter('pending')">Pending</button>
-          <button class="btn btn-validated" [class.active]="currentFilter==='validated'" (click)="setFilter('validated')">Validated</button>
-          <button class="btn" [class.active]="currentFilter==='brouillon'" (click)="setFilter('brouillon')" *ngIf="isValidator">Draft</button>
+      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div class="status-toggle segmented" role="group" aria-label="Filter by status">
+          <button type="button" class="toggle-btn pending" [class.active]="currentFilter==='pending'" (click)="setFilter('pending')">
+            <i class="feather icon-clock"></i>
+            <span>Pending</span>
+            <span class="count">{{ countPending }}</span>
+          </button>
+          <button type="button" class="toggle-btn validated" [class.active]="currentFilter==='validated'" (click)="setFilter('validated')">
+            <i class="feather icon-check-circle"></i>
+            <span>Validated</span>
+            <span class="count">{{ countValidated }}</span>
+          </button>
         </div>
-        <div class="col-md-6">
-          <div class="modern-search unified">
-            <i class="feather icon-search"></i>
-            <input type="text" class="form-control" placeholder="Search RFQs by id, CQ, quote, client" [(ngModel)]="searchText">
-          </div>
+        <div class="modern-search unified" style="max-width: 360px;">
+          <i class="feather icon-search"></i>
+          <input type="text" class="form-control" placeholder="Search RFQs by id, CQ, quote, client" [(ngModel)]="searchText">
         </div>
       </div>
 
@@ -84,7 +95,7 @@
               <a class="icon-btn" [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
                 <i class="feather icon-eye"></i>
               </a>
-              <a class="icon-btn" *ngIf="isEngineer && currentFilter!=='validated'" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Edit RFQ">
+              <a class="icon-btn" *ngIf="currentFilter!=='validated' && ((isEngineer && isAssignedToMe(rfq)) || isValidator)" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Edit RFQ">
                 <i class="feather icon-edit"></i>
               </a>
               <a class="icon-btn text-danger" *ngIf="isAdmin" href="javascript:void(0)" (click)="delete(rfq.id)" title="Delete RFQ">
@@ -95,7 +106,7 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center mt-3">
+      <div class="d-flex justify-content-center browse-pagination">
         <ngb-pagination
           class="pagination-dark"
           [collectionSize]="getFilteredRFQsByStatus(currentFilter).length"

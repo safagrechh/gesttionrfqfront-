@@ -1,15 +1,37 @@
-<div class="container">
-  <div class="col-sm-12">
-    <app-card cardTitle="Create Version" [options]="false">
+<div class="row modern-page">
+  <div class="col-12">
+    <div class="card modern-card">
+      <div class="card-body">
+
+      <!-- Page Hero -->
+      <div class="section-card page-hero">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-file-plus"></i>
+            <div>
+              <div class="hero-title">Create a new Version</div>
+              <div class="hero-subtitle">Mirror RFQ create: fill details, materials, tests, and ownership.</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-outline-light back-expand-btn" (click)="navigateBack()" aria-label="Back">
+              <i class="feather icon-arrow-left"></i>
+              <span class="label">Back</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
       <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
-        <div class="row">
+        <div class="row g-3">
 
-          <!-- Client -->
-          <!-- Client -->
-          <div class="row" >
-            <h6> Client </h6>
-            <hr />
+          <!-- Client & RFQ Basics -->
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-user"></i>
+              <span>Client & RFQ</span>
+            </div>
+            <div class="row g-3">
             <div class="col-md-4 mb-3">
            <div class="form-group">
             <label for="clientId">Client</label>
@@ -21,8 +43,6 @@
             <div *ngIf="createForm.get('clientId')?.touched && createForm.get('clientId')?.invalid" class="text-danger">
               <small *ngIf="createForm.get('clientId')?.hasError('required')">Client selection is required.</small>
             </div>
-
-
            </div>
             </div>
           <div class="col-md-4 mb-3" *ngIf="selectedClient">
@@ -40,13 +60,6 @@
               </div>
             </div>
             </div>
-        </div>
-
-
-          <!-- RFQ -->
-          <div class="row">
-            <h6> RFQ </h6>
-            <hr />
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="quoteName">Quote Name</label>
@@ -85,12 +98,16 @@
                 <input id="estV" class="form-control" formControlName="estV" placeholder="Enter estimated value" type="number" />
               </div>
             </div>
+            </div>
           </div>
 
           <!-- Materials -->
-          <div class="row">
-            <h6> Materials </h6>
-            <hr />
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-package"></i>
+              <span>Materials</span>
+            </div>
+            <div class="row g-3">
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="koDate">KO Date</label>
@@ -123,12 +140,16 @@
                 <input id="mrDate" class="form-control" formControlName="mrDate" type="date" />
               </div>
             </div>
+            </div>
           </div>
 
           <!-- Test -->
-          <div class="row">
-            <h6> Test </h6>
-            <hr />
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-cpu"></i>
+              <span>Test</span>
+            </div>
+            <div class="row g-3">
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="testLeaderId">Test Leader</label>
@@ -149,12 +170,16 @@
                 <input id="trDate" class="form-control" formControlName="trDate" type="date" />
               </div>
             </div>
+            </div>
           </div>
 
           <!-- VA -->
-          <div class="row">
-            <h6> VA </h6>
-            <hr />
+          <div class="section-card">
+            <div class="section-header">
+              <i class="feather icon-users"></i>
+              <span>VA</span>
+            </div>
+            <div class="row g-3">
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label for="valeaderId">VA Leader</label>
@@ -189,7 +214,7 @@
                 </select>
               </div>
             </div> -->
-          
+            </div>
           </div>
           <div class="col-md-4 mb-3">
             <div class="form-group">
@@ -215,16 +240,19 @@
             </select>
           </div>
 
-          <!-- Submit button -->
-          <div class="d-flex justify-content-center mt-4">
-            <button  type="submit" class="btn btn-outline-primary">
-              <i class="feather icon-save"></i> Ajouter Version
-            </button>
+          <!-- Floating bottom actions -->
+          <div class="floating-actions">
+            <div class="floating-actions-inner">
+              <button type="submit" class="action-expand-btn primary">
+                <i class="feather icon-save"></i>
+                <span class="label">Create Version</span>
+              </button>
+            </div>
           </div>
-
 
         </div>
       </form>
-    </app-card>
+      </div>
+    </div>
   </div>
 </div>
