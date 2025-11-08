@@ -134,8 +134,19 @@ h2 {
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 12px;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem; /* slightly more space between sections */
   box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+}
+
+/* Section headers: give space between icon and title, and below header */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between icon and title */
+  margin-bottom: 0.5rem; /* space before fields start */
+}
+.section-header i {
+  font-size: 1.1rem;
 }
 
 /* Hero banner styling to match Create/Edit pages */
@@ -182,8 +193,11 @@ form .row > .row {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem; /* align with section spacing */
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+  /* Ensure section width matches the title bar by neutralizing row's negative margins */
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Tidy headers and separators inside section cards */
@@ -197,4 +211,426 @@ form .row > .row hr {
   border-top: 1px solid #e5e7eb;
   opacity: 1;
   margin: 0.25rem 0 0.75rem 0;
+}
+
+/* Modern card wrapper for consistent spacing and polish */
+.modern-card {
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 14px 28px rgba(16,24,40,0.08);
+}
+
+/* Apply specific polish only to detail cards (RFQ/Version) */
+.modern-card.details-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background-color: rgb(0, 94, 201);
+}
+:host ::ng-deep .modern-card.details-card .card-body {
+  padding: 1rem 1.5rem; /* add left/right padding inside details card */
+}
+
+/* Add horizontal space around small sections inside the details card */
+.modern-card.details-card .section-card {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+.modern-card.details-card .section-card .col-md-3,
+.modern-card.details-card .section-card .col-md-4,
+.modern-card.details-card .section-card .col-md-6 {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+/* Comments card border styling to match modern-card aesthetics */
+.modern-card.comments-card {
+  /* Match section-card borders and radius */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+  background-color: #fff;
+}
+.modern-card.comments-card .card-body {
+  padding: 1rem 1.25rem;
+}
+
+/* Add subtle spacing around comments grids */
+.comments-card {
+  margin-bottom: 0.25rem;
+}
+
+/* Ensure inner app-card doesn't mask the details-card tint */
+:host ::ng-deep .modern-card.details-card app-card .card {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+:host ::ng-deep .modern-card.details-card app-card .card-body {
+  padding: 0; /* avoid double padding when nested in details-card */
+}
+
+/* Floating actions: fixed quick-access bar */
+.floating-actions {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.floating-actions-inner {
+  display: flex;
+  gap: 10px;
+}
+
+.action-expand-btn {
+  background: #1f2937; /* Gray-800 */
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: 0 12px 24px rgba(31,41,55,0.28);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+.action-expand-btn .label {
+  display: inline-block;
+  font-size: 13px;
+}
+.action-expand-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px rgba(31,41,55,0.34);
+}
+.action-expand-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 12px 24px rgba(31,41,55,0.28);
+}
+.action-expand-btn i {
+  font-size: 18px;
+}
+
+/* Variants */
+.action-expand-btn.success,
+.action-expand-btn.win {
+  background: #10b981; /* emerald-500 */
+}
+.action-expand-btn.danger {
+  background: #ef4444; /* red-500 */
+}
+
+/* Edit/Warning variant: yellow buttons for edit actions */
+.action-expand-btn.warning,
+.action-expand-btn.edit {
+  background: #fbbf24; /* amber-400 */
+  color: #111827; /* gray-900 for contrast */
+  box-shadow: 0 12px 24px rgba(251, 191, 36, 0.35);
+}
+.action-expand-btn.warning:hover,
+.action-expand-btn.edit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px rgba(251, 191, 36, 0.45);
+}
+
+/* Comment variant: modern blue comment button */
+.action-expand-btn.comment {
+  background: #3b82f6; /* blue-500 */
+  color: #ffffff;
+  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
+}
+.action-expand-btn.comment:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px rgba(59, 130, 246, 0.45);
+}
+.action-expand-btn.comment i {
+  color: #ffffff;
+}
+
+/* Icon-only action buttons: compact square buttons */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.125);
+  color: inherit;
+  background-color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.icon-btn:hover {
+  background-color: #fff;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+}
+
+/* Comment icon variant: soft blue tint */
+.icon-btn.comment {
+  background-color: rgba(59, 130, 246, 0.12); /* blue-500 tint */
+  border-color: rgba(59, 130, 246, 0.28);
+}
+.icon-btn.comment:hover {
+  background-color: rgba(59, 130, 246, 0.18);
+  box-shadow: 0 0.5rem 1rem rgba(59, 130, 246, 0.35);
+}
+.icon-btn.comment i {
+  color: #0a0a0a !important;
+}
+
+/* Borderless top-right floating send icon */
+.comments-card {
+  position: relative;
+}
+.send-icon-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: #2563eb; /* blue-600 */
+  cursor: pointer;
+  border-radius: 50%; /* circular hit area for modern feel */
+  transition: transform 0.15s ease, opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.send-icon-top-right i {
+  font-size: 26px;
+  line-height: 1;
+}
+.send-icon-top-right:hover {
+  transform: translateY(-1px);
+  color: #1d4ed8; /* blue-700 */
+  background-color: rgba(37, 99, 235, 0.10);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.20);
+}
+.send-icon-top-right:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+/* Ensure link buttons look like buttons */
+a.action-expand-btn {
+  text-decoration: none;
+}
+/* Spacing between main title and status badge in RFQ/Version headers */
+.rfq-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 2rem; /* increase horizontal distance */
+  row-gap: 0.5rem;  /* spacing when wrapping on small screens */
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0; /* keep header compact */
+  }
+
+  .badge {
+    margin-left: 1rem; /* extra breathing room from title */
+  }
+}
+
+/* Increase spacing between icon and title in details section headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* widen icon–title spacing */
+  margin-bottom: 0.75rem; /* more space below header */
+}
+.rfq-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  margin-bottom: 1.5rem; /* clear separation from next sections */
+}
+
+.rfq-title-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rfq-title-left i {
+  font-size: 1.25rem;
+  color: #6c757d; /* muted icon color */
+}
+
+.rfq-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.status-badge {
+  font-weight: 600;
+}
+.pipeline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3rem; /* even more space so shadows don’t overlap */
+  padding: 5rem 1rem; /* extra breathing room so shadows aren’t clipped */
+  overflow-x: auto;
+  overflow-y: visible; /* keep vertical shadows visible */
+}
+
+.pipeline-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%; /* move line up a bit for better alignment */
+  transform: translateY(-50%);
+  height: 4px;
+  background: linear-gradient(90deg, #93c4fd6f 0%, #93c4fd7e 100%); /* blue track */
+  border-radius: 9999px;
+}
+
+.pipeline-step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 8px 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.1); /* softer, smoother shadow */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+.pipeline-step:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+}
+.pipeline-step.selected {
+  border-color: #9ca3af; /* neutral gray, no blue tint */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14); /* neutral glow */
+}
+
+.pipeline-node {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #f3f4f6; /* gray-100 */
+  color: #374151; /* gray-700 */
+}
+.pipeline-node i {
+  font-size: 16px;
+}
+
+.pipeline-label .title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.pipeline-label .subtitle {
+  font-size: 12px;
+  color: #6b7280; /* gray-500 */
+}
+
+/* Status colors */
+.pipeline-step.valid .pipeline-node {
+  background: #d1fae5; /* emerald-100 */
+  color: #047857; /* emerald-700 */
+}
+.pipeline-step.pending .pipeline-node {
+  background: #fef3c7; /* amber-100 */
+  color: #b45309; /* amber-700 */
+}
+.pipeline-step.rejected .pipeline-node {
+  background: #fee2e2; /* red-100 */
+  color: #b91c1c; /* red-700 */
+}
+.rfq-title-bar--compact {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+}
+.rfq-title-bar--compact .title-icon {
+  width: 28px;
+  height: 28px;
+}
+.rfq-title-bar--compact .title-icon i {
+  font-size: 14px;
+}
+.rfq-title-bar--compact .rfq-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Centered title bar variant with distinct borders */
+.rfq-title-bar--centered {
+  justify-content: center;
+  gap: 0.5rem;
+  border-style: dashed;
+  border-color: #2e68be; /* gray-300 */
+  border-width: 2px;
+  border-radius: 12px;
+  background: #fbfbfb;
+}
+.rfq-title-bar--centered .rfq-title {
+  font-size: 1.1rem; /* modest size per request */
+  font-weight: 600;
+}
+.rfq-title-bar--centered .title-icon i {
+  font-size: 1rem;
+  color: #6b7280; /* gray-500 */
+}
+
+/* Back button: match Create/Edit hover-reveal behavior */
+.back-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  transition: border-radius 160ms ease, width 160ms ease, padding 160ms ease;
+}
+.back-expand-btn i {
+  font-size: 18px;
+  transition: transform 160ms ease;
+  transform: translateX(18px);
+  line-height: 1;
+}
+.back-expand-btn .label {
+  display: inline-block;
+  max-width: 0;
+  width: 0;
+  opacity: 0;
+  transition: max-width 200ms ease, opacity 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+}
+.back-expand-btn:hover i {
+  transform: translateX(-4px);
+}
+.back-expand-btn:hover .label {
+  max-width: 120px;
+  width: auto;
+  opacity: 1;
+  transform: translateX(0);
+}
+.back-expand-btn:hover {
+  border-radius: 999px;
+  padding: 0 12px;
+  width: auto;
+  gap: 8px;
 }

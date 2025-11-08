@@ -21,44 +21,132 @@
   </div>
 </div>
 
+<!-- Floating Actions: quick access for common RFQ actions -->
+  <div class="floating-actions">
+    <div class="floating-actions-inner">
+    <!-- Download RFQ file when viewing RFQ -->
+    <button *ngIf="rfq?.fileName" type="button" class="action-expand-btn" (click)="downloadFile(idrfq)" title="Download RFQ">
+      <i class="feather icon-download-cloud"></i>
+      <span class="label">Download RFQ</span>
+    </button>
+
+    <!-- Download Version file when a version is selected -->
+    <button *ngIf="selectedVersion?.fileName" type="button" class="action-expand-btn" (click)="downloadFileV(selectedVersion.id)" title="Download Version">
+      <i class="feather icon-download"></i>
+      <span class="label">Download Version</span>
+    </button>
+
+    <!-- Validate RFQ when viewing RFQ (no version selected) -->
+    <button *ngIf="!selectedVersion && isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
+            type="button" class="action-expand-btn success" (click)="onSubmitValider()" title="Valider RFQ">
+      <i class="feather icon-check-circle"></i>
+      <span class="label">Valider RFQ</span>
+    </button>
+
+    <!-- Validate Version when a version is selected -->
+    <button *ngIf="selectedVersion && isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
+            type="button" class="action-expand-btn success" (click)="onSubmitValiderV()" title="Valider Version">
+      <i class="feather icon-check-circle"></i>
+      <span class="label">Valider Version</span>
+    </button>
+
+    <!-- Edit RFQ only when RFQ is displayed (no version selected) and not valid -->
+  <a *ngIf="!selectedVersion && (isValidateur || isAdmin) && rfq?.valide === false" class="action-expand-btn warning" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" title="Edit RFQ">
+      <i class="feather icon-edit"></i>
+      <span class="label">Edit RFQ</span>
+    </a>
+
+    <!-- Edit Version (non-admin, when version not validated) -->
+    <a *ngIf="selectedVersion && !isAdmin && !isBrouillon && selectedVersion?.valide === false"
+       class="action-expand-btn warning"
+       [routerLink]="'/rfq-manage/edit-version/' + idrfq +'/' + selectedVersion?.id"
+       title="Edit Version">
+      <i class="feather icon-edit"></i>
+      <span class="label">Edit Version</span>
+    </a>
+
+    <!-- Add Version (same visibility case as Win/Lose buttons) -->
+    <a *ngIf="!isAdmin && areAllVersionsValid() && rfqinitial?.valide && rfqinitial?.statut === null"
+       class="action-expand-btn success" [routerLink]="'/rfq-manage/ajouter-version/' + idrfq" title="Add Version">
+      <i class="feather icon-plus"></i>
+      <span class="label">Add Version</span>
+    </a>
+
+    <!-- Win/Lose actions (only when RFQ valid and all versions valid, non-admin) -->
+    <button *ngIf="!isAdmin && areAllVersionsValid() && rfqinitial?.valide && rfqinitial?.statut === null"
+            type="button" class="action-expand-btn win" (click)="updateRFQStatus('win')" title="Win RFQ">
+      <i class="feather icon-check-circle"></i>
+      <span class="label">Win</span>
+    </button>
+    <button *ngIf="!isAdmin && areAllVersionsValid() && rfqinitial?.valide && rfqinitial?.statut === null"
+            type="button" class="action-expand-btn danger" (click)="updateRFQStatus('lose')" title="Lose RFQ">
+      <i class="feather icon-x-circle"></i>
+      <span class="label">Lose</span>
+    </button>
+  </div>
+</div>
+
 <div class="container">
   <div class="col-sm-12">
-    <app-card cardTitle="RFQ Versions" [options]="false">
+    <div class="row section-card">
+
       <div class="workflow-container">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>RFQ N°{{ idrfq }} - Versions</h2>
-          <div>
+        <div class="rfq-title-bar rfq-title-bar--centered">
+          <div class="title-icon"><i class="fas fa-stream"></i></div>
+          <h3 class="rfq-title">RFQ N°{{ idrfq }} - Versions</h3>
+          <div class="rfq-title-badges">
             <span *ngIf="rfqinitial?.statut === 0" class="badge bg-success p-2">Won</span>
             <span *ngIf="rfqinitial?.statut === 1" class="badge bg-danger p-2">Lost</span>
           </div>
         </div>
-        <div class="line"></div>
-        <div class="workflow" >
-          <!-- RFQ Step -->
-          <div class="step" [ngClass]="{
-              'valid': rfqinitial?.valide,
-              'pending': !rfqinitial?.valide && !rfqinitial?.rejete,
-              'rejected': rfqinitial?.rejete,
-
-            }" (click)="onRFQClick()">
-            <div class="circle">
-              <span>{{ rfqinitial?.valide ? '✔' : (rfqinitial?.rejete ? '✖' : '―') }}</span>
+        <div class="pipeline">
+          <div class="pipeline-track"></div>
+          <!-- RFQ Node -->
+          <button type="button"
+                  class="pipeline-step"
+                  [class.valid]="rfqinitial?.valide"
+                  [class.pending]="!rfqinitial?.valide && !rfqinitial?.rejete"
+                  [class.rejected]="rfqinitial?.rejete"
+                  [class.selected]="!selectedVersion"
+                  (click)="onRFQClick()"
+                  title="RFQ initial">
+            <div class="pipeline-node">
+              <i class="feather" [ngClass]="{
+                'icon-check-circle': rfqinitial?.valide,
+                'icon-x-circle': rfqinitial?.rejete,
+                'icon-minus': !rfqinitial?.valide && !rfqinitial?.rejete
+              }"></i>
             </div>
-            <h3>V0_{{ idrfq }}</h3>
-            <p>{{ rfqinitial?.valide ? 'Validé' : (rfqinitial?.rejete ? 'Rejeté' : 'En attente') }}</p>
-          </div>
-
-          <!-- Dynamically Generated Version Steps -->
-          <div class="step" *ngFor="let version of versions; let i = index" (click)="onVersionClick(version.id)" [ngClass]="{ 'valid': version?.valide, 'pending': !version?.valide && !version?.rejete, 'rejected': version?.rejete }">
-            <div class="circle">
-              <span>{{ version?.valide ? '✔' : (version?.rejete ? '✖' : '―') }}</span>
+            <div class="pipeline-label">
+              <div class="title">V0_{{ idrfq }}</div>
+              <div class="subtitle">{{ rfqinitial?.valide ? 'Validé' : (rfqinitial?.rejete ? 'Rejeté' : 'En attente') }}</div>
             </div>
-            <h3>V{{i+1}}_{{ idrfq }}</h3>
-            <p>{{ version?.valide ? 'Validé' : (version?.rejete ? 'Rejeté' : 'En attente') }}</p>
-          </div>
+          </button>
 
+          <!-- Version Nodes -->
+          <button type="button"
+                  class="pipeline-step"
+                  *ngFor="let version of versions; let i = index"
+                  (click)="onVersionClick(version.id)"
+                  [class.valid]="version?.valide"
+                  [class.pending]="!version?.valide && !version?.rejete"
+                  [class.rejected]="version?.rejete"
+                  [class.selected]="selectedVersion?.id === version?.id"
+                  title="Version V{{ i+1 }}">
+            <div class="pipeline-node">
+              <i class="feather" [ngClass]="{
+                'icon-check-circle': version?.valide,
+                'icon-x-circle': version?.rejete,
+                'icon-minus': !version?.valide && !version?.rejete
+              }"></i>
+            </div>
+            <div class="pipeline-label">
+              <div class="title">V{{ i+1 }}_{{ idrfq }}</div>
+              <div class="subtitle">{{ version?.valide ? 'Validé' : (version?.rejete ? 'Rejeté' : 'En attente') }}</div>
+            </div>
+          </button>
         </div>
-        <div *ngIf="!isAdmin  && areAllVersionsValid() " class="d-flex justify-content-end mb-3">
+        <!-- <div *ngIf="!isAdmin  && areAllVersionsValid() " class="d-flex justify-content-end mb-3">
           <button *ngIf="rfqinitial?.valide && rfqinitial?.statut === null"
                   class="btn btn-success me-2"
                   (click)="updateRFQStatus('win')">
@@ -76,10 +164,11 @@
              class="btn btn-outline-success add-version-btn">
             <i class="feather icon-plus"></i> une nouvelle version
           </a>
-        </div>
+        </div> -->
 
       </div>
-    </app-card>
+
+    </div>
   </div>
 </div>
 
@@ -89,13 +178,18 @@
 
 <div class="container">
   <div *ngIf="rfq" class="col-sm-12">
-    <app-card cardTitle="Basic Component" [options]="false">
+    <div class="row section-card">
+      <div class="col-12">
+
 
       <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>RFQ N°{{ idrfq }}</h3>
+      <div class="rfq-title-bar mb-4">
+        <div class="rfq-title-left">
+          <i class="feather icon-file-text"></i>
+          <h2 class="rfq-title">RFQ N°{{ idrfq }}</h2>
+        </div>
         <span
-          class="badge rounded-pill px-3 py-2"
+          class="badge rounded-pill px-3 py-2 status-badge"
           [ngClass]="{
             'bg-warning text-dark': !rfq.valide && !rfq.rejete,
             'bg-success': rfq.valide,
@@ -108,10 +202,13 @@
 
       <!-- Formulaire RFQ en lecture seule -->
       <form [formGroup]="rfqForm">
-        <div class="row">
+        <div class="row g-3">
           <!-- Client Section -->
-          <div class="row">
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-user"></i>
+              <span>Client</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Client</label>
@@ -127,9 +224,11 @@
           </div>
 
           <!-- RFQ Section -->
-          <div class="row">
-            <h6>RFQ</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-file-text"></i>
+              <span>RFQ Details</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Quote Name</label>
@@ -169,9 +268,11 @@
           </div>
 
           <!-- Materials Section -->
-          <div class="row">
-            <h6>Materials</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-package"></i>
+              <span>Materials</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>KO Date</label>
@@ -205,9 +306,11 @@
           </div>
 
           <!-- Test Section -->
-          <div class="row">
-            <h6>Test</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-activity"></i>
+              <span>Test</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Test Leader</label>
@@ -229,9 +332,11 @@
           </div>
 
           <!-- VA Section -->
-          <div class="row">
-            <h6>VA</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-briefcase"></i>
+              <span>VA</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>VA Leader</label>
@@ -273,9 +378,17 @@
           </div>
 
           <!-- RFQ Engineer Section -->
-          <div class="form-group">
-            <label>RFQ Engineer</label>
-            <input class="form-control" [value]="rfq.ingenieurRFQ" disabled />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-user-check"></i>
+              <span>RFQ Engineer</span>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>RFQ Engineer</label>
+                <input class="form-control" [value]="rfq.ingenieurRFQ" disabled />
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -284,97 +397,28 @@
 
 
 
-      <!-- Boutons d'action -->
-      <div class="d-flex justify-content-center mt-4">
-        <!-- <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
-                type="button" class="btn btn-outline-danger"
-                (click)="onSubmitRejeter()">
-          <i class="feather icon-x-circle"></i> Rejeter
-        </button> -->
-        <button *ngIf="isValidateur && !isBrouillon && rfq?.valide === false && rfq?.rejete === false"
-                type="button" class="btn btn-outline-success"
-                (click)="onSubmitValider()">
-          <i class="feather icon-check-circle"></i> Valider
-        </button>
-        <a  [routerLink]="'/rfq-manage/edit-rfq/' + idrfq" *ngIf=" !isAdmin && !isBrouillon && rfq?.valide === false"
-                type="button" class="btn btn-outline-warning">
-          <i class="feather icon-edit"></i> Editer
-        </a>
 
-        <a  *ngIf="!isAdmin && isBrouillon" [routerLink]="'/rfq-manage/edit-rfq/' + idrfq"
-                type="button" class="btn btn-outline-warning">
-          <i class="feather icon-edit"></i> Finaliser Brouillon
-        </a>
-        <a *ngIf="isAdmin"
-                          href="javascript:void(0)"
-                          (click)="delete(idrfq)"
-                          title="Delete RFQ"
-                          class="ms-2 text-danger">
-                         <i class="feather icon-trash-2"></i>
-                       </a>
-      </div>
-    </app-card>
-
-    <app-card  *ngIf="!isAdmin" cardTitle="Basic Component" [options]="false">
-      <h5>Commentaires</h5>
-      <hr/>
-      <div *ngIf="comments && comments.length > 0; else noComments">
-        <ul class="list-group">
-          <li *ngFor="let comment of comments" class="list-group-item">
-            <div class="d-flex align-items-center">
-              <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
-              <img src="assets/images/user/avatar-2.jpg" class="img-radius"
-              alt="User-Profile-Image"
-              style="width: 40px; height: 40px; border-radius: 50%;"
-              class="me-2" />
-         <div class="flex-grow-1 pl-1">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
-                  <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
-                </div>
-
-                <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noComments>
-        <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
-      </ng-template>
-     </app-card>
-
- <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
-      <div *ngIf="!rfq.valide" class="mt-4">
-        <app-card cardTitle="Rejet de la RFQ">
-          <form class="form-group" [formGroup]="rejectForm">
-            <label>Commentaire</label>
-            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
-          </form>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-outline-danger" (click)="submitRejection()">
-              <i class="feather icon-x-circle"></i> Ajouter un commentaire
-            </button>
-
-          </div>
-        </app-card>
-      </div>
-   </div>
+    </div>
 
 
-
-
-
+    </div>
+  </div>
 
 
 
    <div *ngIf="selectedVersion" class="col-sm-12">
-    <app-card cardTitle="Basic Component" [options]="false">
+    <div class="row section-card" *ngIf="selectedVersion">
+      <div class="col-12">
+
 
       <!-- En-tête avec RFQ N° et statut affiché en haut à droite -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Version V{{selectedVersionIndex !== null ? selectedVersionIndex + 1 : ''}} - RFQ N°{{ idrfq }}</h3>        <span
-          class="badge rounded-pill px-3 py-2"
+      <div class="rfq-title-bar mb-4">
+        <div class="rfq-title-left">
+          <i class="feather icon-layers"></i>
+          <h2 class="rfq-title">Version V{{selectedVersionIndex !== null ? selectedVersionIndex + 1 : ''}} - RFQ N°{{ idrfq }}</h2>
+        </div>
+        <span
+          class="badge rounded-pill px-3 py-2 status-badge"
           [ngClass]="{
             'bg-warning text-dark': !selectedVersion.valide && !selectedVersion.rejete,
             'bg-success': selectedVersion.valide,
@@ -387,10 +431,13 @@
 
       <!-- Formulaire selectedVersion en lecture seule -->
       <form [formGroup]="rfqForm">
-        <div class="row">
+        <div class="row g-3">
           <!-- Client Section -->
-          <div class="row">
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-user"></i>
+              <span>Client</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Client</label>
@@ -405,10 +452,12 @@
             </div>
           </div>
 
-          <!-- selectedVersion Section -->
-          <div class="row">
-            <h6>selectedVersion</h6>
-            <hr />
+          <!-- Version Details Section -->
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-file-text"></i>
+              <span>Version Details</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Quote Name</label>
@@ -448,9 +497,11 @@
           </div>
 
           <!-- Materials Section -->
-          <div class="row">
-            <h6>Materials</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-package"></i>
+              <span>Materials</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>KO Date</label>
@@ -484,9 +535,11 @@
           </div>
 
           <!-- Test Section -->
-          <div class="row">
-            <h6>Test</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-activity"></i>
+              <span>Test</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>Test Leader</label>
@@ -508,9 +561,11 @@
           </div>
 
           <!-- VA Section -->
-          <div class="row">
-            <h6>VA</h6>
-            <hr />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-briefcase"></i>
+              <span>VA</span>
+            </div>
             <div class="col-md-4 mb-3">
               <div class="form-group">
                 <label>VA Leader</label>
@@ -551,87 +606,107 @@
           </div>
 
           <!-- RFQ Engineer Section -->
-          <div class="form-group">
-            <label>RFQ Engineer</label>
-            <input class="form-control" [value]="selectedVersion.ingenieurRFQ" disabled />
+          <div class="row section-card">
+            <div class="section-header">
+              <i class="feather icon-user-check"></i>
+              <span>RFQ Engineer</span>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="form-group">
+                <label>RFQ Engineer</label>
+                <input class="form-control" [value]="selectedVersion.ingenieurRFQ" disabled />
+              </div>
+            </div>
           </div>
         </div>
       </form>
       <br/>
       <hr/>
 
-
-
-      <!-- Boutons d'action -->
-      <div class="d-flex justify-content-center mt-4">
-        <!-- <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
-                type="button" class="btn btn-outline-danger"
-                (click)="onSubmitRejeter()">
-          <i class="feather icon-x-circle"></i> Rejeter
-        </button> -->
-        <button *ngIf="isValidateur && !isBrouillon && selectedVersion?.valide === false && selectedVersion?.rejete === false"
-                type="button" class="btn btn-outline-success"
-                (click)="onSubmitValiderV()">
-          <i class="feather icon-check-circle"></i> Valider
-        </button>
-        <a   [routerLink]="'/rfq-manage/edit-version/' + idrfq +'/' + selectedVersion?.id " *ngIf="!isAdmin && !isBrouillon && selectedVersion?.valide === false"
-                type="button" class="btn btn-outline-warning">
-          <i class="feather icon-edit"></i> Editer
-        </a>
-
-
-
       </div>
-    </app-card>
-
-    <app-card   *ngIf="!isAdmin" cardTitle="Basic Component" [options]="false">
-      <h5>Commentaires</h5>
-      <hr/>
-      <div *ngIf="comments && comments.length > 0; else noComments">
-        <ul class="list-group">
-          <li *ngFor="let comment of comments" class="list-group-item">
-            <div class="d-flex align-items-center">
-              <!-- Avatar (utilisez l'image par défaut ou récupérez-la depuis votre API si disponible) -->
-              <img src="assets/images/user/avatar-2.jpg" class="img-radius"
-              alt="User-Profile-Image"
-              style="width: 40px; height: 40px; border-radius: 50%;"
-              class="me-2" />
-         <div class="flex-grow-1 pl-1">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
-                  <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
-                </div>
-
-                <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noComments>
-        <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
-      </ng-template>
-     </app-card>
-
-
- <!-- Formulaire de rejet (s'affiche lorsqu'on clique sur Rejeter) -->
-      <div *ngIf="!selectedVersion?.valide" class="mt-4">
-        <app-card cardTitle="Rejet de la RFQ">
-          <form class="form-group" [formGroup]="rejectForm">
-            <label>Commentaire</label>
-            <textarea class="form-control" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
-          </form>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-outline-danger" (click)="submitRejectionV()">
-              <i class="feather icon-x-circle"></i> Ajouter Commentaire
-            </button>
-
-          </div>
-        </app-card>
       </div>
    </div>
+ <!-- Unified Comments (RFQ or Version) -->
 
-
-
- </div>
+      <div class="col-12">
+        <div class="card modern-card comments-card">
+          <div class="card-body">
+            <h5>Commentaires</h5>
+            <hr/>
+            <div class="row g-3 align-items-start">
+              <!-- Comments list -->
+              <div class="col-md-6">
+                <div class="card modern-card comments-card"><div class="card-body">
+                  <ng-container *ngIf="selectedVersion; else rfqCommentsBlock">
+                    <div *ngIf="versionComments && versionComments.length > 0; else noVersionCommentsInline">
+                      <ul class="list-group">
+                        <li *ngFor="let comment of versionComments" class="list-group-item">
+                          <div class="d-flex align-items-center">
+                            <img src="assets/images/user/avatar-2.jpg" class="img-radius"
+                                 alt="User-Profile-Image"
+                                 style="width: 40px; height: 40px; border-radius: 50%;"
+                                 class="me-2" />
+                            <div class="flex-grow-1 pl-1">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
+                                <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
+                              </div>
+                              <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </ng-container>
+                  <ng-template #rfqCommentsBlock>
+                    <div *ngIf="rfqComments && rfqComments.length > 0; else noRFQCommentsUnified">
+                      <ul class="list-group">
+                        <li *ngFor="let comment of rfqComments" class="list-group-item">
+                          <div class="d-flex align-items-center">
+                            <img src="assets/images/user/avatar-2.jpg" class="img-radius"
+                                 alt="User-Profile-Image"
+                                 style="width: 40px; height: 40px; border-radius: 50%;"
+                                 class="me-2" />
+                            <div class="flex-grow-1 pl-1">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 text-bold text-primary">{{ comment.nomUser || 'Utilisateur inconnu' }}</h6>
+                                <small class="text-muted">{{ comment.dateC | date:'short' }}</small>
+                              </div>
+                              <label class="mb-0 pt-1 pl-1">{{ comment.contenu }}</label>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <ng-template #noRFQCommentsUnified>
+                      <p class="text-muted">Aucun commentaire pour cette RFQ.</p>
+                    </ng-template>
+                  </ng-template>
+                  <ng-template #noVersionCommentsInline>
+                    <p class="text-muted">Aucun commentaire pour cette version.</p>
+                  </ng-template>
+                </div></div>
+              </div>
+              <!-- Add comment form (RFQ or Version) -->
+              <div class="col-md-6" *ngIf="(!selectedVersion && !rfq?.valide) || (selectedVersion && !selectedVersion?.valide)">
+                <div class="card modern-card comments-card"><div class="card-body">
+                  <form class="form-group" [formGroup]="rejectForm">
+                    <label>Commentaire</label>
+                    
+                    <textarea class="form-control comment-textarea" formControlName="comment" [(ngModel)]="rejectForm.value.comment" rows="3"></textarea>
+                  </form>
+                  <!-- Borderless send icon at top-right -->
+                  <button type="button"
+                          class="send-icon-top-right"
+                          title="Envoyer commentaire"
+                          aria-label="Envoyer commentaire"
+                          (click)="selectedVersion ? submitRejectionV() : submitRejection()">
+                    <i class="icofont icofont-send-mail"></i>
+                  </button>
+                </div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 

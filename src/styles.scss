@@ -4,6 +4,8 @@
 
 /* fonts-icon */
 @import 'scss/fonts/fontawesome/scss/fontawesome';
+// Load IcoFont icon set globally so component icons render
+@import 'assets/icon/icofont/css/icofont';
 @import 'scss/fonts/feather/iconfont';
 
 @import 'scss/general';

@@ -22,7 +22,9 @@ export class RFQComponent implements OnInit, OnDestroy {
   rfq: any ;
   rfqinitial : any  ;
   selectedVersion: any = null;
-  comments: Array<CommentaireDto> = []; // Stocke les commentaires de la RFQ
+  comments: Array<CommentaireDto> = []; // Legacy, not used in template
+  rfqComments: Array<CommentaireDto> = []; // Commentaires liés à la RFQ
+  versionComments: Array<CommentaireDto> = []; // Commentaires liés à la Version
   idrfq!: number;
   isValidateur: boolean = false;
   showRejectForm = false; // Contrôle l'affichage du formulaire de rejet
@@ -248,10 +250,10 @@ export class RFQComponent implements OnInit, OnDestroy {
   }
 
   loadComments(id: number) {
-    this.comments = null;
+    this.rfqComments = null;
     this.commentService.apiCommentaireByrfqRfqIdGet(id).subscribe(
       (response: any) => {
-        this.comments = response.$values;
+        this.rfqComments = response.$values;
       },
       (error) => {
         console.error('Erreur lors de la récupération des RFQ:', error);
@@ -259,11 +261,11 @@ export class RFQComponent implements OnInit, OnDestroy {
     );
   }
   loadCommentsV(id: number) {
-    this.comments = null;
+    this.versionComments = null;
     this.commentService.apiCommentaireByversionrfqVersionRfqIdGet(id).subscribe(
       (response: any) => {
-        this.comments = response.$values;
-        console.log("comments",this.comments)
+        this.versionComments = response.$values;
+        console.log("comments", this.versionComments)
       },
       (error) => {
         console.error('Erreur lors de la récupération des RFQ:', error);
