@@ -5,13 +5,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientService } from 'src/app/api';
 import { ClientSummaryDto, CreateClientDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-client-manage',
   templateUrl: './client-manage.component.html',
   styleUrls: ['./client-manage.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [CommonModule, SharedModule, RouterModule, NgbPaginationModule],
 })
 
 export class ClientManageComponent implements OnInit {
@@ -21,6 +22,21 @@ export class ClientManageComponent implements OnInit {
   selectedClient: ClientSummaryDto | null = null;
   clientForm!: FormGroup;
   searchAttempted: boolean = false;
+  // Pagination state
+  page: number = 1;
+  pageSize: number = 8;
+
+  // Computed indices for the current page (used in template)
+  get startIndex(): number {
+    if (!this.clients || this.clients.length === 0) return 0;
+    return (this.page - 1) * this.pageSize + 1;
+  }
+
+  get endIndex(): number {
+    if (!this.clients || this.clients.length === 0) return 0;
+    const end = this.page * this.pageSize;
+    return end < this.clients.length ? end : this.clients.length;
+  }
 
   constructor(private clientService: ClientService, private router: Router, private fb: FormBuilder) {}
 
@@ -38,6 +54,7 @@ export class ClientManageComponent implements OnInit {
     this.clientService.apiClientGet().subscribe(
       (response: any) => {
         this.clients = response.$values;
+        this.page = 1; // reset to first page on reload
       },
       (error) => {
         console.error('Error fetching clients:', error);
@@ -74,12 +91,12 @@ export class ClientManageComponent implements OnInit {
     const newClient: CreateClientDto = this.clientForm.value;
     this.clientService.apiClientPost(newClient).subscribe(
       () => {
-        alert('Client ajouté avec succès!');
+        alert('Client added successfully!');
         this.clientForm.reset();
         this.loadAllClients();
       },
       (error) => {
-        console.error('Erreur lors de l’ajout du client:', error);
+        console.error('Error while adding the client:', error);
       }
     );
   }
@@ -97,12 +114,12 @@ export class ClientManageComponent implements OnInit {
 
     this.clientService.apiClientIdPut(this.selectedClient.id!, this.selectedClient).subscribe(
       () => {
-        alert('Client mis à jour avec succès!');
+        alert('Client updated successfully!');
         this.selectedClient = null;
         this.loadAllClients();
       },
       (error) => {
-        console.error('Erreur lors de la mise à jour du client:', error);
+        console.error('Error while updating the client:', error);
       }
     );
   }

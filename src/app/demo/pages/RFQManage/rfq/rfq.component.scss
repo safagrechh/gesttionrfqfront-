@@ -254,6 +254,12 @@ form .row > .row hr {
   padding: 1rem 1.25rem;
 }
 
+/* Compact writing area for comment textarea */
+.comment-textarea {
+  height: 90px; /* smaller writing area */
+  resize: vertical; /* still allow expand if needed */
+}
+
 /* Add subtle spacing around comments grids */
 .comments-card {
   margin-bottom: 0.25rem;

@@ -1,46 +1,55 @@
 <div class="col-sm-12">
   <!-- Formulaire de modification / création -->
-  <div *ngIf="selectedSegment" class="card mb-3">
+  <div *ngIf="selectedSegment" class="section-card mb-3 edit-form-card">
     <div class="card-body">
-      <h5>Modifier un Market Segment</h5>
-      <form (ngSubmit)="saveSegment()">
+      <h5>Edit Market Segment</h5>
+      <form (ngSubmit)="saveSegment()" class="form-modern">
         <div class="mb-3">
-          <label class="form-label">Nom</label>
+          <label class="form-label">Name</label>
           <input type="text" class="form-control" [(ngModel)]="selectedSegment.nom" name="nom" required />
         </div>
-
-        <button type="submit" class="btn btn-success">Enregistrer</button>
-        <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-add-user">
+            <i class="feather icon-save"></i>
+            <span>Save</span>
+          </button>
+          <button type="button" class="btn btn-cancel-arrow" (click)="cancelEdit()" aria-label="Cancel">
+            <i class="feather icon-arrow-right"></i>
+          </button>
+        </div>
       </form>
     </div>
   </div>
 
   <div class="card">
     <div class="card-body">
-      <h5 class="mb-3">Gestion des Market Segments</h5>
+      <h5 class="mb-3">Market Segments Management</h5>
 
       <div class="row">
         <!-- Navigation verticale -->
         <div class="col-md-3 col-sm-12">
-          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
+          <ul class="nav flex-column nav-pills role-options" ngbNav #nav3="ngbNav" orientation="vertical">
             <!-- Création de Market Segment -->
             <li [ngbNavItem]="1" class="nav-item">
-              <a class="nav-link" ngbNavLink>Créer un Market Segment</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-plus"></i>
+                <span class="role-name">Create Market Segment</span>
+              </a>
               <ng-template ngbNavContent>
                 <div class="p-3">
-                  <h5>Créer un Nouveau Market Segment</h5>
+                  <h5>Create a New Market Segment</h5>
                   <form [formGroup]="segmentForm" (ngSubmit)="createSegment()">
                     <div class="mb-3">
-                      <label class="form-label">Nom</label>
+                      <label class="form-label">Name</label>
                       <input type="text" class="form-control" formControlName="nom" required />
                       <small class="text-danger" *ngIf="segmentForm.get('nom')?.invalid && segmentForm.get('nom')?.touched">
-                        Nom est requis.
+                        Name is required.
                       </small>
                     </div>
 
                     <div class="d-flex justify-content-center mt-4">
                       <button type="submit" class="btn btn-outline-primary" [disabled]="segmentForm.invalid">
-                        <i class="feather icon-check-circle"></i> Ajouter
+                        <i class="feather icon-check-circle"></i> Add
                       </button>
                     </div>
                   </form>
@@ -51,42 +60,44 @@
 
             <!-- Liste des Market Segments -->
             <li [ngbNavItem]="2" class="nav-item">
-              <a class="nav-link" ngbNavLink>Consulter Market Segments</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-layers"></i>
+                <span class="role-name">View Market Segments</span>
+                <span class="role-count">{{ marketSegments.length }}</span>
+              </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>Nom</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let segment of marketSegments; trackBy: trackTable">
-                        <td>{{ segment.nom }}</td>
-                        <td>
-                          <a href="javascript:void(0)" (click)="editSegment(segment)" title="Modifier">
-                            <i class="feather icon-edit text-warning"></i>
-                          </a>
-                          <a href="javascript:void(0)" (click)="deleteSegment(segment.id)" title="Supprimer" class="ms-2">
-                            <i class="feather icon-trash text-danger"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="user-list">
+                  <div class="user-item" *ngFor="let segment of marketSegments; trackBy: trackTable">
+                    <div class="user-meta">
+                      <div class="avatar"><i class="feather icon-tag"></i></div>
+                      <div class="identity">
+                        <div class="name">{{ segment.nom }}</div>
+                      </div>
+                    </div>
+                    <div class="user-actions">
+                      <a href="javascript:void(0)" (click)="editSegment(segment)" title="Edit" class="action-btn" aria-label="Edit segment">
+                        <i class="feather icon-edit"></i>
+                      </a>
+                      <a href="javascript:void(0)" (click)="deleteSegment(segment.id)" title="Delete" class="action-btn" aria-label="Delete segment">
+                        <i class="feather icon-trash"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </ng-template>
             </li>
 
             <!-- Recherche Market Segment -->
             <li [ngbNavItem]="3" class="nav-item">
-              <a class="nav-link" ngbNavLink>Rechercher un Market Segment</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-search"></i>
+                <span class="role-name">Search Market Segment</span>
+              </a>
               <ng-template ngbNavContent>
                 <div class="p-3">
                   <div class="input-group search-bar">
                     <input type="text" class="form-control search-input"
-                           placeholder="Rechercher par nom..."
+                           placeholder="Search by name..."
                            [(ngModel)]="searchName">
                     <button class="btn search-button" (click)="searchByName()">
                       <i class="feather icon-search"></i>
@@ -94,32 +105,26 @@
                   </div>
 
                   <div *ngIf="filteredSegment">
-                    <div class="table-responsive">
-                      <table class="table table-hover mb-0">
-                        <thead>
-                          <tr>
-                            <th>Nom</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{{ filteredSegment.nom }}</td>
-                            <td>
-                              <a href="javascript:void(0)" (click)="editSegment(filteredSegment)" title="Modifier">
-                                <i class="feather icon-edit text-warning"></i>
-                              </a>
-                              <a href="javascript:void(0)" (click)="deleteSegment(filteredSegment.id)" title="Supprimer" class="ms-2">
-                                <i class="feather icon-trash text-danger"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div class="user-list">
+                      <div class="user-item">
+                        <div class="user-meta">
+                          <div class="avatar"><i class="feather icon-tag"></i></div>
+                          <div class="identity">
+                            <div class="name">{{ filteredSegment.nom }}</div>
+                          </div>
+                        </div>
+                        <div class="user-actions">
+                          <a href="javascript:void(0)" (click)="editSegment(filteredSegment)" title="Edit" class="action-btn" aria-label="Edit segment">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteSegment(filteredSegment.id)" title="Delete" class="action-btn" aria-label="Delete segment">
+                            <i class="feather icon-trash"></i>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <p *ngIf="searchAttempted && !filteredSegment" class="text-danger mt-2">Aucun segment trouvé avec ce nom.</p>
+                  <p *ngIf="searchAttempted && !filteredSegment" class="text-danger mt-2">No segment found with that name.</p>
                 </div>
               </ng-template>
             </li>

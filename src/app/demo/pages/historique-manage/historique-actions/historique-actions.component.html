@@ -1,14 +1,28 @@
-<div class="row">
+<div class="row modern-page">
   <div class="col-sm-12">
-    <app-card cardTitle="Historique des Actions" [options]="false">
-      <form [formGroup]="filterForm" class="mb-3">
+    <div class="card modern-card">
+      <div class="card-body">
+
+      <div class="section-card page-hero mb-3">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-activity"></i>
+            <div>
+              <div class="hero-title">Action History</div>
+              <div class="hero-subtitle">Filter and review past actions by users.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="filterForm" class="form-modern section-card mb-3">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
-            <label class="form-label" for="startDate">Date début</label>
+            <label class="form-label" for="startDate">Start date</label>
             <input id="startDate" type="date" class="form-control" formControlName="startDate" />
           </div>
           <div class="col-md-3">
-            <label class="form-label" for="endDate">Date fin</label>
+            <label class="form-label" for="endDate">End date</label>
             <input id="endDate" type="date" class="form-control" formControlName="endDate" />
           </div>
           <div class="col-md-2">
@@ -16,40 +30,44 @@
             <input id="cq" type="number" class="form-control" formControlName="cq" />
           </div>
           <div class="col-md-3">
-            <label class="form-label" for="userId">Utilisateur</label>
+            <label class="form-label" for="userId">User</label>
             <select id="userId" class="form-control" formControlName="userId">
-              <option value="">-- Tous --</option>
+              <option value="">-- All --</option>
               <option *ngFor="let u of users" [value]="u.id">{{ u.nomUser }}</option>
             </select>
           </div>
-          <div class="col-md-12 d-flex gap-2">
-            <button type="button" class="btn btn-primary" (click)="applyFilter()">
-              <i class="feather icon-filter"></i> Filtrer
-            </button>
-            <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()">
-              <i class="feather icon-refresh-ccw"></i> Réinitialiser
-            </button>
+          <div class="col-md-12">
+            <div class="form-actions center">
+              <button type="button" class="btn btn-add-user" (click)="applyFilter()">
+                <i class="feather icon-filter"></i>
+                <span>Filter</span>
+              </button>
+              <button type="button" class="btn btn-outline-secondary" (click)="resetFilters()">
+                <i class="feather icon-refresh-ccw"></i> Reset
+              </button>
+            </div>
           </div>
         </div>
       </form>
 
-      <div *ngIf="loading" class="alert alert-info">Chargement...</div>
+      <div *ngIf="loading" class="alert alert-info">Loading...</div>
       <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-      <div class="table-responsive" *ngIf="!loading && actions.length > 0">
-        <table class="table table-hover mb-0">
+      <div class="section-card" *ngIf="!loading && actions.length > 0">
+        <div class="table-responsive">
+        <table class="table-modern">
           <thead>
             <tr>
               <th>Date</th>
-              <th>Utilisateur</th>
+              <th>User</th>
               <th>Type</th>
-              <th>Cible</th>
-              <th>Référence</th>
-              <th>Détails</th>
+              <th>Target</th>
+              <th>Reference</th>
+              <th>Details</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let a of actions; trackBy: trackById">
+            <tr *ngFor="let a of (actions | slice: (page - 1) * pageSize : (page - 1) * pageSize + pageSize); trackBy: trackById">
               <td>{{ formatDate(a.dateAction) }}</td>
               <td>{{ a.userName }}</td>
               <td>{{ a.type }}</td>
@@ -59,8 +77,21 @@
             </tr>
           </tbody>
         </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <small class="text-muted">Showing {{ startIndex }}-{{ endIndex }} of {{ actions.length }}</small>
+          <ngb-pagination
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="actions.length"
+            [boundaryLinks]="true"
+            [maxSize]="5"
+            size="sm">
+          </ngb-pagination>
+        </div>
       </div>
-      <p *ngIf="!loading && actions.length === 0" class="text-muted">Aucune action trouvée.</p>
-    </app-card>
+      <p *ngIf="!loading && actions.length === 0" class="text-muted">No actions found.</p>
+      </div>
+    </div>
   </div>
 </div>

@@ -3773,6 +3773,10 @@
             "type": "string",
             "nullable": true
           },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
           "role": {
             "$ref": "#/components/schemas/RoleU"
           }
@@ -4563,6 +4567,10 @@
             "type": "string",
             "nullable": true
           },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
           "role": {
             "$ref": "#/components/schemas/RoleU"
           }
@@ -4601,6 +4609,10 @@
           "password": {
             "type": "string",
             "format": "password",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
             "nullable": true
           },
           "role": {
@@ -4670,6 +4682,10 @@
             "nullable": true
           },
           "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
             "type": "string",
             "nullable": true
           },

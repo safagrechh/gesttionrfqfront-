@@ -20,6 +20,7 @@ export interface User {
     nomUser?: string | null;
     email?: string | null;
     password?: string | null;
+    image?: string | null;
     role?: RoleU;
     commentaires?: Array<Commentaire> | null;
     historiqueActions?: Array<HistoriqueAction> | null;

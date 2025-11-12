@@ -14,6 +14,7 @@ export interface UserSummaryDto {
     id?: number;
     nomUser?: string | null;
     email?: string | null;
+    image?: string | null;
     role?: RoleU;
     password?: string | null;
 }

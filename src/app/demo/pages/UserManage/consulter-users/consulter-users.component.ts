@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { RoleU, UserService } from 'src/app/api';
-import { UserSummaryDto } from 'src/app/api';
+import { UserSummaryDto, CreateUserDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ToastNotificationService } from 'src/app/services/toast-notification.service';
 
 @Component({
   selector: 'app-consulter-users',
@@ -17,16 +18,24 @@ export class ConsulterUsersComponent implements OnInit {
   searchName: string = '';
   filteredUser: UserSummaryDto | null = null;
   selectedUser: UserSummaryDto | null = null;
+  selectedImageName: string | null = null;
+  newImageName: string | null = null;
   searchAttempted: boolean = false; // Track whether a search has been performed
+  newUser: CreateUserDto = {
+    nomUser: '',
+    email: '',
+    password: '',
+    role: 0 as RoleU,
+    image: null
+  };
 
   roleList = [
-    { id: 0, name: 'Validateurs' },
-    { id: 1, name: 'Ingénieurs' },
-    { id: 2, name: 'Administrateurs' },
-    { id: 3, name: 'Lecteurs' }
+    { id: 0, name: 'Validators' },
+    { id: 1, name: 'Engineers' },
+    { id: 2, name: 'Administrators' }
   ];
 
-  constructor(private userService: UserService , private router: Router ) {}
+  constructor(private userService: UserService , private router: Router, private toastService: ToastNotificationService ) {}
 
   ngOnInit(): void {
     this.loadAllUsers();
@@ -69,6 +78,52 @@ export class ConsulterUsersComponent implements OnInit {
 
   cancelEdit(): void {
     this.selectedUser = null;
+    this.selectedImageName = null;
+  }
+
+  private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  onSelectedUserImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file || !this.selectedUser) return;
+    this.readFileAsDataURL(file)
+      .then((dataUrl) => {
+        this.selectedUser!.image = dataUrl;
+        this.selectedImageName = file.name;
+      })
+      .catch((err) => {
+        console.error('Error reading image file:', err);
+        this.toastService.showToast({ type: 'error', message: "Erreur lors du chargement de l'image" });
+      });
+  }
+
+  clearSelectedUserImage(): void {
+    if (!this.selectedUser) return;
+    this.selectedUser.image = null;
+    this.selectedImageName = null;
+  }
+
+  onNewUserImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.readFileAsDataURL(file)
+      .then((dataUrl) => {
+        this.newUser.image = dataUrl;
+        this.newImageName = file.name;
+      })
+      .catch((err) => {
+        console.error('Error reading image file:', err);
+        this.toastService.showToast({ type: 'error', message: "Erreur lors du chargement de l'image" });
+      });
   }
 
   updateUser(): void {
@@ -97,22 +152,74 @@ export class ConsulterUsersComponent implements OnInit {
 
       this.userService.apiUserIdPut(updatedUser.id, updatedUser).subscribe(
         () => {
-          alert('User updated successfully!');
+          this.toastService.showToast({
+            type: 'success',
+            message: 'Utilisateur mis à jour avec succès'
+          });
           this.selectedUser = null;
           this.router.navigate(['/user-manage/get-users']);
         },
         (error) => {
           console.error('Error updating user:', error);
-          alert('There was an error updating the user.');
+          this.toastService.showToast({
+            type: 'error',
+            message: 'Erreur lors de la mise à jour de l\'utilisateur'
+          });
         }
       );
     }
   }
 
+  createUser(): void {
+    // Basic validation
+    const { nomUser, email, password, role } = this.newUser;
+    if (!nomUser || !email || !password || role === undefined || role === null) {
+      alert('Veuillez remplir tous les champs pour ajouter un utilisateur.');
+      return;
+    }
+
+    // Ensure role is a valid RoleU value
+    const roleValue = Number(role);
+    const roleEnumValue: RoleU | undefined = (Object.values(RoleU).includes(roleValue as RoleU) ? (roleValue as RoleU) : undefined);
+    if (roleEnumValue === undefined) {
+      alert('Rôle invalide sélectionné.');
+      return;
+    }
+
+    const payload: CreateUserDto = {
+      nomUser: nomUser?.toString().trim(),
+      email: email?.toString().trim(),
+      password: password?.toString(),
+      role: roleEnumValue,
+      image: this.newUser.image ?? null
+    };
+
+    this.userService.apiUserPost(payload).subscribe(
+      (created) => {
+        this.toastService.showToast({
+          type: 'success',
+          message: 'Utilisateur ajouté avec succès'
+        });
+        // Reload list
+        this.loadAllUsers();
+        // Reset form
+        this.newUser = { nomUser: '', email: '', password: '', role: 0 as RoleU, image: null };
+        this.newImageName = null;
+      },
+      (error) => {
+        console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+        this.toastService.showToast({
+          type: 'error',
+          message: 'Une erreur est survenue lors de l\'ajout de l\'utilisateur'
+        });
+      }
+    );
+  }
+
 
 
   deleteUser(id: number): void {
-    if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+    if (confirm("Are you sure you want to delete this user?")) {
       this.userService.apiUserIdDelete(id).subscribe(() => {
         this.users = this.users.filter(user => user.id !== id);
       });
@@ -121,12 +228,12 @@ export class ConsulterUsersComponent implements OnInit {
 
   getRoleName(role: number): string {
     const roleMap: { [key: number]: string } = {
-      0: 'Validateur',
-      1: 'Ingénieur',
-      2: 'Administrateur' ,
-      3:'Lecteur'
+      0: 'Validator',
+      1: 'Engineer',
+      2: 'Administrator',
+      3: 'Viewer'
     };
-    return roleMap[role] || 'Inconnu';
+    return roleMap[role] || 'Unknown';
   }
 
 }

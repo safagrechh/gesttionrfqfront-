@@ -130,6 +130,13 @@ i.icon-edit {
   }
 }
 
+/* Ensure combined section-card + page-hero uses the canonical blue and no border */
+.section-card.page-hero {
+  background: rgb(33, 90, 170);
+  border: none;
+  box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+}
+
 /* Modern card container to match Assigned page */
 .modern-card {
   border: none;
@@ -285,22 +292,19 @@ i.icon-edit {
 .add-rfq-btn i {
   font-size: 18px;
   transition: transform 160ms ease;
-  transform: none; /* keep icon centered in the circular button */
-  line-height: 0; /* remove font baseline offset for perfect centering */
-  display: inline-block;
-  margin: 0;
+  transform: translateX(18px);
+  line-height: 1;
 }
 .add-rfq-btn .label {
   display: inline-block;
   max-width: 0;
   width: 0;
   opacity: 0;
-  transform: translateX(-4px);
   transition: max-width 200ms ease, opacity 160ms ease, transform 160ms ease;
   white-space: nowrap;
 }
 .add-rfq-btn:hover i {
-  transform: none; /* avoid shifting icon when label expands */
+  transform: translateX(-4px);
 }
 .add-rfq-btn:hover .label {
   max-width: 120px;

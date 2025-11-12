@@ -1,125 +1,258 @@
+<div class="row modern-page">
+  <div class="col-12">
+    <div class="card modern-card">
+      <div class="card-body">
+
+      <!-- Page Hero -->
+      <div class="section-card page-hero">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-users"></i>
+            <div>
+              <div class="hero-title">View Users</div>
+              <div class="hero-subtitle">Manage and search users by role.</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <!-- Reserved for actions (e.g., add user) -->
+          </div>
+        </div>
+      </div>
+
 <div class="col-sm-12">
 
   <!-- Formulaire de modification -->
-  <div *ngIf="selectedUser" class="card mb-3">
+  <div *ngIf="selectedUser" class="section-card mb-3 edit-form-card">
     <div class="card-body">
-      <h5>Modifier l'utilisateur</h5>
-      <form (ngSubmit)="updateUser()">
-        <div class="mb-3">
-          <label class="form-label">Nom</label>
-          <input type="text" class="form-control" [(ngModel)]="selectedUser.nomUser" name="nomUser" required />
+      <h5>Edit user</h5>
+      <form (ngSubmit)="updateUser()" class="form-modern">
+        <div class="row">
+          <!-- Left: fields -->
+          <div class="col-md-7 col-sm-12">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.nomUser" name="nomUser" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Role</label>
+              <select class="form-control" [(ngModel)]="selectedUser.role" name="role" required>
+                <option [value]="0">Validator</option>
+                <option [value]="1">Engineer</option>
+                <option [value]="2">Administrator</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Right: image upload -->
+          <div class="col-md-5 col-sm-12">
+            <div class="image-panel">
+              <div class="panel-title">Profile Photo</div>
+              <div class="avatar-preview mb-3">
+                <img *ngIf="selectedUser?.image" [src]="selectedUser.image" alt="Avatar" />
+                <div *ngIf="!selectedUser?.image" class="avatar placeholder">
+                  <i class="feather icon-user"></i>
+                </div>
+              </div>
+              <div class="image-actions">
+                <label class="btn btn-add-user btn-change-image">
+                  <i class="feather icon-image"></i>
+                  <span>Change image</span>
+                  <input type="file" accept="image/*" (change)="onSelectedUserImageChange($event)" />
+                </label>
+                <button type="button" class="btn btn-outline-secondary btn-remove-image" (click)="clearSelectedUserImage()">
+                  <i class="feather icon-x"></i>
+                  <span>Remove</span>
+                </button>
+              </div>
+              <div class="image-name" *ngIf="selectedImageName">{{ selectedImageName }}</div>
+              <div class="image-hint">PNG/JPG recommended, max 2MB. Use a square image for best results.</div>
+            </div>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control" [(ngModel)]="selectedUser.email" name="email" required />
+        <div class="form-actions">
+          <button type="submit" class="btn btn-add-user">
+            <i class="feather icon-save"></i>
+            <span>Save</span>
+          </button>
+          <button type="button" class="btn btn-cancel-arrow" (click)="cancelEdit()" aria-label="Cancel">
+            <i class="feather icon-arrow-right"></i>
+          </button>
         </div>
-
-        <div class="mb-3">
-          <label class="form-label">Mots de passe </label>
-          <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Rôle</label>
-          <select class="form-control" [(ngModel)]="selectedUser.role" name="role" required>
-            <option [value]=0>Validateur</option>
-            <option [value]=1>Ingénieur</option>
-            <option [value]=2>Administrateur</option>
-            <option [value]=3>Lecteur</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-success">Enregistrer</button>
-        <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
       </form>
     </div>
   </div>
 
-  <div class="card">
+  <div class="section-card">
     <div class="card-body">
-      <h5 class="mb-3">Consulter les Utilisateurs</h5>
+
 
 
       <div class="row">
         <!-- Navigation verticale -->
         <div class="col-md-3 col-sm-12">
-          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
+          <ul class="nav flex-column nav-pills role-options" ngbNav #nav3="ngbNav" orientation="vertical">
             <li *ngFor="let role of roleList; let i = index" [ngbNavItem]="i + 1" class="nav-item">
-              <a class="nav-link" ngbNavLink>{{ role.name }}</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-shield"></i>
+                <span class="role-name">{{ getRoleName(role.id) }}</span>
+                <span class="role-count">{{ getUsersByRole(role.id).length }}</span>
+              </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let user of getUsersByRole(role.id); trackBy: trackTable">
-                        <td>{{ user.nomUser }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                          <a href="javascript:void(0)" (click)="editUser(user)" title="Modifier Utilisateur">
-                            <i class="feather icon-edit text-warning"></i>
-                          </a>
-                          <a href="javascript:void(0)" (click)="deleteUser(user.id)" title="Supprimer Utilisateur" class="ms-2">
-                            <i class="feather icon-trash text-danger"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="user-list">
+                  <div class="user-item" *ngFor="let user of getUsersByRole(role.id); trackBy: trackTable">
+                  <div class="user-meta">
+                      <div class="avatar">
+                        <img *ngIf="user.image" [src]="user.image" alt="Avatar" />
+                        <i *ngIf="!user.image" class="feather icon-user"></i>
+                      </div>
+                      <div class="identity">
+                        <div class="name">{{ user.nomUser }}</div>
+                        <div class="email text-muted">{{ user.email }}</div>
+                      </div>
+                    </div>
+                    <div class="user-actions">
+                      <span class="role-badge">{{ getRoleName(role.id) }}</span>
+                      <a href="javascript:void(0)" (click)="editUser(user)" title="Edit User" class="action-btn" aria-label="Edit user">
+                        <i class="feather icon-edit"></i>
+                      </a>
+                      <a href="javascript:void(0)" (click)="deleteUser(user.id)" title="Delete User" class="action-btn" aria-label="Delete user">
+                        <i class="feather icon-trash"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </ng-template>
               <hr />
             </li>
 
-            <!-- Recherche utilisateur -->
+            <!-- User search -->
             <li [ngbNavItem]="roleList.length + 1" class="nav-item">
-              <a class="nav-link" ngbNavLink>Rechercher par Nom</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-search"></i>
+                <span class="role-name">Search by Name</span>
+              </a>
               <ng-template ngbNavContent>
                 <div class="p-3">
                   <div class="input-group search-bar">
-                    <input type="text" class="form-control search-input" placeholder="Rechercher par nom..." [(ngModel)]="searchName">
+                    <input type="text" class="form-control search-input" placeholder="Search by name..." [(ngModel)]="searchName">
                     <button class="btn search-button" (click)="searchByName()">
                       <i class="feather icon-search"></i>
                     </button>
                   </div>
 
                   <div *ngIf="filteredUser">
-                    <div class="table-responsive">
-                      <table class="table table-hover mb-0">
-                        <thead>
-                          <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Rôle</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{{ filteredUser.nomUser }}</td>
-                            <td>{{ filteredUser.email }}</td>
-                            <td>{{ getRoleName(filteredUser.role) }}</td>
-                            <td>
-                              <a href="javascript:void(0)" (click)="editUser(filteredUser)" title="Modifier Utilisateur">
-                                <i class="feather icon-edit text-warning"></i>
-                              </a>
-                              <a href="javascript:void(0)" (click)="deleteUser(filteredUser.id)" title="Supprimer Utilisateur" class="ms-2">
-                                <i class="feather icon-trash text-danger"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div class="user-list">
+                      <div class="user-item">
+                        <div class="user-meta">
+                          <div class="avatar"><i class="feather icon-user"></i></div>
+                          <div class="identity">
+                            <div class="name">{{ filteredUser.nomUser }}</div>
+                            <div class="email text-muted">{{ filteredUser.email }}</div>
+                          </div>
+                        </div>
+                        <div class="user-actions">
+                          <span class="role-badge">{{ getRoleName(filteredUser.role) }}</span>
+                          <a href="javascript:void(0)" (click)="editUser(filteredUser)" title="Edit User" class="action-btn" aria-label="Edit user">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteUser(filteredUser.id)" title="Delete User" class="action-btn" aria-label="Delete user">
+                            <i class="feather icon-trash"></i>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <p *ngIf="searchAttempted && !filteredUser" class="text-danger mt-2">Aucun utilisateur trouvé avec ce nom.</p>
+                  <p *ngIf="searchAttempted && !filteredUser" class="text-danger mt-2">No user found with that name.</p>
+                </div>
+              </ng-template>
+              <hr />
+            </li>
+
+            <!-- Add user -->
+            <li [ngbNavItem]="roleList.length + 2" class="nav-item">
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-user-plus"></i>
+                <span class="role-name">Add a User</span>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="p-3">
+                  <div class="section-card mb-3">
+                    <div class="card-body">
+                      <h5>Add a user</h5>
+                      <form (ngSubmit)="createUser()" class="form-modern">
+                        <div class="row">
+                          <div class="col-md-7 col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label">Name</label>
+                              <input type="text" class="form-control" [(ngModel)]="newUser.nomUser" name="newNomUser" required />
+                            </div>
+
+                            <div class="mb-3">
+                              <label class="form-label">Email</label>
+                              <input type="email" class="form-control" [(ngModel)]="newUser.email" name="newEmail" required />
+                            </div>
+
+                            <div class="mb-3">
+                              <label class="form-label">Password</label>
+                              <input type="password" class="form-control" [(ngModel)]="newUser.password" name="newPassword" required />
+                            </div>
+
+                            <div class="mb-3">
+                              <label class="form-label">Role</label>
+                              <select class="form-control" [(ngModel)]="newUser.role" name="newRole" required>
+                                <option [value]="0">Validator</option>
+                                <option [value]="1">Engineer</option>
+                                <option [value]="2">Administrator</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-md-5 col-sm-12">
+                            <div class="image-panel">
+                              <div class="panel-title">Profile Photo</div>
+                              <div class="avatar-preview mb-3">
+                                <img *ngIf="newUser?.image" [src]="newUser.image" alt="Avatar" />
+                                <div *ngIf="!newUser?.image" class="avatar placeholder">
+                                  <i class="feather icon-user"></i>
+                                </div>
+                              </div>
+                              <div class="image-actions">
+                                <label class="btn btn-add-user btn-change-image btn-icon-only" title="Choose image">
+                                  <i class="feather icon-upload"></i>
+                                  <input type="file" accept="image/*" (change)="onNewUserImageChange($event)" />
+                                </label>
+                                <button type="button" class="btn btn-outline-secondary btn-remove-image btn-icon-only" title="Remove" (click)="newUser.image = null; newImageName = null;">
+                                  <i class="feather icon-x"></i>
+                                </button>
+                              </div>
+                              <div class="image-name" *ngIf="newImageName">{{ newImageName }}</div>
+                              <div class="image-hint">PNG/JPG recommended, max 2MB. Use a square image for best results.</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-actions center">
+                          <button type="submit" class="btn btn-add-user">
+                            <i class="feather icon-user-plus"></i>
+                            <span>Add</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </ng-template>
               <hr />
@@ -131,6 +264,10 @@
         <div class="col-md-9 col-sm-12">
           <div [ngbNavOutlet]="nav3" class="ms-4"></div>
         </div>
+      </div>
+    </div>
+  </div>
+
       </div>
     </div>
   </div>

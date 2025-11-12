@@ -1,11 +1,30 @@
-<div class="col-sm-12">
+<div class="row modern-page">
+  <div class="col-12">
+    <div class="card modern-card">
+      <div class="card-body">
+
+      <!-- Page Hero -->
+      <div class="section-card page-hero mb-3">
+        <div class="hero-content">
+          <div class="hero-left">
+            <i class="feather icon-users"></i>
+            <div>
+              <div class="hero-title">View Clients</div>
+              <div class="hero-subtitle">Create, view, and search clients.</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <!-- Reserved for actions (e.g., add client) -->
+          </div>
+        </div>
+      </div>
   <!-- Formulaire de modification / création -->
-  <div *ngIf="selectedClient" class="card mb-3">
+  <div *ngIf="selectedClient" class="section-card mb-3 edit-form-card">
     <div class="card-body">
-      <h5>Modifier un Client</h5>
-      <form (ngSubmit)="saveClient()">
+      <h5>Edit client</h5>
+      <form (ngSubmit)="saveClient()" class="form-modern">
         <div class="mb-3">
-          <label class="form-label">Nom</label>
+          <label class="form-label">Name</label>
           <input type="text" class="form-control" [(ngModel)]="selectedClient.nom" name="nom" required />
         </div>
 
@@ -15,37 +34,47 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Chiffre d'affaires</label>
+          <label class="form-label">Sales</label>
           <input type="text" class="form-control" [(ngModel)]="selectedClient.sales" name="sales" />
         </div>
 
-        <button type="submit" class="btn btn-success">Enregistrer</button>
-        <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Annuler</button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-add-user">
+            <i class="feather icon-save"></i>
+            <span>Save</span>
+          </button>
+          <button type="button" class="btn btn-cancel-arrow" (click)="cancelEdit()" aria-label="Cancel">
+            <i class="feather icon-arrow-right"></i>
+          </button>
+        </div>
       </form>
     </div>
   </div>
 
-  <div class="card">
+  <div class="section-card">
     <div class="card-body">
-      <h5 class="mb-3">Gestion des Clients</h5>
+      <h5 class="mb-3">Client Management</h5>
 
       <div class="row">
         <!-- Navigation verticale -->
         <div class="col-md-3 col-sm-12">
-          <ul class="nav flex-column nav-pills" ngbNav #nav3="ngbNav" orientation="vertical">
+          <ul class="nav flex-column nav-pills role-options" ngbNav #nav3="ngbNav" orientation="vertical">
 
             <!-- Création de Client -->
             <li [ngbNavItem]="2" class="nav-item">
-              <a class="nav-link" ngbNavLink>Créer un Client</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-user-plus"></i>
+                <span class="role-name">Add a Client</span>
+              </a>
               <ng-template ngbNavContent>
                 <div class="p-3">
-                  <h5>Créer un Nouveau Client</h5>
-                  <form [formGroup]="clientForm" (ngSubmit)="createClient()">
+                  <h5>Add a New Client</h5>
+                  <form [formGroup]="clientForm" (ngSubmit)="createClient()" class="form-modern">
                     <div class="mb-3">
-                      <label class="form-label">Nom</label>
+                      <label class="form-label">Name</label>
                       <input type="text" class="form-control" formControlName="nom" required />
                       <small class="text-danger" *ngIf="clientForm.get('nom')?.invalid && clientForm.get('nom')?.touched">
-                        Nom est requis.
+                        Name is required.
                       </small>
                     </div>
 
@@ -53,7 +82,7 @@
                       <label class="form-label">Email</label>
                       <input type="email" class="form-control" formControlName="email" required />
                       <small class="text-danger" *ngIf="clientForm.get('email')?.invalid && clientForm.get('email')?.touched">
-                        Email valide est requis.
+                        A valid email is required.
                       </small>
                     </div>
 
@@ -61,13 +90,14 @@
                       <label class="form-label">Sales</label>
                       <input type="text" class="form-control" formControlName="sales" />
                       <small class="text-danger" *ngIf="clientForm.get('sales')?.invalid && clientForm.get('sales')?.touched">
-                        Sales est requis.
+                        Sales is required.
                       </small>
                     </div>
 
-                    <div class="d-flex justify-content-center mt-4">
-                      <button type="submit" class="btn btn-outline-primary" [disabled]="clientForm.invalid">
-                        <i class="feather icon-check-circle"></i> Ajouter
+                    <div class="form-actions center">
+                      <button type="submit" class="btn btn-add-user" [disabled]="clientForm.invalid">
+                        <i class="feather icon-user-plus"></i>
+                        <span>Add</span>
                       </button>
                     </div>
                   </form>
@@ -81,82 +111,88 @@
 
             <!-- Onglet Liste des clients -->
             <li [ngbNavItem]="1" class="nav-item">
-              <a class="nav-link" ngbNavLink>Consulter les Clients</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-users"></i>
+                <span class="role-name">View Clients</span>
+                <span class="role-count">{{ clients.length }}</span>
+              </a>
               <ng-template ngbNavContent>
-                <div class="table-responsive">
-                  <table class="table table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Chiffre d'affaires</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let client of clients; trackBy: trackTable">
-                        <td>{{ client.nom }}</td>
-                        <td>{{ client.email }}</td>
-                        <td>{{ client.sales || 'N/A' }}</td>
-                        <td>
-                          <a href="javascript:void(0)" (click)="editClient(client)" title="Modifier Client">
-                            <i class="feather icon-edit text-warning"></i>
-                          </a>
-                          <a href="javascript:void(0)" (click)="deleteClient(client.id)" title="Supprimer Client" class="ms-2">
-                            <i class="feather icon-trash text-danger"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="user-list">
+                  <div class="user-item" *ngFor="let client of clients; trackBy: trackTable">
+                    <div class="user-meta">
+                      <div class="avatar">
+                        <i class="feather icon-user"></i>
+                      </div>
+                      <div class="identity">
+                        <div class="name">{{ client.nom }}</div>
+                        <div class="email text-muted">{{ client.email }}</div>
+                      </div>
+                    </div>
+                    <div class="user-actions">
+                      <span class="role-badge">{{ client.sales || 'N/A' }}</span>
+                      <a href="javascript:void(0)" (click)="editClient(client)" title="Edit Client" class="action-btn" aria-label="Edit client">
+                        <i class="feather icon-edit"></i>
+                      </a>
+                      <a href="javascript:void(0)" (click)="deleteClient(client.id)" title="Delete Client" class="action-btn" aria-label="Delete client">
+                        <i class="feather icon-trash"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <small class="text-muted">Showing {{ startIndex }}-{{ endIndex }} of {{ clients.length }}</small>
+                  <ngb-pagination
+                    [(page)]="page"
+                    [pageSize]="pageSize"
+                    [collectionSize]="clients.length"
+                    [boundaryLinks]="true"
+                    [maxSize]="5"
+                    size="sm">
+                  </ngb-pagination>
                 </div>
               </ng-template>
-              <hr />
-            </li>
+                <hr />
+              </li>
 
             <!-- Recherche Client -->
             <li [ngbNavItem]="4" class="nav-item">
-              <a class="nav-link" ngbNavLink>Rechercher un Client</a>
+              <a class="nav-link role-chip" ngbNavLink>
+                <i class="feather icon-search"></i>
+                <span class="role-name">Search Client</span>
+              </a>
               <ng-template ngbNavContent>
                 <div class="p-3">
                   <div class="input-group search-bar">
-                    <input type="text" class="form-control search-input" placeholder="Rechercher par nom..." [(ngModel)]="searchName">
+                    <input type="text" class="form-control search-input" placeholder="Search by name..." [(ngModel)]="searchName">
                     <button class="btn search-button" (click)="searchByName()">
                       <i class="feather icon-search"></i>
                     </button>
                   </div>
 
                   <div *ngIf="filteredClient">
-                    <div class="table-responsive">
-                      <table class="table table-hover mb-0">
-                        <thead>
-                          <tr>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>Chiffre d'affaires</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{{ filteredClient.nom }}</td>
-                            <td>{{ filteredClient.email }}</td>
-                            <td>{{ filteredClient.sales || 'N/A' }}</td>
-                            <td>
-                              <a href="javascript:void(0)" (click)="editClient(filteredClient)" title="Modifier Client">
-                                <i class="feather icon-edit text-warning"></i>
-                              </a>
-                              <a href="javascript:void(0)" (click)="deleteClient(filteredClient.id)" title="Supprimer Client" class="ms-2">
-                                <i class="feather icon-trash text-danger"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div class="user-list">
+                      <div class="user-item">
+                        <div class="user-meta">
+                          <div class="avatar"><i class="feather icon-user"></i></div>
+                          <div class="identity">
+                            <div class="name">{{ filteredClient.nom }}</div>
+                            <div class="email text-muted">{{ filteredClient.email }}</div>
+                          </div>
+                        </div>
+                        <div class="user-actions">
+                          <span class="role-badge">{{ filteredClient.sales || 'N/A' }}</span>
+                          <a href="javascript:void(0)" (click)="editClient(filteredClient)" title="Edit Client" class="action-btn" aria-label="Edit client">
+                            <i class="feather icon-edit"></i>
+                          </a>
+                          <a href="javascript:void(0)" (click)="deleteClient(filteredClient.id)" title="Delete Client" class="action-btn" aria-label="Delete client">
+                            <i class="feather icon-trash"></i>
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <p *ngIf="searchAttempted && !filteredClient" class="text-danger mt-2">Aucun client trouvé avec ce nom.</p>
+                  <p *ngIf="searchAttempted && !filteredClient" class="text-danger mt-2">No client found with that name.</p>
                 </div>
               </ng-template>
               <hr />
@@ -172,5 +208,6 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>

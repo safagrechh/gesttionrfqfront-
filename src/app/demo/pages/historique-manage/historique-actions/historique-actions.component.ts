@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HistoriqueActionDto, HistoriqueActionService, UserService, UserSummaryDto } from 'src/app/api';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-historique-actions',
   templateUrl: './historique-actions.component.html',
   styleUrls: ['./historique-actions.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, SharedModule]
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, SharedModule, NgbPaginationModule]
 })
 export class HistoriqueActionsComponent implements OnInit {
   filterForm!: FormGroup;
@@ -18,6 +19,21 @@ export class HistoriqueActionsComponent implements OnInit {
   users: UserSummaryDto[] = [];
   loading = false;
   error: string | null = null;
+  // Pagination state
+  page: number = 1;
+  pageSize: number = 10;
+
+  // Computed indices for the current page (used in template)
+  get startIndex(): number {
+    if (!this.actions || this.actions.length === 0) return 0;
+    return (this.page - 1) * this.pageSize + 1;
+  }
+
+  get endIndex(): number {
+    if (!this.actions || this.actions.length === 0) return 0;
+    const end = this.page * this.pageSize;
+    return end < this.actions.length ? end : this.actions.length;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +82,7 @@ export class HistoriqueActionsComponent implements OnInit {
     this.historiqueService.apiHistoriqueActionGet('body', false, { httpHeaderAccept: 'application/json' }).subscribe({
       next: (resp: any) => {
         this.actions = resp.$values || [];
+        this.page = 1; // reset to first page on load
         this.loading = false;
       },
       error: (err) => {
@@ -98,6 +115,7 @@ export class HistoriqueActionsComponent implements OnInit {
     ).subscribe({
       next: (resp: any) => {
         this.actions = resp.$values || [];
+        this.page = 1; // reset to first page after filtering
         this.loading = false;
       },
       error: (err) => {

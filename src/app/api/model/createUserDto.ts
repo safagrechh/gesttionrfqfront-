@@ -14,6 +14,7 @@ export interface CreateUserDto {
     nomUser?: string | null;
     email?: string | null;
     password?: string | null;
+    image?: string | null;
     role?: RoleU;
 }
 export namespace CreateUserDto {
