@@ -71,30 +71,12 @@ export const NavigationItems: NavigationItem[] = [
     icon: 'icon-users',
     children: [
       {
-        id: 'user-form',
+        id: 'manage-user',
         title: 'Manage User',
-        type: 'collapse',
+        type: 'item',
         icon: 'feather icon-user-plus',
-        children: [
-          {
-            id: 'create-user',
-            title: 'Ajouter User',
-            type: 'item',
-            url: '/user-manage/user-form',
-
-            classes: 'nav-item'
-          },
-          {
-            id: 'get-users',
-            title: 'Consulter users ',
-            type: 'item',
-            url: '/user-manage/get-users',
-
-            classes: 'nav-item'
-          }
-
-        ]
-
+        url: '/user-manage',
+        classes: 'nav-item'
       },
       {
 
@@ -107,30 +89,20 @@ export const NavigationItems: NavigationItem[] = [
           }
          ,
       {
-        id: 'worker-form',
-        title: 'Gestion des Workers',
-        type: 'collapse',
-        icon: 'feather icon-user-plus',
-        children: [
-          {
-            id: 'create-Material-Leader',
-            title: 'Material/Test Leaders',
-            type: 'item',
-            url: '/worker-manage/material-leaders',
-
-            classes: 'nav-item'
-          },
-          {
-            id: 'create-market-segment',
-            title: 'Gestion des Market Segments',
-            type: 'item',
-            url: '/worker-manage/market-segment',
-
-            classes: 'nav-item'
-          }
-
-        ]
-
+        id: 'material-leaders',
+        title: 'Material/Test Leaders',
+        type: 'item',
+        url: '/worker-manage/material-leaders',
+        icon: 'feather icon-users',
+        classes: 'nav-item'
+      },
+      {
+        id: 'market-segment',
+        title: 'Gestion des Market Segments',
+        type: 'item',
+        url: '/worker-manage/market-segment',
+        icon: 'feather icon-grid',
+        classes: 'nav-item'
       }
 
     ]

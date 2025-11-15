@@ -64,6 +64,11 @@ export class NavContentComponent {
         copy.hidden = true;
       }
 
+      // Hide Create RFQ for admin
+      if (copy.id === 'create-rfq' && roles.isAdmin) {
+        copy.hidden = true;
+      }
+
       if (copy.children && copy.children.length) {
         copy.children = this.applyRoleVisibility(copy.children, roles);
       }

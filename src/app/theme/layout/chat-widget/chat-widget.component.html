@@ -1,0 +1,22 @@
+<button class="chat-launcher" (click)="toggle()" aria-label="Open chat">💬</button>
+
+<div class="chat-box" *ngIf="isOpen">
+  <div class="chat-header">
+    <div>Chatbot</div>
+    <button class="close" (click)="toggle()">✕</button>
+  </div>
+  <div class="chat-body">
+    <div *ngFor="let m of messages" [class.user]="m.role==='user'" [class.assistant]="m.role==='assistant'" class="msg">
+      <div class="msg-text">{{ m.text }}</div>
+      <div class="msg-time">{{ m.time | date:'shortTime' }}</div>
+    </div>
+    <div *ngIf="messages.length===0" class="empty">Ask a question…</div>
+  </div>
+  <div class="chat-input">
+    <input [(ngModel)]="input" [disabled]="loading" placeholder="Type a message" />
+    <button (click)="send()" [disabled]="loading || !input.trim()">Send</button>
+  </div>
+  <div *ngIf="loading" class="status">Sending…</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</div>
+
