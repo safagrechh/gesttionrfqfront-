@@ -1097,6 +1097,210 @@
         }
       }
     },
+    "/api/Reclamation": {
+      "post": {
+        "tags": [
+          "Reclamation"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReclamationDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReclamationDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReclamationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Reclamation"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reclamation/mine": {
+      "get": {
+        "tags": [
+          "Reclamation"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReclamationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reclamation/{id}": {
+      "get": {
+        "tags": [
+          "Reclamation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReclamationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reclamation/{id}/status": {
+      "put": {
+        "tags": [
+          "Reclamation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReclamationStatusDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReclamationStatusDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReclamationStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/RFQ": {
       "get": {
         "tags": [
@@ -3175,6 +3379,48 @@
         }
       }
     },
+    "/api/VersionRFQ/{id}/hidden": {
+      "put": {
+        "tags": [
+          "VersionRFQ"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetHiddenDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetHiddenDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetHiddenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/VersionRFQ/by-rfq/{rfqId}": {
       "get": {
         "tags": [
@@ -3668,6 +3914,10 @@
           "nomUser": {
             "type": "string",
             "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3754,6 +4004,23 @@
           "rfqId": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateReclamationDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReclamationType"
           }
         },
         "additionalProperties": false
@@ -4346,6 +4613,104 @@
         },
         "additionalProperties": false
       },
+      "Reclamation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReclamationType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReclamationStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReclamationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReclamationType"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ReclamationStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReclamationStatus": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "ReclamationType": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
       "RoleU": {
         "enum": [
           0,
@@ -4363,6 +4728,15 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "SetHiddenDto": {
+        "type": "object",
+        "properties": {
+          "hidden": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
       },
       "Statut": {
         "enum": [
@@ -4539,6 +4913,15 @@
         },
         "additionalProperties": false
       },
+      "UpdateReclamationStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/ReclamationStatus"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateStatutDto": {
         "type": "object",
         "properties": {
@@ -4666,6 +5049,13 @@
               "$ref": "#/components/schemas/VersionRFQ"
             },
             "nullable": true
+          },
+          "reclamations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reclamation"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4691,10 +5081,6 @@
           },
           "role": {
             "$ref": "#/components/schemas/RoleU"
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4798,6 +5184,9 @@
             "type": "boolean"
           },
           "brouillon": {
+            "type": "boolean"
+          },
+          "hidden": {
             "type": "boolean"
           },
           "materialLeader": {
@@ -4906,6 +5295,9 @@
             "type": "boolean"
           },
           "rejete": {
+            "type": "boolean"
+          },
+          "hidden": {
             "type": "boolean"
           },
           "sopDate": {
@@ -5053,6 +5445,9 @@
             "type": "boolean"
           },
           "rejete": {
+            "type": "boolean"
+          },
+          "hidden": {
             "type": "boolean"
           }
         },

@@ -1,7 +1,7 @@
-<div class="row modern-page">
+
   <div class="col-12">
-    <div class="card modern-card">
-      <div class="card-body">
+
+
 
       <!-- Page Hero -->
       <div class="section-card page-hero">
@@ -41,7 +41,16 @@
 
             <div class="mb-3">
               <label class="form-label">Password</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedUser.password" name="password" required />
+              <div class="d-flex gap-2">
+                <input type="text" class="form-control flex-grow-1" [(ngModel)]="editPassword" name="password" placeholder="Leave blank to keep unchanged" (input)="onEditPasswordInput(editPassword || '')" />
+                <button type="button" class="btn btn-outline-secondary btn-suggest" (click)="suggestEditPassword()">Suggest</button>
+              </div>
+              <div class="password-meter" *ngIf="editPassword">
+                <div class="track">
+                  <div class="bar" [style.width.%]="editPasswordStrength.score * 20" [style.background]="editPasswordStrength.color"></div>
+                </div>
+                <small class="label">Strength: {{ editPasswordStrength.label }}</small>
+              </div>
             </div>
 
             <div class="mb-3">
@@ -202,12 +211,22 @@
 
                             <div class="mb-3">
                               <label class="form-label">Email</label>
-                              <input type="email" class="form-control" [(ngModel)]="newUser.email" name="newEmail" required />
+                              <input type="email" class="form-control" [(ngModel)]="newUser.email" name="newEmail" required (input)="onNewUserEmailInput(newUser.email || '')" />
+                              <small class="text-danger" *ngIf="emailExists">This email is already in use.</small>
                             </div>
 
                             <div class="mb-3">
                               <label class="form-label">Password</label>
-                              <input type="password" class="form-control" [(ngModel)]="newUser.password" name="newPassword" required />
+                              <div class="d-flex gap-2">
+                                <input [type]="showNewPassword ? 'text' : 'password'" class="form-control flex-grow-1" [(ngModel)]="newUser.password" name="newPassword" required (input)="onPasswordInput(newUser.password || '')" />
+                                <button type="button" class="btn btn-outline-secondary btn-suggest" (click)="suggestNewPassword()">Suggest</button>
+                              </div>
+                              <div class="password-meter" *ngIf="newUser.password">
+                                <div class="track">
+                                  <div class="bar" [style.width.%]="passwordStrength.score * 20" [style.background]="passwordStrength.color"></div>
+                                </div>
+                                <small class="label">Strength: {{ passwordStrength.label }}</small>
+                              </div>
                             </div>
 
                             <div class="mb-3">
@@ -245,7 +264,7 @@
                         </div>
 
                         <div class="form-actions center">
-                          <button type="submit" class="btn btn-add-user">
+                          <button type="submit" class="btn btn-add-user" [disabled]="emailExists || !newUser.nomUser || !newUser.email || !newUser.password || newUser.role === undefined || newUser.role === null">
                             <i class="feather icon-user-plus"></i>
                             <span>Add</span>
                           </button>
@@ -269,6 +288,6 @@
   </div>
 
       </div>
-    </div>
-  </div>
+    
+
 </div>

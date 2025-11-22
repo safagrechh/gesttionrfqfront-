@@ -9,12 +9,11 @@
  */
 
 
-export interface CommentaireDto { 
-    id?: number;
-    contenu?: string | null;
-    dateC?: string;
-    validateurId?: number;
-    nomUser?: string | null;
-    image?: string | null;
-}
+export type ReclamationType = 0 | 1 | 2;
+
+export const ReclamationType = {
+    NUMBER_0: 0 as ReclamationType,
+    NUMBER_1: 1 as ReclamationType,
+    NUMBER_2: 2 as ReclamationType
+};
 

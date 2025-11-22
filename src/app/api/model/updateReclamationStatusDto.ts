@@ -7,14 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ReclamationStatus } from './reclamationStatus';
 
 
-export interface CommentaireDto { 
-    id?: number;
-    contenu?: string | null;
-    dateC?: string;
-    validateurId?: number;
-    nomUser?: string | null;
-    image?: string | null;
+export interface UpdateReclamationStatusDto { 
+    status?: ReclamationStatus;
 }
+export namespace UpdateReclamationStatusDto {
+}
+
 

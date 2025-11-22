@@ -2,7 +2,16 @@
   <!-- Notifications Dropdown -->
   <li>
     <div class="dropdown" ngbDropdown placement="auto">
-      <span class="pr-2 mr-2">{{ userName }} - {{ userRole }}</span>
+      <div class="user-chip">
+        <div class="avatar">
+          <img *ngIf="userImage" [src]="userImage" alt="User avatar" />
+          <i *ngIf="!userImage" class="feather icon-user"></i>
+        </div>
+        <div class="meta">
+          <div class="user-name">{{ userName }}</div>
+          <div class="user-role-badge">{{ userRole }}</div>
+        </div>
+      </div>
 
       <a ngbDropdownToggle href="javascript:" class="ms-3 position-relative">
         <i class="icon feather icon-bell" [ngClass]="{'text-danger': unread > 0}"></i>
@@ -32,9 +41,9 @@
           }">
             <i class="feather icon-wifi-off me-1" *ngIf="connectionStatus === 'disconnected' || connectionStatus === 'error'"></i>
             <i class="feather icon-loader me-1" *ngIf="connectionStatus === 'connecting' || connectionStatus === 'reconnecting'"></i>
-            {{ connectionStatus === 'connecting' ? 'Connecting...' : 
-               connectionStatus === 'reconnecting' ? 'Reconnecting...' : 
-               connectionStatus === 'error' ? 'Connection error' : 
+            {{ connectionStatus === 'connecting' ? 'Connecting...' :
+               connectionStatus === 'reconnecting' ? 'Reconnecting...' :
+               connectionStatus === 'error' ? 'Connection error' :
                'Disconnected' }}
           </small>
         </div>
@@ -43,8 +52,8 @@
           <li *ngIf="getNewNotifications().length > 0" class="n-title">
             <p class="m-b-0">NEW</p>
           </li>
-          <li *ngFor="let n of getNewNotifications()" 
-              class="notification" 
+          <li *ngFor="let n of getNewNotifications()"
+              class="notification"
               [ngClass]="{'unread-notification': !n.isRead}">
             <div class="d-flex" (click)="markRead(n)" style="cursor: pointer;">
               <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="User avatar" />
@@ -59,20 +68,20 @@
                 <p>{{ n.message }}</p>
               </div>
               <div class="notification-actions">
-                <span class="delete-btn" 
-                      (click)="$event.stopPropagation(); remove(n.id || 0)" 
+                <span class="delete-btn"
+                      (click)="$event.stopPropagation(); remove(n.id || 0)"
                       title="Delete notification">
                   ×
                 </span>
               </div>
             </div>
           </li>
-          
+
           <li *ngIf="getEarlierNotifications().length > 0" class="n-title">
             <p class="m-b-0">EARLIER</p>
           </li>
-          <li *ngFor="let n of getEarlierNotifications()" 
-              class="notification" 
+          <li *ngFor="let n of getEarlierNotifications()"
+              class="notification"
               [ngClass]="{'unread-notification': !n.isRead, 'read-notification': n.isRead}">
             <div class="d-flex" (click)="markRead(n)" style="cursor: pointer;">
               <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="User avatar" />
@@ -87,15 +96,15 @@
                 <p>{{ n.message }}</p>
               </div>
               <div class="notification-actions">
-                <span class="delete-btn" 
-                      (click)="$event.stopPropagation(); remove(n.id || 0)" 
+                <span class="delete-btn"
+                      (click)="$event.stopPropagation(); remove(n.id || 0)"
                       title="Delete notification">
                   ×
                 </span>
               </div>
             </div>
           </li>
-          
+
           <li *ngIf="!notifications.length" class="text-center text-muted p-3">
             No notifications
           </li>
@@ -116,7 +125,7 @@
       </a>
       <div class="dropdown-menu dropdown-menu-end profile-notification" ngbDropdownMenu>
         <div class="pro-head bg-danger">
-          <img src="assets/images/user/avatar-2.jpg" class="img-radius" alt="User-Profile-Image" />
+          <img [src]="userImage || 'assets/images/user/avatar-2.jpg'" class="img-radius" alt="User-Profile-Image" />
           <span>{{ userName }}</span>
           <a href="javascript:" class="dud-logout" title="Logout" (click)="logout()">
             <i class="feather icon-log-out"></i>

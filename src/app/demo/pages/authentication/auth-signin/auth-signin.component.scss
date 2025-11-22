@@ -1,0 +1,54 @@
+.auth-wrapper .card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.auth-wrapper .form-control {
+  border-radius: 12px;
+}
+
+.auth-wrapper .input-group .form-control {
+  border-radius: 12px;
+}
+
+.auth-wrapper .btn-theme2 {
+  border-radius: 12px;
+}
+
+.auth-wrapper .checkbox input + .cr {
+  border-radius: 6px;
+}
+
+/* Reclamation modal */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+.confirm-modal {
+  width: 440px;
+  max-width: 90vw;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.18);
+  padding: 20px;
+  text-align: center;
+}
+.confirm-modal .modal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #1d4ed8;
+  margin: 0 auto 10px auto;
+}
+.confirm-modal .modal-title { font-weight: 700; font-size: 16px; color: #111827; margin-bottom: 4px; }
+.confirm-modal .modal-subtitle { color: #6b7280; margin-bottom: 14px; }
+.confirm-modal .modal-actions { display: flex; align-items: center; justify-content: center; gap: 10px; }

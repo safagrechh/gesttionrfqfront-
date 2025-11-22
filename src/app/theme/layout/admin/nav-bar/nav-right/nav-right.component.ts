@@ -32,6 +32,7 @@ type NotificationVM = {
 export class NavRightComponent implements OnInit, OnDestroy {
   userName: string = 'Loading...';
   userRole: string = '';
+  userImage: string | null = null;
 
   // what the template needs
   notifications: NotificationVM[] = [];
@@ -68,6 +69,7 @@ export class NavRightComponent implements OnInit, OnDestroy {
       next: (user) => {
         this.userName = user.nomUser;
         this.userRole = this.roleMap[user.role] || 'Unknown role';
+        this.userImage = user.image || null;
 
         // After user is loaded, ensure token is set for notifications
         const token = localStorage.getItem('token');

@@ -18,7 +18,7 @@ export const NavigationItems: NavigationItem[] = [
 
   {
     id: 'navigation',
-    title: 'Navigation',
+    title: 'Overview',
     type: 'group',
     icon: 'icon-navigation',
     children: [
@@ -34,13 +34,13 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'rfq-manage',
-    title: 'RFQ Management',
+    title: 'RFQs',
     type: 'group',
     icon: 'icon-ui',
     children: [
       {
         id: 'create-rfq',
-        title: 'Create RFQ',
+        title: 'New RFQ',
         type: 'item',
         url: '/rfq-manage/create-rfq',
         icon: 'feather icon-file-plus',
@@ -48,7 +48,7 @@ export const NavigationItems: NavigationItem[] = [
       },
       {
         id: 'get-rfqs',
-        title: 'View RFQs',
+        title: 'All RFQs',
         type: 'item',
         url: '/rfq-manage/get-rfqs',
         icon: 'feather icon-list',
@@ -66,13 +66,13 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'user-manage',
-    title: 'User Management',
+    title: 'Users',
     type: 'group',
     icon: 'icon-users',
     children: [
       {
         id: 'manage-user',
-        title: 'Manage User',
+        title: 'Manage Users',
         type: 'item',
         icon: 'feather icon-user-plus',
         url: '/user-manage',
@@ -81,7 +81,7 @@ export const NavigationItems: NavigationItem[] = [
       {
 
             id: 'client-manage',
-            title: 'Gestion des Clients',
+            title: 'Clients',
             type: 'item',
             url: '/client-manage',
             icon: 'feather icon-user-plus',
@@ -98,10 +98,19 @@ export const NavigationItems: NavigationItem[] = [
       },
       {
         id: 'market-segment',
-        title: 'Gestion des Market Segments',
+        title: 'Market Segments',
         type: 'item',
         url: '/worker-manage/market-segment',
         icon: 'feather icon-grid',
+        classes: 'nav-item'
+      }
+      ,
+      {
+        id: 'reclamation-manage',
+        title: 'Reclamations',
+        type: 'item',
+        url: '/reclamation-manage',
+        icon: 'feather icon-alert-triangle',
         classes: 'nav-item'
       }
 
@@ -109,13 +118,13 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'rapport-manage',
-    title: 'Rapport',
+    title: 'Reports',
     type: 'group',
     icon: 'icon-ui',
     children: [
       {
         id: 'generate-report',
-        title: 'Générer Rapport',
+        title: 'Generate Reports',
         type: 'item',
         icon: 'feather icon-file-plus',
         url: '/report-manage/generer-rapport',
@@ -125,13 +134,13 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'historique-manage',
-    title: 'Historique Management',
+    title: 'History',
     type: 'group',
     icon: 'icon-ui',
     children: [
       {
         id: 'historique-actions',
-        title: 'Historique Actions',
+        title: 'Audit Log',
         type: 'item',
         icon: 'feather icon-file-plus',
         url: '/historique-manage/historique-actions',

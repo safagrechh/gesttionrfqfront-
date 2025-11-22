@@ -330,6 +330,14 @@ i.icon-edit {
 .form-modern .btn-cancel-arrow i { font-size: 18px; line-height: 1; transform: rotate(45deg); }
 .form-modern .btn-cancel-arrow:hover { background: #ffffff; box-shadow: 0 10px 20px rgba(0,0,0,0.12); transform: translateY(-1px); }
 
+/* Password strength meter */
+.password-meter { margin-top: 6px; }
+.password-meter .track { height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+.password-meter .bar { height: 8px; border-radius: 999px; transition: width 160ms ease; }
+.password-meter .label { display: block; margin-top: 4px; font-size: 0.8rem; color: #6b7280; }
+
+.btn-suggest, .btn-toggle { white-space: nowrap; }
+
 /* Avatar and image upload styles */
 .user-item .avatar,
 .avatar {
@@ -432,3 +440,6 @@ i.icon-edit {
 .image-upload .form-control[type="file"] {
   padding: 8px;
 }
+.edit-form-card .password-meter { margin-top: 4px; }
+.edit-form-card .password-meter .track {  width: 250px; display: inline-block; }
+.edit-form-card .password-meter .label { font-size: 0.75rem; }

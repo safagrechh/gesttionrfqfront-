@@ -14,31 +14,55 @@
         <h3 class="mb-4"> <i class="feather icon-unlock auth-icon"></i> Login</h3>
 
         <!-- Email input -->
-        <div class="input-group mb-3">
-          <input type="email" [(ngModel)]="email" class="form-control" placeholder="Adresse email" />
+        <div class="input-group mb-2">
+          <input type="email" [(ngModel)]="email" (input)="onEmailInput()" class="form-control" placeholder="Email address" />
         </div>
+        <small class="text-danger" *ngIf="emailError">{{ emailError }}</small>
 
         <!-- Password input -->
-        <div class="input-group mb-4">
-          <input type="password" [(ngModel)]="password" class="form-control" placeholder="Mots de passe" />
+        <div class="input-group mb-2 mt-3">
+          <input type="password" [(ngModel)]="password" (input)="onPasswordInput()" class="form-control" placeholder="Password" />
         </div>
+        <small class="text-danger" *ngIf="passwordError">{{ passwordError }}</small>
+
+        <!-- General error -->
+        <div class="alert alert-danger mt-3" *ngIf="authError">{{ authError }}</div>
 
         <!-- Remember me checkbox -->
-        <div class="form-group text-start mb-4">
+        <div class="form-group text-start mb-4 mt-3">
           <div class="checkbox checkbox-fill d-inline">
             <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="" />
-            <label for="checkbox-fill-a1" class="cr">Se Souvenir</label>
+            <label for="checkbox-fill-a1" class="cr">Remember me</label>
           </div>
         </div>
 
         <!-- Submit button -->
-        <button class="btn btn-theme2 mb-4" (click)="onSubmit()">Se Connecter</button>
+        <button class="btn btn-theme2 mb-4" [disabled]="isSubmitting" (click)="onSubmit()">Sign In</button>
 
         <!-- Forgot password link -->
         <p class="mb-2 text-muted">
-          Mots de passe oublié?
-          <a [routerLink]="['/auth/reset-password']">Réinitialiser</a>
+          Forgot password?
+          <a href="javascript:void(0)" (click)="openReclaim()">Send a reclamation to admin</a>
         </p>
+
+        <div class="confirm-overlay" *ngIf="reclaimVisible">
+          <div class="confirm-modal">
+            <div class="modal-icon"><i class="feather icon-mail"></i></div>
+            <div class="modal-title">Request password reclamation</div>
+            <div class="modal-subtitle">Enter your email to notify the admin.</div>
+            <div class="input-group mb-2">
+              <input type="email" [(ngModel)]="reclaimEmail" (input)="onReclaimEmailInput()" class="form-control" placeholder="Email address" />
+            </div>
+            <small class="text-danger" *ngIf="reclaimEmailError">{{ reclaimEmailError }}</small>
+
+            <div class="modal-actions mt-3">
+              <button type="button" class="btn btn-light" (click)="closeReclaim()">Cancel</button>
+              <button type="button" class="btn btn-success" [disabled]="reclaimVerifying || !reclaimEmail" (click)="confirmReclaim()">Confirm</button>
+            </div>
+
+            <div class="alert alert-success mt-3" *ngIf="reclaimSuccess">{{ reclaimSuccess }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

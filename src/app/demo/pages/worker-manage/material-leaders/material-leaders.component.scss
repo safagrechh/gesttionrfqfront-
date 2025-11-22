@@ -196,3 +196,38 @@ i.icon-edit {
 }
 .form-modern .btn-cancel-arrow i { font-size: 18px; line-height: 1; transform: rotate(45deg); }
 .form-modern .btn-cancel-arrow:hover { background: #ffffff; box-shadow: 0 10px 20px rgba(0,0,0,0.12); transform: translateY(-1px); }
+.page-hero {
+  background: rgb(33, 90, 170);
+  color: #fff;
+  padding: 18px 20px;
+  box-shadow: 0 10px 26px rgba(33, 90, 170, 0.25);
+  border: none;
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+  }
+  .hero-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .hero-subtitle {
+    opacity: 0.92;
+    font-size: 13px;
+  }
+  i {
+    font-size: 22px;
+    opacity: 0.9;
+  }
+}

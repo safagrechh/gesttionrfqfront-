@@ -17,5 +17,6 @@ export interface VersionRFQSummaryDto {
     rfqId?: number;
     valide?: boolean;
     rejete?: boolean;
+    hidden?: boolean;
 }
 

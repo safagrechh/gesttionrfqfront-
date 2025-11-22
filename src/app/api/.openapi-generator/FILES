@@ -11,6 +11,7 @@ api/marketSegment.service.ts
 api/notification.service.ts
 api/rFQ.service.ts
 api/rapport.service.ts
+api/reclamation.service.ts
 api/user.service.ts
 api/versionRFQ.service.ts
 api/worker.service.ts
@@ -28,6 +29,7 @@ model/createClientDto.ts
 model/createCommentaireDto.ts
 model/createHistoriqueActionDto.ts
 model/createNotificationRequest.ts
+model/createReclamationDto.ts
 model/createUserDto.ts
 model/createWorkerDto.ts
 model/generateReportRequest.ts
@@ -41,12 +43,18 @@ model/rFQ.ts
 model/rFQDetailsDto.ts
 model/rFQSummaryDto.ts
 model/rapport.ts
+model/reclamation.ts
+model/reclamationDto.ts
+model/reclamationStatus.ts
+model/reclamationType.ts
 model/roleU.ts
 model/roleW.ts
+model/setHiddenDto.ts
 model/statut.ts
 model/updateClientDto.ts
 model/updateCommentaireDto.ts
 model/updateRFQDto.ts
+model/updateReclamationStatusDto.ts
 model/updateStatutDto.ts
 model/updateUserDto.ts
 model/updateWorkerDto.ts

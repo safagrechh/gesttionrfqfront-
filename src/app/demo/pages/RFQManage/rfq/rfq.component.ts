@@ -35,6 +35,19 @@ export class RFQComponent implements OnInit, OnDestroy {
   isAdmin: boolean = false;
   selectedVersionIndex: number | null = null;
   private routeSubscription!: Subscription;
+  compareMode: boolean = false;
+  compareAId: number | null = null;
+  compareBId: number | null = null;
+  compareA: any = null;
+  compareB: any = null;
+  compareFields: string[] = ['client','cq','quoteName','marketSegment','numRefQuoted','sopDate','maxV','estV','koDate','customerDataDate','mdDate','mrDate','tdDate','trDate','ldDate','lrDate','cdDate','approvalDate','materialLeader','testLeader','ingenieurRFQ','vaLeader'];
+  changedFields: string[] = [];
+  compareLabels: { [k: string]: string } = {
+    client: 'Client', cq: 'CQ', quoteName: 'Quote Name', marketSegment: 'Market Segment', numRefQuoted: 'Refs to Quote', sopDate: 'SOP Date', maxV: 'Max Value', estV: 'Estimated Value', koDate: 'KO Date', customerDataDate: 'Customer Due Date', mdDate: 'Material Due Date', mrDate: 'Material Release', tdDate: 'Test Due Date', trDate: 'Test Release', ldDate: 'Labour Due Date', lrDate: 'Labour Release', cdDate: 'Customer Due Date', approvalDate: 'Approval Date', materialLeader: 'Material Leader', testLeader: 'Test Leader', ingenieurRFQ: 'RFQ Engineer', vaLeader: 'VA Leader'
+  };
+
+  showHidden: boolean = false;
+  currentUserId: number | null = null;
 
 
 
@@ -110,6 +123,8 @@ export class RFQComponent implements OnInit, OnDestroy {
     this.userService.apiUserMeGet().subscribe(user => {
       this.isValidateur = user.role === 0;
       this.isAdmin = user.role === 2;
+      this.currentUserId = user.id ?? null;
+      if (this.isAdmin) this.showHidden = true;
     });
   }
 
@@ -169,12 +184,72 @@ export class RFQComponent implements OnInit, OnDestroy {
   loadVersions(id: number) {
     this.VersionRFQService.apiVersionRFQByRfqRfqIdGet(id).subscribe(
       (response: any) => {
-        this.versions = response.$values;
-        console.log("versions" , this.versions )
+        this.versions = (response?.$values ?? [])
+          .slice()
+          .sort((a: VersionRFQSummaryDto, b: VersionRFQSummaryDto) => (b.id ?? 0) - (a.id ?? 0));
+        this.ensureHiddenFlags();
       },
       (error) => {
         console.error('Erreur lors de la récupération des RFQ:', error);
       });
+  }
+
+  isVersionHidden(id: number | null | undefined): boolean {
+    if (!id && id !== 0) return false;
+    const v = (this.versions || []).find(x => x.id === id) as any;
+    return !!(v && v.hidden);
+  }
+
+  getVisibleVersions(): Array<VersionRFQSummaryDto> {
+    if (this.isAdmin && this.showHidden) return this.versions;
+    return (this.versions || []).filter((v: any) => !v.hidden);
+  }
+
+  getVisibleCount(): number {
+    return this.getVisibleVersions()?.length || 0;
+  }
+
+  getDisplayNumberByIndex(i: number): number {
+    const count = this.getVisibleCount();
+    return count ? (count - 1 - i) : 0;
+  }
+
+  getDisplayNumberById(id?: number | null): number {
+    if (id == null) return 0;
+    const list = this.getVisibleVersions();
+    const idx = list.findIndex(v => v.id === id);
+    return idx >= 0 ? (list.length - 1 - idx) : 0;
+  }
+
+  getSelectedVersionDisplayNumber(): number {
+    return this.getDisplayNumberById(this.selectedVersion?.id);
+  }
+
+  toggleHideSelectedVersion(): void {
+    if (!this.isAdmin || !this.selectedVersion || (!this.selectedVersion.id && this.selectedVersion.id !== 0)) return;
+    const id = this.selectedVersion.id as number;
+    const nextHidden = !this.selectedVersion.hidden;
+    this.VersionRFQService.apiVersionRFQIdHiddenPut(id, { hidden: nextHidden }).subscribe({
+      next: () => {
+        this.selectedVersion.hidden = nextHidden;
+        this.loadVersions(this.idrfq);
+        if (nextHidden && !this.showHidden) {
+          this.onRFQClick();
+        }
+      }
+    });
+  }
+
+  private ensureHiddenFlags(): void {
+    const ids = (this.versions || []).map(v => v.id).filter(id => id !== undefined && id !== null) as number[];
+    ids.forEach(id => {
+      this.VersionRFQService.apiVersionRFQIdGet(id).subscribe(d => {
+        const idx = this.versions.findIndex(v => v.id === id);
+        if (idx >= 0) {
+          (this.versions[idx] as any).hidden = !!(d as any).hidden;
+        }
+      });
+    });
   }
 
   downloadFile(id: number) {
@@ -419,6 +494,12 @@ export class RFQComponent implements OnInit, OnDestroy {
 
   }
 
+  enableCompare() { this.compareMode = true; }
+  disableCompare() { this.compareMode = false; this.compareAId = null; this.compareBId = null; this.compareA = null; this.compareB = null; this.changedFields = []; }
+  onSelectCompareA(id: number) { this.compareAId = id; this.VersionRFQService.apiVersionRFQIdGet(id).subscribe(d => { this.compareA = d; this.refreshChangedFields(); }); }
+  onSelectCompareB(id: number) { this.compareBId = id; this.VersionRFQService.apiVersionRFQIdGet(id).subscribe(d => { this.compareB = d; this.refreshChangedFields(); }); }
+  isDiff(field: string): boolean { const a = this.compareA ? this.compareA[field] : null; const b = this.compareB ? this.compareB[field] : null; return JSON.stringify(a) !== JSON.stringify(b); }
+  refreshChangedFields() { if (this.compareA && this.compareB) { this.changedFields = this.compareFields.filter(f => this.isDiff(f)); } }
   // Rejette la RFQ (après enregistrement du commentaire si nécessaire)
   rejectRFQ() {
     if (this.isValidateur && this.rfq?.valide === false && this.rfq?.rejete === false) {

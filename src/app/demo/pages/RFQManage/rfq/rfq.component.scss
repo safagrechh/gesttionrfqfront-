@@ -135,7 +135,7 @@ h2 {
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1.25rem; /* slightly more space between sections */
-  box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.09);
 }
 
 /* Section headers: give space between icon and title, and below header */
@@ -194,7 +194,7 @@ form .row > .row {
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1.25rem; /* align with section spacing */
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 6px 14px rgba(1, 1, 42, 0.15);
   /* Ensure section width matches the title bar by neutralizing row's negative margins */
   margin-left: 0;
   margin-right: 0;
@@ -579,6 +579,16 @@ a.action-expand-btn {
   font-weight: 600;
 }
 
+.pipeline-step.hidden {
+  opacity: 0.55;
+  border-style: dashed;
+  border-color: #9ca3af; /* gray-400 */
+}
+.pipeline-step.hidden .pipeline-node {
+  filter: grayscale(0.9);
+  background: #f9fafb; /* gray-50 */
+}
+
 /* Centered title bar variant with distinct borders */
 .rfq-title-bar--centered {
   justify-content: center;
@@ -588,6 +598,7 @@ a.action-expand-btn {
   border-width: 2px;
   border-radius: 12px;
   background: #fbfbfb;
+  position: relative;
 }
 .rfq-title-bar--centered .rfq-title {
   font-size: 1.1rem; /* modest size per request */
@@ -596,6 +607,13 @@ a.action-expand-btn {
 .rfq-title-bar--centered .title-icon i {
   font-size: 1rem;
   color: #6b7280; /* gray-500 */
+}
+
+.show-hidden-switch {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Back button: match Create/Edit hover-reveal behavior */
@@ -640,3 +658,14 @@ a.action-expand-btn {
   width: auto;
   gap: 8px;
 }
+
+
+.compare-panel { margin-top: 1.25rem; margin-bottom: 1.25rem; }
+.compare-selects { margin-bottom: 1rem; }
+.compare-card { border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.compare-card .card-body { padding: 1.25rem 1.5rem; }
+.diff-row { display: grid; grid-template-columns: 1.5fr auto 24px auto; align-items: center; gap: 14px; padding: 12px 14px; border: 1px dashed #e5e7eb; border-radius: 10px; background: linear-gradient(90deg,#f8fafc 0%,#f1f5f9 100%); margin-bottom: 12px; }
+.field-name { font-weight: 600; color: #111827; }
+.badge.value-a { background: #3b82f6; color: #fff; border-radius: 999px; padding: 8px 12px; }
+.badge.value-b { background: #8b5cf6; color: #fff; border-radius: 999px; padding: 8px 12px; }
+

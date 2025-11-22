@@ -39,6 +39,7 @@ export interface VersionRFQ {
     valide?: boolean;
     rejete?: boolean;
     brouillon?: boolean;
+    hidden?: boolean;
     materialLeader?: Worker;
     materialLeaderId?: number | null;
     testLeader?: Worker;

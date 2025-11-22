@@ -81,15 +81,16 @@
             <div class="mt-2">
               <ng-container *ngIf="rfq.versionsCount && rfq.versionsCount > 0; else noVersions">
                 <div class="version-dots">
+                  <span class="version-dot" [ngClass]="getVersionDotClass(rfq)"></span>
                   <ng-container *ngIf="versionsByRFQ[rfq.id]?.length; else fallbackDots">
-                    <span *ngFor="let v of versionsByRFQ[rfq.id]" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
+                    <span *ngFor="let v of getVisibleVersionsForRFQ(rfq.id)" class="version-dot" [ngClass]="getVersionDotClassForVersion(v)"></span>
                   </ng-container>
                   <ng-template #fallbackDots>
                     <span *ngFor="let _ of getVersionDots(rfq.versionsCount)" class="version-dot dot-yellow"></span>
                   </ng-template>
                 </div>
               </ng-container>
-              <ng-template #noVersions><div class="version-dots"><span class="version-dot dot-grey"></span></div></ng-template>
+              <ng-template #noVersions><div class="version-dots"><span class="version-dot" [ngClass]="getVersionDotClass(rfq)"></span></div></ng-template>
             </div>
             <div class="rfq-card-actions d-flex justify-content-end gap-2">
               <a class="icon-btn" [routerLink]="'/rfq-manage/get-rfq/' + rfq.id" title="View RFQ">
@@ -98,7 +99,7 @@
               <a class="icon-btn" *ngIf="currentFilter!=='validated' && ((isEngineer && isAssignedToMe(rfq)) || isValidator)" [routerLink]="'/rfq-manage/edit-rfq/' + rfq.id" title="Edit RFQ">
                 <i class="feather icon-edit"></i>
               </a>
-              <a class="icon-btn text-danger" *ngIf="isAdmin" href="javascript:void(0)" (click)="delete(rfq.id)" title="Delete RFQ">
+              <a class="icon-btn text-danger" *ngIf="isValidator || (isEngineer && isAssignedToMe(rfq))" href="javascript:void(0)" (click)="openDeleteConfirm(rfq)" title="Delete RFQ">
                 <i class="feather icon-trash-2"></i>
               </a>
             </div>
@@ -115,6 +116,18 @@
           (pageChange)="setCurrentPage($event)"
           size="sm">
         </ngb-pagination>
+      </div>
+
+      <div class="confirm-overlay" *ngIf="confirmDeleteVisible">
+        <div class="confirm-modal">
+          <div class="modal-icon"><i class="feather icon-alert-triangle"></i></div>
+          <div class="modal-title">Delete RFQ No. {{ rfqToDelete?.id }}</div>
+          <div class="modal-subtitle">This action cannot be undone.</div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-light" (click)="closeDeleteConfirm()">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

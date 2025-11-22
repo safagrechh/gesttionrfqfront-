@@ -79,6 +79,11 @@ const routes: Routes = [
         path: 'report-manage',
         loadChildren: () => import('./demo/pages/report-manage/report-manage.module').then(m => m.ReportManageModule)
       }
+      ,
+      {
+        path: 'reclamation-manage',
+        loadChildren: () => import('./demo/pages/reclamation-manage/reclamation-manage.module').then(m => m.ReclamationManageModule)
+      }
       
 
     ]

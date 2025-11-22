@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { Rapport } from './rapport';
+import { Reclamation } from './reclamation';
 import { HistoriqueAction } from './historiqueAction';
 import { RoleU } from './roleU';
 import { Commentaire } from './commentaire';
@@ -29,6 +30,7 @@ export interface User {
     rfQsEnTantQueValidateur?: Array<RFQ> | null;
     versionRFQsEnTantQueIngenieur?: Array<VersionRFQ> | null;
     versionRFQsEnTantQueValidateur?: Array<VersionRFQ> | null;
+    reclamations?: Array<Reclamation> | null;
 }
 export namespace User {
 }

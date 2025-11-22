@@ -18,6 +18,7 @@ export interface VersionRFQDetailsDto {
     rfqId?: number;
     valide?: boolean;
     rejete?: boolean;
+    hidden?: boolean;
     sopDate?: string | null;
     maxV?: number | null;
     estV?: number | null;

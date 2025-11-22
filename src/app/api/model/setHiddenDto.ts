@@ -9,12 +9,7 @@
  */
 
 
-export interface CommentaireDto { 
-    id?: number;
-    contenu?: string | null;
-    dateC?: string;
-    validateurId?: number;
-    nomUser?: string | null;
-    image?: string | null;
+export interface SetHiddenDto { 
+    hidden?: boolean;
 }
 

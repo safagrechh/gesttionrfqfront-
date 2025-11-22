@@ -1,0 +1,135 @@
+<div class="row modern-page">
+  <div class="col-12">
+     <div class="section-card page-hero mb-3">
+          <div class="hero-content">
+            <div class="hero-left">
+              <i class="feather icon-alert-triangle"></i>
+              <div>
+                <div class="hero-title">Manage Reclamations</div>
+                <div class="hero-subtitle">View, filter, and take action on reclamations.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+    <div class="card modern-card">
+      <div class="card-body">
+
+
+
+        <div class="row">
+          <div class="col-md-8">
+            <div class="type-filter mb-2">
+              <span class="filter-label">Filter by type:</span>
+              <div class="chip-group">
+                <button type="button" class="chip" [class.active]="selectedType==='all'" (click)="setTypeFilter('all')">
+                  <span class="chip-label">{{ getTypeLabel('all') }}</span>
+                  <span class="chip-count">{{ getTypeCount('all') }}</span>
+                </button>
+                <button type="button" class="chip" [class.active]="selectedType===0" (click)="setTypeFilter(0)">
+                  <span class="chip-label">{{ getTypeLabel(0) }}</span>
+                  <span class="chip-count">{{ getTypeCount(0) }}</span>
+                </button>
+                <button type="button" class="chip" [class.active]="selectedType===1" (click)="setTypeFilter(1)">
+                  <span class="chip-label">{{ getTypeLabel(1) }}</span>
+                  <span class="chip-count">{{ getTypeCount(1) }}</span>
+                </button>
+                <button type="button" class="chip" [class.active]="selectedType===2" (click)="setTypeFilter(2)">
+                  <span class="chip-label">{{ getTypeLabel(2) }}</span>
+                  <span class="chip-count">{{ getTypeCount(2) }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="section-layout">
+              <div class="status-toolbar">
+                <button type="button" class="tool-btn pending" [class.active]="currentFilter==='pending'" (click)="setFilter('pending')" title="Pending" aria-label="Pending"><i class="feather icon-clock"></i></button>
+                <button type="button" class="tool-btn confirmed" [class.active]="currentFilter==='confirmed'" (click)="setFilter('confirmed')" title="Confirmed" aria-label="Confirmed"><i class="feather icon-check-circle"></i></button>
+                <button type="button" class="tool-btn rejected" [class.active]="currentFilter==='rejected'" (click)="setFilter('rejected')" title="Rejected" aria-label="Rejected"><i class="feather icon-x-circle"></i></button>
+                <button type="button" class="tool-btn all" [class.active]="currentFilter==='all'" (click)="setFilter('all')" title="All" aria-label="All"><i class="feather icon-list"></i></button>
+              </div>
+              <div class="section-card">
+                <ng-container *ngIf="getCount(currentFilter) > 0; else emptyRecs">
+                  <div class="rec-list">
+                    <div class="tile cursor-pointer" *ngFor="let r of getFilteredPaginated(currentFilter); trackBy: trackRow" (click)="select(r)">
+                      <div class="tile-accent" [ngClass]="getAccentClass(r)"></div>
+                      <div class="tile-header">
+                        <div class="tile-title"><i class="feather icon-paperclip me-1"></i> {{ r.title || 'No title' }}</div>
+                        <span class="tile-status" [ngClass]="getBadgeClass(r)">{{ getBadgeLabel(r) }}</span>
+                      </div>
+                      <div class="tile-sub">ID: #{{ r.id }}</div>
+                      <div class="tile-message">{{ r.message }}</div>
+                      <div class="tile-footer">
+                        <div class="tile-user">
+                          <div class="avatar"><i class="feather icon-user"></i></div>
+                          <div class="user-name">{{ r.userId != null ? ('User #' + r.userId) : 'Outside the system' }}</div>
+                        </div>
+                        <div class="tile-meta">
+                          <div>Created: {{ r.createdAt | date:'dd MMM yyyy' }}</div>
+                          <div>Last Update: {{ r.updatedAt | date:'dd MMM yyyy' }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted">Showing page {{ getCurrentPage() }} of {{ getTotalPages() }}</small>
+                    <ngb-pagination
+                      [page]="getCurrentPage()"
+                      [pageSize]="pageSize"
+                      [collectionSize]="getCount(currentFilter)"
+                      [boundaryLinks]="true"
+                      [maxSize]="5"
+                      size="sm"
+                      (pageChange)="setCurrentPage($event)">
+                    </ngb-pagination>
+                  </div>
+                </ng-container>
+                <ng-template #emptyRecs>
+                  <div class="text-center text-muted py-4">
+                    <i class="feather icon-smile" style="font-size: 2rem;"></i>
+                    <div class="mt-2" *ngIf="currentFilter === 'pending'; else genericMsg">All clear — no pending reclamations 🎉</div>
+                    <ng-template #genericMsg>
+                      <div>No reclamations match your filters. Enjoy the calm ✨</div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+
+        
+          </div>
+
+          <div class="col-md-4">
+            <div class="section-card">
+              <div *ngIf="selected; else emptySelection">
+                <div class="alert reclamation-alert" [ngClass]="getAlertClass(selected)" role="alert">
+                  <div class="alert-content">
+                    <div class="alert-title">{{ selected.title || 'No title' }}</div>
+                    <div class="alert-meta text-muted">#{{ selected.id }} • {{ selected.type }} • {{ selected.createdAt | date:'short' }} • {{ getStatusText(selected) }}</div>
+                    <div class="mt-2">
+                      <div><strong>User ID:</strong> {{ selected.userId ?? 'None' }}</div>
+                      <div><strong>Message:</strong></div>
+                      <div class="mt-1">{{ selected.message }}</div>
+                    </div>
+                  </div>
+                  <div class="action-bar" *ngIf="isPending(selected)">
+                    <button class="option confirm" [disabled]="updatingId === selected.id" (click)="confirm(selected)">
+                      <i class="feather icon-check"></i> Confirm
+                    </button>
+                    <button class="option reject" [disabled]="updatingId === selected.id" (click)="reject(selected)">
+                      <i class="feather icon-x"></i> Reject
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <ng-template #emptySelection>
+                <div class="text-muted p-3">Select a reclamation from the list to view its content.</div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

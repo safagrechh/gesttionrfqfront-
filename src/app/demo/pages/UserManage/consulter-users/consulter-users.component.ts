@@ -35,6 +35,69 @@ export class ConsulterUsersComponent implements OnInit {
     { id: 2, name: 'Administrators' }
   ];
 
+  attemptCreate: boolean = false;
+  emailExists: boolean = false;
+  passwordStrength: { score: number; label: string; color: string } = { score: 0, label: 'Weak', color: '#ef4444' };
+  editPassword: string = '';
+  showNewPassword: boolean = false;
+  showEditPassword: boolean = false;
+  editPasswordStrength: { score: number; label: string; color: string } = { score: 0, label: 'Weak', color: '#ef4444' };
+
+  onNewUserEmailInput(email: string) {
+    const e = (email || '').trim().toLowerCase();
+    this.emailExists = !!e && this.users.some(u => (u.email || '').trim().toLowerCase() === e);
+  }
+  onPasswordInput(pw: string) {
+    const s = (pw || '');
+    let score = 0;
+    if (s.length >= 8) score++;
+    if (/[a-z]/.test(s)) score++;
+    if (/[A-Z]/.test(s)) score++;
+    if (/\d/.test(s)) score++;
+    if (/[^A-Za-z0-9]/.test(s)) score++;
+    const labels = ['Very Weak','Weak','Fair','Good','Strong','Very Strong'];
+    const colors = ['#ef4444','#f97316','#f59e0b','#10b981','#3b82f6','#8b5cf6'];
+    this.passwordStrength = { score, label: labels[Math.min(score, 5)], color: colors[Math.min(score, 5)] };
+  }
+
+  onEditPasswordInput(pw: string) {
+    const s = (pw || '');
+    let score = 0;
+    if (s.length >= 8) score++;
+    if (/[a-z]/.test(s)) score++;
+    if (/[A-Z]/.test(s)) score++;
+    if (/\d/.test(s)) score++;
+    if (/[^A-Za-z0-9]/.test(s)) score++;
+    const labels = ['Very Weak','Weak','Fair','Good','Strong','Very Strong'];
+    const colors = ['#ef4444','#f97316','#f59e0b','#10b981','#3b82f6','#8b5cf6'];
+    this.editPasswordStrength = { score, label: labels[Math.min(score, 5)], color: colors[Math.min(score, 5)] };
+  }
+
+  private generateStrongPassword(length: number = 12): string {
+    const lowers = 'abcdefghijklmnopqrstuvwxyz';
+    const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const digits = '0123456789';
+    const symbols = '!@#$%^&*()-_=+[]{};:,.<>/?';
+    const all = lowers + uppers + digits + symbols;
+    const pick = (set: string) => set[Math.floor(Math.random() * set.length)];
+    const base = [pick(lowers), pick(uppers), pick(digits), pick(symbols)].join('');
+    let rest = '';
+    for (let i = base.length; i < length; i++) rest += pick(all);
+    const pwd = (base + rest).split('').sort(() => Math.random() - 0.5).join('');
+    return pwd;
+  }
+
+  suggestNewPassword() {
+    this.newUser.password = this.generateStrongPassword();
+    this.onPasswordInput(this.newUser.password);
+    this.showNewPassword = true;
+  }
+
+  suggestEditPassword() {
+    this.editPassword = this.generateStrongPassword();
+    this.showEditPassword = true;
+  }
+
   constructor(private userService: UserService , private router: Router, private toastService: ToastNotificationService ) {}
 
   ngOnInit(): void {
@@ -74,6 +137,7 @@ export class ConsulterUsersComponent implements OnInit {
 
   editUser(user: UserSummaryDto): void {
     this.selectedUser = { ...user };
+    this.editPassword = '';
   }
 
   cancelEdit(): void {
@@ -127,62 +191,50 @@ export class ConsulterUsersComponent implements OnInit {
   }
 
   updateUser(): void {
-    if (this.selectedUser) {
-      console.log('Before Conversion:', this.selectedUser);
+    if (!this.selectedUser) return;
 
-      // Convert role to number and ensure it's valid
-      const roleValue = Number(this.selectedUser.role);
-      console.log('Converted Role Value:', roleValue);
-
-      const roleEnumValue: RoleU | undefined = (Object.values(RoleU).includes(roleValue as RoleU) ? (roleValue as RoleU) : undefined);
-      console.log('Mapped Role:', roleEnumValue);
-
-      if (roleEnumValue === undefined) {
-        console.error('Invalid role assignment.');
-        alert('Invalid role selected.');
-        return;
-      }
-
-      const updatedUser: UserSummaryDto = {
-        ...this.selectedUser,
-        role: roleEnumValue // Ensure role is properly assigned
-      };
-
-      console.log('Updated User DTO:', updatedUser);
-
-      this.userService.apiUserIdPut(updatedUser.id, updatedUser).subscribe(
-        () => {
-          this.toastService.showToast({
-            type: 'success',
-            message: 'Utilisateur mis à jour avec succès'
-          });
-          this.selectedUser = null;
-          this.router.navigate(['/user-manage/get-users']);
-        },
-        (error) => {
-          console.error('Error updating user:', error);
-          this.toastService.showToast({
-            type: 'error',
-            message: 'Erreur lors de la mise à jour de l\'utilisateur'
-          });
-        }
-      );
-    }
-  }
-
-  createUser(): void {
-    // Basic validation
-    const { nomUser, email, password, role } = this.newUser;
-    if (!nomUser || !email || !password || role === undefined || role === null) {
-      alert('Veuillez remplir tous les champs pour ajouter un utilisateur.');
+    const roleValue = Number(this.selectedUser.role);
+    const roleEnumValue: RoleU | undefined = (Object.values(RoleU).includes(roleValue as RoleU) ? (roleValue as RoleU) : undefined);
+    if (roleEnumValue === undefined) {
+      this.toastService.showToast({ type: 'error', message: 'Invalid role selected.' });
       return;
     }
 
-    // Ensure role is a valid RoleU value
+    const payload = {
+      id: this.selectedUser.id,
+      nomUser: this.selectedUser.nomUser?.toString().trim(),
+      email: this.selectedUser.email?.toString().trim(),
+      role: roleEnumValue,
+      image: this.selectedUser.image ?? null,
+      password: this.editPassword ? this.editPassword.toString() : null
+    };
+
+    this.userService.apiUserIdPut(payload.id!, payload).subscribe({
+      next: () => {
+        this.toastService.showToast({ type: 'success', message: 'Utilisateur mis à jour avec succès' });
+        this.selectedUser = null;
+        this.editPassword = '';
+        this.router.navigate(['/user-manage/get-users']);
+      },
+      error: (error) => {
+        console.error('Error updating user:', error);
+        this.toastService.showToast({ type: 'error', message: 'Erreur lors de la mise à jour de l\'utilisateur' });
+      }
+    });
+  }
+
+  createUser(): void {
+    this.attemptCreate = true;
+    const { nomUser, email, password, role } = this.newUser;
+    if (!nomUser || !email || !password || role === undefined || role === null || this.emailExists) {
+      this.toastService.showToast({ type: 'warning', message: 'Please fill all required fields and ensure email is unique.' });
+      return;
+    }
+
     const roleValue = Number(role);
     const roleEnumValue: RoleU | undefined = (Object.values(RoleU).includes(roleValue as RoleU) ? (roleValue as RoleU) : undefined);
     if (roleEnumValue === undefined) {
-      alert('Rôle invalide sélectionné.');
+      this.toastService.showToast({ type: 'error', message: 'Invalid role selected.' });
       return;
     }
 
@@ -194,26 +246,24 @@ export class ConsulterUsersComponent implements OnInit {
       image: this.newUser.image ?? null
     };
 
-    this.userService.apiUserPost(payload).subscribe(
-      (created) => {
-        this.toastService.showToast({
-          type: 'success',
-          message: 'Utilisateur ajouté avec succès'
-        });
-        // Reload list
+    this.userService.apiUserPost(payload).subscribe({
+      next: () => {
+        this.toastService.showToast({ type: 'success', message: 'Utilisateur ajouté avec succès' });
         this.loadAllUsers();
-        // Reset form
         this.newUser = { nomUser: '', email: '', password: '', role: 0 as RoleU, image: null };
         this.newImageName = null;
+        this.emailExists = false;
+        this.attemptCreate = false;
+        this.passwordStrength = { score: 0, label: 'Weak', color: '#ef4444' };
       },
-      (error) => {
-        console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-        this.toastService.showToast({
-          type: 'error',
-          message: 'Une erreur est survenue lors de l\'ajout de l\'utilisateur'
-        });
+      error: (error) => {
+        const msg = (error?.error || error?.message || '').toString().toLowerCase();
+        if (error?.status === 409 || msg.includes('email') && msg.includes('exist')) {
+          this.emailExists = true;
+        }
+        this.toastService.showToast({ type: 'error', message: 'Erreur lors de l\'ajout de l\'utilisateur' });
       }
-    );
+    });
   }
 
 

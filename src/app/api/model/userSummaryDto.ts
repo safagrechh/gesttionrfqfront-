@@ -16,7 +16,6 @@ export interface UserSummaryDto {
     email?: string | null;
     image?: string | null;
     role?: RoleU;
-    password?: string | null;
 }
 export namespace UserSummaryDto {
 }

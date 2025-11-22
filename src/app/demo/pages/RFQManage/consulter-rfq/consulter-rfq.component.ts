@@ -40,6 +40,8 @@ export class ConsulterRFQComponent implements OnInit {
   pagePending: number = 1;
   pageValidated: number = 1;
   pageDraft: number = 1;
+  confirmDeleteVisible: boolean = false;
+  rfqToDelete: RFQDetailsDto | null = null;
 
   constructor(
     private rfqService: RFQService,
@@ -97,23 +99,11 @@ export class ConsulterRFQComponent implements OnInit {
   }
 
   private isValidated(rfq: RFQDetailsDto): boolean {
-    if (rfq.brouillon === true || rfq.rejete === true) return false;
-    if (rfq.valide !== true) return false;
-    // If RFQ has versions, only consider validated if all versions are validated.
-    if (rfq.versionsCount && rfq.versionsCount > 0) {
-      const versions = this.versionsByRFQ[rfq.id!];
-      // If versions not yet loaded, keep RFQ's validated status; once loaded it will reclassify.
-      if (!versions || versions.length === 0) return true;
-      return this.areAllVersionsValidated(rfq.id);
-    }
-    // No versions: keep RFQ validated status
-    return true;
+    return rfq.valide === true;
   }
 
   private isPending(rfq: RFQDetailsDto): boolean {
-    if (rfq.brouillon === true || rfq.rejete === true) return false;
-    // Pending if RFQ not validated OR it has any pending version.
-    return (rfq.valide !== true) || this.hasAnyPendingVersion(rfq.id);
+    return rfq.brouillon !== true && rfq.valide !== true;
   }
 
   getRFQsByStatus(status: string): RFQDetailsDto[] {
@@ -282,7 +272,26 @@ export class ConsulterRFQComponent implements OnInit {
       if (id && rfq.versionsCount && rfq.versionsCount > 0) {
         this.versionService.apiVersionRFQByRfqRfqIdGet(id).subscribe(
           (response: any) => {
-            this.versionsByRFQ[id] = response.$values || [];
+            const summaries = (response.$values || []) as Array<{ id?: number } & any>;
+            const ids = summaries.map(s => s.id).filter(x => x !== undefined && x !== null) as number[];
+            if (ids.length === 0) {
+              this.versionsByRFQ[id] = [];
+              return;
+            }
+            const collected: VersionRFQDetailsDto[] = [];
+            ids.forEach(vid => {
+              this.versionService.apiVersionRFQIdGet(vid).subscribe(
+                (details: VersionRFQDetailsDto) => {
+                  if (!(details as any).hidden) {
+                    collected.push(details);
+                  }
+                  this.versionsByRFQ[id] = [...collected];
+                },
+                (err) => {
+                  console.error(`Erreur lors de la récupération des détails de version ${vid} pour RFQ ${id}:`, err);
+                }
+              );
+            });
           },
           (error) => {
             console.error(`Erreur lors de la récupération des versions pour RFQ ${id}:`, error);
@@ -290,6 +299,13 @@ export class ConsulterRFQComponent implements OnInit {
         );
       }
     });
+  }
+
+  /** Visible versions for an RFQ (exclude hidden) */
+  getVisibleVersionsForRFQ(rfqId?: number): VersionRFQDetailsDto[] {
+    if (!rfqId) return [];
+    const list = this.versionsByRFQ[rfqId] || [];
+    return list.filter(v => !(v as any).hidden);
   }
 
   /** Helper: dot color based on actual version status */
@@ -301,28 +317,38 @@ export class ConsulterRFQComponent implements OnInit {
 
   // Legacy CQ-only search removed; unified search via searchText in rfqMatchesSearch
 
-  delete(id: number) {
-    if (confirm('Are you sure you want to delete this RFQ?')) {
-      this.rfqService.apiRFQIdDelete(id).subscribe(
-        () => {
-          this.toastService.showToast({
-            message: 'RFQ deleted successfully',
-            type: 'success',
-            duration: 6000,
-            rfqId: id?.toString()
-          });
-          this.fetchRFQDetails(); // Refresh the list
-        },
-        (error) => {
-          console.error('Erreur lors de la suppression de RFQ:', error);
-          this.toastService.showToast({
-            message: 'There was an error deleting the RFQ.',
-            type: 'error',
-            duration: 7000
-          });
-        }
-      );
-    }
+  openDeleteConfirm(rfq: RFQDetailsDto) {
+    this.rfqToDelete = rfq;
+    this.confirmDeleteVisible = true;
+  }
+  closeDeleteConfirm() {
+    this.confirmDeleteVisible = false;
+    this.rfqToDelete = null;
+  }
+  confirmDelete() {
+    const id = this.rfqToDelete?.id;
+    if (!id) { this.closeDeleteConfirm(); return; }
+    this.rfqService.apiRFQIdDelete(id).subscribe(
+      () => {
+        this.toastService.showToast({
+          message: 'RFQ deleted successfully',
+          type: 'success',
+          duration: 6000,
+          rfqId: id?.toString()
+        });
+        this.closeDeleteConfirm();
+        this.fetchRFQDetails();
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression de RFQ:', error);
+        this.toastService.showToast({
+          message: 'There was an error deleting the RFQ.',
+          type: 'error',
+          duration: 7000
+        });
+        this.closeDeleteConfirm();
+      }
+    );
   }
 
   deletedraft(id: number) {
