@@ -19,7 +19,6 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/chatRequest.ts
 model/client.ts
 model/clientDetailsDto.ts
 model/clientSummaryDto.ts
@@ -49,7 +48,9 @@ model/reclamationStatus.ts
 model/reclamationType.ts
 model/roleU.ts
 model/roleW.ts
+model/sendMessageDto.ts
 model/setHiddenDto.ts
+model/startChatDto.ts
 model/statut.ts
 model/updateClientDto.ts
 model/updateCommentaireDto.ts

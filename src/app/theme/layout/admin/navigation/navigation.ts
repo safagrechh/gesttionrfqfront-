@@ -129,6 +129,13 @@ export const NavigationItems: NavigationItem[] = [
         icon: 'feather icon-file-plus',
         url: '/report-manage/generer-rapport',
         classes: 'nav-item'
+      },
+      {
+        id: 'reclame',
+        title: 'Reclame',
+        type: 'item',
+        icon: 'feather icon-alert-triangle',
+        classes: 'nav-item'
       }
     ]
   },

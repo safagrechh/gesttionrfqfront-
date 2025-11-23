@@ -1,0 +1,39 @@
+@if (open) {
+  <div class="reclame-modal-container" (click)="close()">
+    <div class="reclame-modal" role="dialog" aria-modal="true" aria-label="Reclamation form" (click)="$event.stopPropagation()">
+      <div class="reclame-header">
+        <div class="header-left">
+          <div class="avatar"><i class="feather icon-alert-triangle"></i></div>
+          <div class="titles">
+            <div class="title">New Reclamation</div>
+            <div class="subtitle">Create and submit your request</div>
+          </div>
+        </div>
+        <button type="button" class="close-btn" title="Close" aria-label="Close" (click)="close()"><i class="feather icon-x"></i></button>
+      </div>
+      <div class="reclame-body">
+        <div class="type-row">
+          <div class="label">Type</div>
+          <div class="chip-group">
+            <button type="button" class="chip system" [class.active]="recType===0" (click)="recType=0"><i class="feather icon-cpu"></i><span>System</span></button>
+            <button type="button" class="chip general" [class.active]="recType===1" (click)="recType=1"><i class="feather icon-info"></i><span>General</span></button>
+            <button type="button" class="chip password" [class.active]="recType===2" (click)="recType=2"><i class="feather icon-lock"></i><span>Password Reset</span></button>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <label class="form-label">Title</label>
+          <input class="form-control modern" type="text" [(ngModel)]="recTitle" placeholder="Optional title" />
+        </div>
+        <div class="input-row">
+          <label class="form-label">Contenu</label>
+          <textarea class="form-control modern" rows="5" [(ngModel)]="recMessage" placeholder="Describe your reclamation"></textarea>
+        </div>
+      </div>
+      <div class="reclame-footer">
+        <button type="button" class="btn ghost" (click)="close()"><i class="feather icon-x"></i> Cancel</button>
+        <button type="button" class="btn primary" [disabled]="submitting || !recMessage" (click)="submit()"><i class="feather icon-send"></i> Submit</button>
+      </div>
+    </div>
+  </div>
+}

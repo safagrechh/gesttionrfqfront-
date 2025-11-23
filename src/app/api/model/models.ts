@@ -1,4 +1,3 @@
-export * from './chatRequest';
 export * from './client';
 export * from './clientDetailsDto';
 export * from './clientSummaryDto';
@@ -27,7 +26,9 @@ export * from './reclamationStatus';
 export * from './reclamationType';
 export * from './roleU';
 export * from './roleW';
+export * from './sendMessageDto';
 export * from './setHiddenDto';
+export * from './startChatDto';
 export * from './statut';
 export * from './updateClientDto';
 export * from './updateCommentaireDto';

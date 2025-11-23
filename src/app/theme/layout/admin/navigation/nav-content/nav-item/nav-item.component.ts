@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 // project import
 import { NavigationItem } from '../../navigation';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ReclamationModalService } from 'src/app/services/reclamation-modal.service';
 
 @Component({
   selector: 'app-nav-item',
@@ -15,9 +16,11 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 })
 export class NavItemComponent {
   private location = inject(Location);
+  private reclamationModal = inject(ReclamationModalService);
 
   // public props
   item = input<NavigationItem>();
+
 
   // constructor
 
@@ -54,4 +57,6 @@ export class NavItemComponent {
       document.querySelector('app-navigation.pcoded-navbar').classList.remove('mob-open');
     }
   }
+
+  openReclamationModal() { this.reclamationModal.open(); }
 }

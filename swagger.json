@@ -36,19 +36,7 @@
         }
       }
     },
-    "/chat": {
-      "get": {
-        "tags": [
-          "Chat"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/chat/send": {
+    "/api/Chat/start": {
       "post": {
         "tags": [
           "Chat"
@@ -57,21 +45,84 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChatRequest"
+                "$ref": "#/components/schemas/StartChatDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChatRequest"
+                "$ref": "#/components/schemas/StartChatDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ChatRequest"
+                "$ref": "#/components/schemas/StartChatDto"
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Chat/{chatId}/messages": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "parameters": [
+          {
+            "name": "chatId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -3754,16 +3805,6 @@
   },
   "components": {
     "schemas": {
-      "ChatRequest": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Client": {
         "type": "object",
         "properties": {
@@ -4003,7 +4044,8 @@
           },
           "rfqId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4729,11 +4771,35 @@
         "type": "integer",
         "format": "int32"
       },
+      "SendMessageDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SetHiddenDto": {
         "type": "object",
         "properties": {
           "hidden": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartChatDto": {
+        "type": "object",
+        "properties": {
+          "recipientUserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "initialMessage": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

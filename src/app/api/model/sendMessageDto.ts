@@ -9,9 +9,7 @@
  */
 
 
-export interface CreateNotificationRequest { 
-    message?: string | null;
-    userId?: number;
-    rfqId?: number | null;
+export interface SendMessageDto { 
+    content?: string | null;
 }
 

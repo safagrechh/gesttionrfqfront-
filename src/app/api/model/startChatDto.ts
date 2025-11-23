@@ -9,9 +9,8 @@
  */
 
 
-export interface CreateNotificationRequest { 
-    message?: string | null;
-    userId?: number;
-    rfqId?: number | null;
+export interface StartChatDto { 
+    recipientUserId?: number;
+    initialMessage?: string | null;
 }
 

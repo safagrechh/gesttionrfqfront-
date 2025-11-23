@@ -7,10 +7,11 @@ import { Subscription } from 'rxjs';
 import { SpinnerComponent } from './theme/shared/components/spinner/spinner.component';
 import { RealtimeNotificationService } from './api/api/realtime-notification.service';
 import { ToastNotificationComponent } from './components/toast-notification/toast-notification.component';
+import { ReclamationModalComponent } from './components/reclamation-modal/reclamation-modal.component';
 
 @Component({
   selector: 'app-root',
-  imports: [SpinnerComponent, RouterModule, ToastNotificationComponent],
+  imports: [SpinnerComponent, RouterModule, ToastNotificationComponent, ReclamationModalComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

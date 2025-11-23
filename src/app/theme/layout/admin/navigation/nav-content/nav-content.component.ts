@@ -69,6 +69,11 @@ export class NavContentComponent {
         copy.hidden = true;
       }
 
+      // Hide Reclame for admin
+      if (copy.id === 'reclame' && roles.isAdmin) {
+        copy.hidden = true;
+      }
+
       if (copy.children && copy.children.length) {
         copy.children = this.applyRoleVisibility(copy.children, roles);
       }

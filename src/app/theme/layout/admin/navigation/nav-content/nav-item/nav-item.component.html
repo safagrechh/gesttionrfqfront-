@@ -30,6 +30,14 @@
       </a>
     </li>
   }
+  @if (!item().url && item().id === 'reclame') {
+    <li [ngClass]="item().classes">
+      <a href="javascript:" class="nav-link" (click)="openReclamationModal()">
+        <ng-container *ngTemplateOutlet="itemIcon"></ng-container>
+        <span class="pcoded-mtext">{{ item().title }}</span>
+      </a>
+    </li>
+  }
   <ng-template #itemIcon>
     @if (item().icon) {
       <span class="pcoded-micon"><i class="feather" [ngClass]="item().icon"></i></span>
