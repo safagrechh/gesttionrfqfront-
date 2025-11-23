@@ -1,0 +1,103 @@
+<div class="row modern-page">
+  <div class="col-12">
+      <!-- Page Hero -->
+        <div class="section-card page-hero mb-3">
+          <div class="hero-content">
+            <i class="feather icon-message-circle"></i>
+            <div>
+              <div class="hero-title">Chat</div>
+              <div class="hero-subtitle">Start conversations and consult your chats</div>
+            </div>
+          </div>
+        </div>
+  
+
+    <div class="chat-layout">
+      <div class="pane users-pane">
+        <div class="pane-header">
+          <div class="title">Users</div>
+          <div class="search">
+            <i class="feather icon-search"></i>
+            <input [(ngModel)]="searchUser" placeholder="Search users" />
+          </div>
+        </div>
+        <div class="pane-body">
+          <div class="user-item" *ngFor="let u of filteredUsers(); trackBy: trackUser" (click)="startChat(u)">
+            <div class="avatar">
+              <img *ngIf="u.image; else userIcon" [src]="u.image" alt="" />
+              <ng-template #userIcon><i class="feather icon-user"></i></ng-template>
+            </div>
+            <div class="identity">
+              <div class="name">{{ u.nomUser || 'Unknown' }}</div>
+              <div class="email">{{ u.email }}</div>
+            </div>
+            <button class="start-btn" [disabled]="starting">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane chats-pane">
+        <div class="pane-header">
+          <div class="title">My Chats</div>
+        </div>
+        <div class="pane-body">
+          <div class="chat-item" *ngFor="let c of chats; trackBy: trackChat" (click)="selectChat(c.id)" [class.active]="selectedChat?.id===c.id">
+            <div class="avatar">
+              <img *ngIf="c.recipient?.image; else chatIcon" [src]="c.recipient?.image" alt="" />
+              <ng-template #chatIcon><i class="feather icon-message-circle"></i></ng-template>
+            </div>
+            <div class="summary">
+              <div class="name">{{ c.recipient?.nomUser || 'Unknown' }}</div>
+              <div class="preview">{{ renderPreview(c) || 'No messages yet' }}</div>
+            </div>
+            <div class="meta">{{ c.updatedAt | date:'short' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane messages-pane" *ngIf="selectedChat as chat">
+        <div class="pane-header">
+          <div class="title">Conversation</div>
+          <div class="subtitle with-user">
+            <span class="avatar small">
+              <img *ngIf="chat.recipient?.image; else headerIcon" [src]="chat.recipient?.image" alt="" />
+              <ng-template #headerIcon><i class="feather icon-user"></i></ng-template>
+            </span>
+            <span class="name">{{ chat.recipient?.nomUser || 'Unknown' }}</span>
+          </div>
+        </div>
+        <div class="messages" [class.empty]="messages.length===0">
+          <div class="msg" *ngFor="let m of messages; trackBy: trackMsg" [class.mine]="isMine(m)" [class.other]="!isMine(m)">
+            <div class="avatar small" *ngIf="!isMine(m)">
+              <img *ngIf="selectedChat?.recipient?.image; else otherIcon" [src]="selectedChat?.recipient?.image" alt="" />
+              <ng-template #otherIcon><i class="feather icon-user"></i></ng-template>
+            </div>
+            <div class="bubble" [class.mine]="isMine(m)" [class.other]="!isMine(m)">{{ m.content }}</div>
+            <div class="avatar small" *ngIf="isMine(m)">
+              <img *ngIf="me?.image; else meIcon" [src]="me?.image" alt="" />
+              <ng-template #meIcon><i class="feather icon-user"></i></ng-template>
+            </div>
+            <div class="time">{{ m.createdAt | date:'short' }}</div>
+          </div>
+          <div class="empty-note" *ngIf="messages.length===0">No messages yet. Say hello 👋</div>
+        </div>
+        <div class="composer">
+          <input [(ngModel)]="newMessage" placeholder="Type a message" />
+          <button class="send modern" [disabled]="sending || !newMessage.trim()" (click)="sendMessage()">
+            <i class="feather icon-send"></i>
+            <span>Send</span>
+          </button>
+        </div>
+      </div>
+      <div class="pane messages-pane" *ngIf="!selectedChat">
+        <div class="pane-header">
+          <div class="title">Conversation</div>
+          <div class="subtitle">Select a chat on the middle pane</div>
+        </div>
+        <div class="messages empty">
+          <div class="empty-note">No chat selected. Start a chat from the left.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

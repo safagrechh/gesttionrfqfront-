@@ -130,6 +130,18 @@
         }
       }
     },
+    "/api/Chat/my": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Client": {
       "get": {
         "tags": [

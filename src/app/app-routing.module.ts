@@ -34,6 +34,10 @@ const routes: Routes = [
         loadComponent: () => import('./demo/dashboard/dashboard.component').then((c) => c.DashboardComponent)
       },
       {
+        path: 'chat',
+        loadComponent: () => import('./demo/pages/chat/chat-page.component').then(c => c.ChatPageComponent)
+      },
+      {
         path: 'basic',
         loadChildren: () => import('./demo/ui-elements/ui-basic/ui-basic.module').then((m) => m.UiBasicModule)
       },
@@ -84,7 +88,7 @@ const routes: Routes = [
         path: 'reclamation-manage',
         loadChildren: () => import('./demo/pages/reclamation-manage/reclamation-manage.module').then(m => m.ReclamationManageModule)
       }
-      
+
 
     ]
   }

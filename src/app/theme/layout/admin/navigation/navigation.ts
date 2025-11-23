@@ -29,6 +29,14 @@ export const NavigationItems: NavigationItem[] = [
         url: '/dashboard',
         icon: 'feather icon-home',
         classes: 'nav-item'
+      },
+      {
+        id: 'chat',
+        title: 'Chat',
+        type: 'item',
+        url: '/chat',
+        icon: 'feather icon-message-circle',
+        classes: 'nav-item'
       }
     ]
   },
